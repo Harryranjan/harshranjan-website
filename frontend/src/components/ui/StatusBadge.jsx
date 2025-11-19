@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 /**
  * StatusBadge - Display status as badge or alert box
- * 
+ *
  * @param {string} status - Status text or preset (published, draft, active, inactive, etc.)
  * @param {string} variant - Color variant (success, warning, error, info, default)
  * @param {string} type - Display type (badge, alert)
@@ -11,14 +11,14 @@ import PropTypes from 'prop-types';
  * @param {string} subtitle - Subtitle for alert type
  * @param {string} className - Additional CSS classes
  */
-export default function StatusBadge({ 
-  status, 
-  variant, 
-  type = 'badge',
+export default function StatusBadge({
+  status,
+  variant,
+  type = "badge",
   icon,
   title,
   subtitle,
-  className = '' 
+  className = "",
 }) {
   // Preset status configurations
   const statusConfig = {
@@ -31,9 +31,9 @@ export default function StatusBadge({
   };
 
   // Use preset or custom
-  const config = statusConfig[status] || { 
-    label: title || status, 
-    variant: variant || "default" 
+  const config = statusConfig[status] || {
+    label: title || status,
+    variant: variant || "default",
   };
   const finalVariant = variant || config.variant;
 
@@ -48,44 +48,42 @@ export default function StatusBadge({
 
   // Alert styles
   const alertBgStyles = {
-    success: 'bg-green-50 border-green-200',
-    warning: 'bg-yellow-50 border-yellow-200',
-    error: 'bg-red-50 border-red-200',
-    info: 'bg-blue-50 border-blue-200',
-    default: 'bg-gray-50 border-gray-200'
+    success: "bg-green-50 border-green-200",
+    warning: "bg-yellow-50 border-yellow-200",
+    error: "bg-red-50 border-red-200",
+    info: "bg-blue-50 border-blue-200",
+    default: "bg-gray-50 border-gray-200",
   };
 
   const alertIconStyles = {
-    success: 'text-green-600',
-    warning: 'text-yellow-600',
-    error: 'text-red-600',
-    info: 'text-blue-600',
-    default: 'text-gray-600'
+    success: "text-green-600",
+    warning: "text-yellow-600",
+    error: "text-red-600",
+    info: "text-blue-600",
+    default: "text-gray-600",
   };
 
   const alertTitleStyles = {
-    success: 'text-green-900',
-    warning: 'text-yellow-900',
-    error: 'text-red-900',
-    info: 'text-blue-900',
-    default: 'text-gray-900'
+    success: "text-green-900",
+    warning: "text-yellow-900",
+    error: "text-red-900",
+    info: "text-blue-900",
+    default: "text-gray-900",
   };
 
   const alertSubtitleStyles = {
-    success: 'text-green-700',
-    warning: 'text-yellow-700',
-    error: 'text-red-700',
-    info: 'text-blue-700',
-    default: 'text-gray-700'
+    success: "text-green-700",
+    warning: "text-yellow-700",
+    error: "text-red-700",
+    info: "text-blue-700",
+    default: "text-gray-700",
   };
 
   // Render as badge (compact pill)
-  if (type === 'badge') {
+  if (type === "badge") {
     return (
       <span
-        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-          badgeVariants[finalVariant]
-        } ${className}`}
+        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${badgeVariants[finalVariant]} ${className}`}
       >
         {config.label}
       </span>
@@ -94,10 +92,14 @@ export default function StatusBadge({
 
   // Render as alert box (for status cards)
   return (
-    <div className={`p-4 rounded-lg border-2 ${alertBgStyles[finalVariant]} ${className}`}>
+    <div
+      className={`p-4 rounded-lg border-2 ${alertBgStyles[finalVariant]} ${className}`}
+    >
       <div className="flex items-center gap-3">
         {icon && (
-          <div className={`w-6 h-6 flex-shrink-0 ${alertIconStyles[finalVariant]}`}>
+          <div
+            className={`w-6 h-6 flex-shrink-0 ${alertIconStyles[finalVariant]}`}
+          >
             {icon}
           </div>
         )}
@@ -106,7 +108,11 @@ export default function StatusBadge({
             {title || config.label}
           </p>
           {subtitle && (
-            <p className={`text-sm ${alertSubtitleStyles[finalVariant]} mt-0.5`}>{subtitle}</p>
+            <p
+              className={`text-sm ${alertSubtitleStyles[finalVariant]} mt-0.5`}
+            >
+              {subtitle}
+            </p>
           )}
         </div>
       </div>
@@ -116,10 +122,10 @@ export default function StatusBadge({
 
 StatusBadge.propTypes = {
   status: PropTypes.string,
-  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info', 'default']),
-  type: PropTypes.oneOf(['badge', 'alert']),
+  variant: PropTypes.oneOf(["success", "warning", "error", "info", "default"]),
+  type: PropTypes.oneOf(["badge", "alert"]),
   icon: PropTypes.node,
   title: PropTypes.string,
   subtitle: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
 };

@@ -4,6 +4,7 @@ export { default as Textarea } from "./Textarea";
 export { default as Button } from "./Button";
 export { default as Card } from "./Card";
 export { default as ImageUpload } from "./ImageUpload";
+export { default as FileUpload } from "./FileUpload";
 export { default as RichTextEditor } from "./RichTextEditor";
 export { default as Modal } from "./Modal";
 export { default as TagInput } from "./TagInput";

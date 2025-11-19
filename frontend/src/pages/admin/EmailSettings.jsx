@@ -62,7 +62,7 @@ export default function EmailSettings() {
   const [testing, setTesting] = useState(false);
   const [status, setStatus] = useState(null);
   const [toast, setToast] = useState(null);
-  const [testEmail, setTestEmail] = useState('');
+  const [testEmail, setTestEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const [settings, setSettings] = useState({
@@ -467,7 +467,7 @@ export default function EmailSettings() {
               Send Test Email
             </Button>
           </div>
-          <InfoBox 
+          <InfoBox
             message="Make sure to save your configuration before testing"
             variant="gray"
             className="mt-3"

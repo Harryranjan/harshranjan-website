@@ -13,6 +13,7 @@ const BlockEditor = ({ value, onChange }) => {
     { type: "video", label: "Video", icon: "🎥" },
     { type: "code", label: "Code", icon: "💻" },
     { type: "quote", label: "Quote", icon: "💬" },
+    { type: "html", label: "HTML", icon: "🔧" },
   ];
 
   const addBlock = (type) => {
@@ -296,6 +297,41 @@ const BlockEditor = ({ value, onChange }) => {
                 placeholder="Author (optional)..."
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2 text-sm"
               />
+            </div>
+          )}
+
+          {block.type === "html" && (
+            <div>
+              <div className="mb-2 flex items-center gap-2 text-sm text-amber-700 bg-amber-50 px-3 py-2 rounded-lg border border-amber-200">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+                <span className="font-medium">
+                  Custom HTML - Be careful with scripts and styles
+                </span>
+              </div>
+              <textarea
+                value={block.content}
+                onChange={(e) =>
+                  updateBlock(block.id, { content: e.target.value })
+                }
+                placeholder='Enter HTML code... Example: <div class="custom">Content</div>'
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm bg-gray-50"
+                rows={8}
+              />
+              <div className="mt-2 text-xs text-gray-500">
+                💡 Tip: You can use HTML, CSS (inline or in &lt;style&gt; tags), and JavaScript
+              </div>
             </div>
           )}
         </div>

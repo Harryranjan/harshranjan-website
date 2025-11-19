@@ -14,6 +14,7 @@ const AdminLayout = () => {
     { name: "Categories", path: "/admin/categories", icon: "🏷️" },
     { name: "Tags", path: "/admin/tags", icon: "🔖" },
     { name: "Forms & Popups", path: "/admin/forms", icon: "📋" },
+    { name: "Downloads", path: "/admin/downloads", icon: "📥" },
     { name: "Portfolio", path: "/admin/portfolio", icon: "💼" },
     { name: "Testimonials", path: "/admin/testimonials", icon: "⭐" },
     { name: "Media Library", path: "/admin/media", icon: "🖼️" },

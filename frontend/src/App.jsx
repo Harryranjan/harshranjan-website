@@ -31,6 +31,10 @@ import FormSubmissions from "./pages/admin/FormSubmissions";
 import ModalBuilder from "./pages/admin/ModalBuilder";
 import PopupBuilder from "./pages/admin/PopupBuilder";
 import EmailSettings from "./pages/admin/EmailSettings";
+import DownloadList from "./pages/admin/DownloadList";
+import DownloadForm from "./pages/admin/DownloadForm";
+import DownloadLeads from "./pages/admin/DownloadLeads";
+import DownloadsLibrary from "./pages/DownloadsLibrary";
 
 function App() {
   return (
@@ -133,6 +137,18 @@ function App() {
             </div>
           }
         />
+        <Route
+          path="/downloads"
+          element={
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-grow">
+                <DownloadsLibrary />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -165,6 +181,10 @@ function App() {
           <Route path="forms/modals/:id/edit" element={<ModalBuilder />} />
           <Route path="forms/popups/new" element={<PopupBuilder />} />
           <Route path="forms/popups/:id/edit" element={<PopupBuilder />} />
+          <Route path="downloads" element={<DownloadList />} />
+          <Route path="downloads/new" element={<DownloadForm />} />
+          <Route path="downloads/edit/:id" element={<DownloadForm />} />
+          <Route path="downloads/:id/leads" element={<DownloadLeads />} />
           <Route
             path="portfolio"
             element={
