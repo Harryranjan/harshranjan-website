@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 /**
  * AutoSaveIndicator Component
  * Shows auto-save status with countdown and last saved time
- * 
+ *
  * @param {boolean} enabled - Whether auto-save is enabled
  * @param {boolean} saving - Whether currently saving
  * @param {Date|string} lastSaved - Last saved timestamp
@@ -134,9 +134,5 @@ export default function AutoSaveIndicator({
   }
 
   // Inline variant (default)
-  return (
-    <div className="flex items-center gap-2">
-      {renderContent()}
-    </div>
-  );
+  return <div className="flex items-center gap-2">{renderContent()}</div>;
 }

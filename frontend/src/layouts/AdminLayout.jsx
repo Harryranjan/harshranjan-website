@@ -13,12 +13,14 @@ const AdminLayout = () => {
     { name: "Blog Posts", path: "/admin/blog", icon: "📝" },
     { name: "Categories", path: "/admin/categories", icon: "🏷️" },
     { name: "Tags", path: "/admin/tags", icon: "🔖" },
+    { name: "Forms & Popups", path: "/admin/forms", icon: "📋" },
     { name: "Portfolio", path: "/admin/portfolio", icon: "💼" },
     { name: "Testimonials", path: "/admin/testimonials", icon: "⭐" },
     { name: "Media Library", path: "/admin/media", icon: "🖼️" },
     { name: "SEO Settings", path: "/admin/seo", icon: "🔍" },
     { name: "Landing Pages", path: "/admin/landing-pages", icon: "🚀" },
     { name: "Contact Messages", path: "/admin/messages", icon: "✉️" },
+    { name: "Email & SMTP", path: "/admin/email-settings", icon: "📧" },
     { name: "Settings", path: "/admin/settings", icon: "⚙️" },
   ];
 
@@ -35,11 +37,23 @@ const AdminLayout = () => {
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className="lg:hidden text-gray-600 hover:text-gray-900 p-2"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 </svg>
               </button>
-              <h1 className="text-lg sm:text-xl font-bold text-gray-900">Admin Panel</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">
+                Admin Panel
+              </h1>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Link
@@ -50,7 +64,9 @@ const AdminLayout = () => {
                 View Site →
               </Link>
               <div className="flex items-center space-x-2">
-                <span className="hidden md:inline text-sm text-gray-600">{user?.email}</span>
+                <span className="hidden md:inline text-sm text-gray-600">
+                  {user?.email}
+                </span>
                 <button
                   onClick={logout}
                   className="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition-colors"

@@ -106,12 +106,12 @@ const Page = sequelize.define(
     // Transform snake_case to camelCase in JSON responses
     getterMethods: {
       createdAt() {
-        return this.getDataValue('created_at');
+        return this.getDataValue("created_at");
       },
       updatedAt() {
-        return this.getDataValue('updated_at');
-      }
-    }
+        return this.getDataValue("updated_at");
+      },
+    },
   }
 );
 

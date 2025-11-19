@@ -1,7 +1,7 @@
 /**
  * BulkActionsBar Component
  * A reusable bulk actions bar with multi-select dropdown
- * 
+ *
  * @param {Array} selectedItems - Array of selected item IDs
  * @param {Function} onClearSelection - Callback to clear selection
  * @param {Array} actions - Array of action objects with {value, label}

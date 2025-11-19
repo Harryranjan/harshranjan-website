@@ -7,19 +7,56 @@ require("dotenv").config();
 
 const { connectDB } = require("./config/database");
 const { schedulePostPublisher } = require("./services/scheduler");
+const emailService = require("./services/emailService");
 
 // Import models to ensure they're registered
 const User = require("./models/User");
 const BlogPost = require("./models/BlogPost");
 const Page = require("./models/Page");
+const Form = require("./models/Form");
+const FormSubmission = require("./models/FormSubmission");
+const Modal = require("./models/Modal");
+const Popup = require("./models/Popup");
+const Setting = require("./models/Setting");
 
 const app = express();
 
 // Connect to database (non-blocking)
 connectDB()
-  .then(() => {
+  .then(async () => {
     // Start the post scheduler after database connection
     schedulePostPublisher();
+
+    // Load email settings from database and initialize
+    try {
+      const Setting = require("./models/Setting");
+      const emailSettings = await Setting.getByCategory("email");
+
+      // Update process.env with database settings if they exist
+      if (emailSettings.email_host)
+        process.env.EMAIL_HOST = emailSettings.email_host;
+      if (emailSettings.email_port)
+        process.env.EMAIL_PORT = String(emailSettings.email_port);
+      if (emailSettings.email_user)
+        process.env.EMAIL_USER = emailSettings.email_user;
+      if (emailSettings.email_password)
+        process.env.EMAIL_PASSWORD = emailSettings.email_password;
+      if (emailSettings.email_from)
+        process.env.EMAIL_FROM = emailSettings.email_from;
+      if (emailSettings.email_provider)
+        process.env.EMAIL_PROVIDER = emailSettings.email_provider;
+      if (emailSettings.admin_email)
+        process.env.ADMIN_EMAIL = emailSettings.admin_email;
+      if (emailSettings.email_secure !== undefined)
+        process.env.EMAIL_SECURE = String(emailSettings.email_secure);
+
+      // Initialize email service
+      await emailService.initialize();
+    } catch (err) {
+      console.log(
+        "⚠️  Email service initialization skipped. Configure settings to enable emails."
+      );
+    }
   })
   .catch((err) => {
     console.log("⚠️  Database connection failed. Server will run without DB.");
@@ -78,6 +115,12 @@ app.use("/api/pages", require("./routes/page.routes"));
 app.use("/api/testimonials", require("./routes/testimonial.routes"));
 app.use("/api/contact", require("./routes/contact.routes"));
 app.use("/api/upload", require("./routes/upload.routes"));
+app.use("/api/forms", require("./routes/form.routes"));
+app.use("/api/modals", require("./routes/modal.routes"));
+app.use("/api/popups", require("./routes/popup.routes"));
+app.use("/api/embed", require("./routes/embed.routes"));
+app.use("/api/email", require("./routes/email.routes"));
+app.use("/api/settings", require("./routes/settings.routes"));
 
 // 404 handler
 app.use((req, res) => {

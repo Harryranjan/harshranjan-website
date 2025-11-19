@@ -13,6 +13,7 @@ import Portfolio from "./pages/Portfolio";
 import BlogList from "./pages/BlogList";
 import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
+import ShortcodeDemo from "./pages/ShortcodeDemo";
 
 // Admin Pages
 import AdminLogin from "./pages/admin/Login";
@@ -24,6 +25,12 @@ import PageForm from "./pages/admin/PageForm";
 import PageOrdering from "./pages/admin/PageOrdering";
 import CategoryManager from "./pages/admin/CategoryManager";
 import TagManager from "./pages/admin/TagManager";
+import FormList from "./pages/admin/FormList";
+import FormBuilder from "./pages/admin/FormBuilderNew";
+import FormSubmissions from "./pages/admin/FormSubmissions";
+import ModalBuilder from "./pages/admin/ModalBuilder";
+import PopupBuilder from "./pages/admin/PopupBuilder";
+import EmailSettings from "./pages/admin/EmailSettings";
 
 function App() {
   return (
@@ -114,6 +121,18 @@ function App() {
             </div>
           }
         />
+        <Route
+          path="/shortcode-demo"
+          element={
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-grow">
+                <ShortcodeDemo />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -135,6 +154,17 @@ function App() {
           <Route path="blog/edit/:id" element={<BlogForm />} />
           <Route path="categories" element={<CategoryManager />} />
           <Route path="tags" element={<TagManager />} />
+          <Route path="forms" element={<FormList />} />
+          <Route path="forms/new" element={<FormBuilder />} />
+          <Route path="forms/:id/edit" element={<FormBuilder />} />
+          <Route
+            path="forms/:formId/submissions"
+            element={<FormSubmissions />}
+          />
+          <Route path="forms/modals/new" element={<ModalBuilder />} />
+          <Route path="forms/modals/:id/edit" element={<ModalBuilder />} />
+          <Route path="forms/popups/new" element={<PopupBuilder />} />
+          <Route path="forms/popups/:id/edit" element={<PopupBuilder />} />
           <Route
             path="portfolio"
             element={
@@ -167,6 +197,7 @@ function App() {
               <div className="text-2xl">Contact Messages - Coming Soon</div>
             }
           />
+          <Route path="email-settings" element={<EmailSettings />} />
           <Route
             path="settings"
             element={<div className="text-2xl">Settings - Coming Soon</div>}

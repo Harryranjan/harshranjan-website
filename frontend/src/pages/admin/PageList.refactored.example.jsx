@@ -103,7 +103,9 @@ export default function PageListRefactored() {
       const published = response.data.pages.filter(
         (p) => p.status === "published"
       ).length;
-      const draft = response.data.pages.filter((p) => p.status === "draft").length;
+      const draft = response.data.pages.filter(
+        (p) => p.status === "draft"
+      ).length;
       setStats({
         total: response.data.totalCount,
         published,
@@ -142,7 +144,9 @@ export default function PageListRefactored() {
       } else if (bulkAction === "publish" || bulkAction === "draft") {
         await Promise.all(
           selectedPages.map((id) =>
-            api.put(`/pages/${id}`, { status: bulkAction === "publish" ? "published" : "draft" })
+            api.put(`/pages/${id}`, {
+              status: bulkAction === "publish" ? "published" : "draft",
+            })
           )
         );
       } else if (bulkAction.startsWith("template-")) {
@@ -296,7 +300,9 @@ export default function PageListRefactored() {
       key: "template",
       label: "Template",
       render: (page) => (
-        <span className="text-sm text-gray-600 capitalize">{page.template}</span>
+        <span className="text-sm text-gray-600 capitalize">
+          {page.template}
+        </span>
       ),
     },
     {
@@ -313,7 +319,12 @@ export default function PageListRefactored() {
     {
       label: "View",
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -335,7 +346,12 @@ export default function PageListRefactored() {
     {
       label: "Edit",
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -350,7 +366,12 @@ export default function PageListRefactored() {
     {
       label: "Delete",
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -396,7 +417,12 @@ export default function PageListRefactored() {
             to="/admin/pages/ordering"
             className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50"
           >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -410,7 +436,12 @@ export default function PageListRefactored() {
             to="/admin/pages/new"
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700"
           >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

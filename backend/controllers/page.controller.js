@@ -18,7 +18,8 @@ exports.getAllPages = async (req, res) => {
 
     if (status) where.status = status;
     if (template) where.template = template;
-    if (show_in_menu !== undefined) where.show_in_menu = show_in_menu === "true";
+    if (show_in_menu !== undefined)
+      where.show_in_menu = show_in_menu === "true";
     if (search) {
       where[Op.or] = [
         { title: { [Op.like]: `%${search}%` } },
@@ -31,17 +32,20 @@ exports.getAllPages = async (req, res) => {
       where,
       limit: parseInt(limit),
       offset: parseInt(offset),
-      order: [["menu_order", "ASC"], ["created_at", "DESC"]],
+      order: [
+        ["menu_order", "ASC"],
+        ["created_at", "DESC"],
+      ],
       raw: false, // Ensure we get model instances
     });
 
     // Transform to include both snake_case and camelCase for compatibility
-    const transformedPages = pages.map(page => {
+    const transformedPages = pages.map((page) => {
       const pageData = page.toJSON();
       return {
         ...pageData,
         createdAt: pageData.created_at,
-        updatedAt: pageData.updated_at
+        updatedAt: pageData.updated_at,
       };
     });
 
@@ -68,12 +72,12 @@ exports.getPageById = async (req, res) => {
     }
 
     const pageData = page.toJSON();
-    res.json({ 
+    res.json({
       page: {
         ...pageData,
         createdAt: pageData.created_at,
-        updatedAt: pageData.updated_at
-      }
+        updatedAt: pageData.updated_at,
+      },
     });
   } catch (error) {
     console.error("Error fetching page:", error);
@@ -133,7 +137,10 @@ exports.createPage = async (req, res) => {
 
     // If setting as homepage, unset other homepages
     if (is_homepage) {
-      await Page.update({ is_homepage: false }, { where: { is_homepage: true } });
+      await Page.update(
+        { is_homepage: false },
+        { where: { is_homepage: true } }
+      );
     }
 
     const page = await Page.create({
@@ -205,7 +212,10 @@ exports.updatePage = async (req, res) => {
 
     // If setting as homepage, unset other homepages
     if (is_homepage && !page.is_homepage) {
-      await Page.update({ is_homepage: false }, { where: { is_homepage: true } });
+      await Page.update(
+        { is_homepage: false },
+        { where: { is_homepage: true } }
+      );
     }
 
     await page.update({
@@ -250,7 +260,8 @@ exports.deletePage = async (req, res) => {
     const childPages = await Page.count({ where: { parent_id: id } });
     if (childPages > 0) {
       return res.status(400).json({
-        message: "Cannot delete page with child pages. Delete or reassign child pages first.",
+        message:
+          "Cannot delete page with child pages. Delete or reassign child pages first.",
       });
     }
 
@@ -271,7 +282,10 @@ exports.getMenuPages = async (req, res) => {
         status: "published",
       },
       attributes: ["id", "title", "slug", "parent_id", "menu_order"],
-      order: [["menu_order", "ASC"], ["title", "ASC"]],
+      order: [
+        ["menu_order", "ASC"],
+        ["title", "ASC"],
+      ],
     });
 
     res.json({ pages });

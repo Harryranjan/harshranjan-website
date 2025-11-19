@@ -23,12 +23,12 @@ export default function PageOrdering() {
       const response = await api.get("/pages", {
         params: { limit: 100 },
       });
-      
+
       // Filter to show only menu pages and sort by menu_order
       const menuPages = response.data.pages
-        .filter(p => p.show_in_menu)
+        .filter((p) => p.show_in_menu)
         .sort((a, b) => a.menu_order - b.menu_order);
-      
+
       setPages(menuPages);
     } catch (error) {
       console.error("Failed to fetch pages:", error);
@@ -47,7 +47,7 @@ export default function PageOrdering() {
   const handleSave = async () => {
     try {
       setSaving(true);
-      
+
       // Update menu_order for all pages
       await Promise.all(
         pages.map((page, index) =>
@@ -107,7 +107,8 @@ export default function PageOrdering() {
           </h1>
         </div>
         <p className="text-gray-600 text-sm sm:text-base ml-8">
-          Drag and drop pages to reorder the menu. Only pages marked as "Show in Menu" are displayed here.
+          Drag and drop pages to reorder the menu. Only pages marked as "Show in
+          Menu" are displayed here.
         </p>
       </div>
 

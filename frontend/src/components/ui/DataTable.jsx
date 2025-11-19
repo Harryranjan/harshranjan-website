@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 /**
  * DataTable Component
  * A reusable data table with checkboxes, badges, and action buttons
- * 
+ *
  * @param {Array} columns - Column configuration [{key, label, render?, sortable?, width?}]
  * @param {Array} data - Array of data objects
  * @param {boolean} selectable - Enable row selection
@@ -125,7 +125,9 @@ export default function DataTable({
               <tr>
                 <td
                   colSpan={
-                    columns.length + (selectable ? 1 : 0) + (actions.length > 0 ? 1 : 0)
+                    columns.length +
+                    (selectable ? 1 : 0) +
+                    (actions.length > 0 ? 1 : 0)
                   }
                   className="px-6 py-12 text-center text-gray-500"
                 >
@@ -169,18 +171,18 @@ export default function DataTable({
                         />
                       </td>
                     )}
-                    {renderRow ? (
-                      renderRow(item, columns)
-                    ) : (
-                      columns.map((column) => (
-                        <td
-                          key={`${itemKey}-${column.key}`}
-                          className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
-                        >
-                          {column.render ? column.render(item) : item[column.key]}
-                        </td>
-                      ))
-                    )}
+                    {renderRow
+                      ? renderRow(item, columns)
+                      : columns.map((column) => (
+                          <td
+                            key={`${itemKey}-${column.key}`}
+                            className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                          >
+                            {column.render
+                              ? column.render(item)
+                              : item[column.key]}
+                          </td>
+                        ))}
                     {actions.length > 0 && (
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center justify-end gap-3">
@@ -194,7 +196,9 @@ export default function DataTable({
                               <button
                                 key={idx}
                                 onClick={() => action.onClick(item)}
-                                className={`transition ${getActionVariant(action.variant)}`}
+                                className={`transition ${getActionVariant(
+                                  action.variant
+                                )}`}
                                 title={action.label}
                               >
                                 {action.icon || action.label}

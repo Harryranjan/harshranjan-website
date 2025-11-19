@@ -195,7 +195,9 @@ export default function BlogSidebar({ currentPost, getImageUrl }) {
                 className="flex items-center justify-between py-2 px-3 hover:bg-blue-50 rounded-lg transition group"
               >
                 <span className="text-sm text-gray-700 group-hover:text-blue-600 font-medium">
-                  {typeof category === 'string' ? category : category.category || category.name || ''}
+                  {typeof category === "string"
+                    ? category
+                    : category.category || category.name || ""}
                 </span>
                 <svg
                   className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition"

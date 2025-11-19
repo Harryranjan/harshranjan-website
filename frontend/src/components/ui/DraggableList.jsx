@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 /**
  * DraggableList Component (Generic version)
  * A reusable drag-and-drop list component
- * 
+ *
  * @param {Array} items - Array of items to display
  * @param {Function} onReorder - Callback when items are reordered
  * @param {Function} renderItem - Custom render function for each item
@@ -114,10 +114,15 @@ export default function DraggableList({
 
                       {/* Custom Content */}
                       <div className="flex-1 min-w-0">
-                        {renderItem ? renderItem(item, index) : (
+                        {renderItem ? (
+                          renderItem(item, index)
+                        ) : (
                           <div>
                             <p className="text-sm font-medium text-gray-900 truncate">
-                              {item.title || item.name || item.label || `Item ${index + 1}`}
+                              {item.title ||
+                                item.name ||
+                                item.label ||
+                                `Item ${index + 1}`}
                             </p>
                             {item.description && (
                               <p className="text-xs text-gray-500 truncate">

@@ -4,7 +4,14 @@ import { Helmet } from "react-helmet-async";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import api from "../../utils/api";
-import { Spinner, ImageUpload, Modal, BlockEditor, LivePreview, TrackingScriptsSection } from "../../components/ui";
+import {
+  Spinner,
+  ImageUpload,
+  Modal,
+  BlockEditor,
+  LivePreview,
+  TrackingScriptsSection,
+} from "../../components/ui";
 
 export default function PageForm() {
   const { id } = useParams();
@@ -53,7 +60,7 @@ export default function PageForm() {
   // Auto-save effect
   useEffect(() => {
     if (!isEditing || !formData.title) return; // Only auto-save when editing existing pages
-    
+
     // Clear previous timeout
     if (autoSaveTimeoutRef.current) {
       clearTimeout(autoSaveTimeoutRef.current);
@@ -122,7 +129,7 @@ export default function PageForm() {
 
   const handleAutoSave = async () => {
     if (!isEditing || saving || autoSaving) return;
-    
+
     try {
       setAutoSaving(true);
       await api.put(`/pages/${id}`, formData);
@@ -189,10 +196,12 @@ export default function PageForm() {
             {isEditing ? "Edit Page" : "Create New Page"}
           </h1>
           <p className="text-gray-600 mt-1 text-sm sm:text-base">
-            {isEditing ? "Update page information" : "Add a new page to your website"}
+            {isEditing
+              ? "Update page information"
+              : "Add a new page to your website"}
           </p>
         </div>
-        
+
         <div className="flex items-center gap-4">
           {/* Preview Toggle Button */}
           <button
@@ -204,383 +213,441 @@ export default function PageForm() {
                 : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
             }`}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
             </svg>
-            <span className="font-medium">{showPreview ? "Hide Preview" : "Show Preview"}</span>
+            <span className="font-medium">
+              {showPreview ? "Hide Preview" : "Show Preview"}
+            </span>
           </button>
-          
+
           {/* Auto-save indicator */}
           {isEditing && (
-          <div className="flex items-center gap-2 text-sm">
-            {autoSaving ? (
-              <div className="flex items-center gap-2 text-blue-600">
-                <Spinner size="sm" />
-                <span>Saving...</span>
-              </div>
-            ) : lastSaved ? (
-              <div className="flex items-center gap-2 text-green-600">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span>
-                  Saved {new Date(lastSaved).toLocaleTimeString()}
-                </span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 text-gray-500">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>Auto-save enabled</span>
-              </div>
-            )}
-          </div>
-        )}
+            <div className="flex items-center gap-2 text-sm">
+              {autoSaving ? (
+                <div className="flex items-center gap-2 text-blue-600">
+                  <Spinner size="sm" />
+                  <span>Saving...</span>
+                </div>
+              ) : lastSaved ? (
+                <div className="flex items-center gap-2 text-green-600">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span>Saved {new Date(lastSaved).toLocaleTimeString()}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 text-gray-500">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>Auto-save enabled</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
-      <div className={`grid gap-6 ${showPreview ? "lg:grid-cols-2" : "grid-cols-1"}`}>
+      <div
+        className={`grid gap-6 ${
+          showPreview ? "lg:grid-cols-2" : "grid-cols-1"
+        }`}
+      >
         {/* Form Section */}
-        <div className={showPreview ? "lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pr-4" : ""}>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic Information */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Basic Information
-          </h2>
+        <div
+          className={
+            showPreview
+              ? "lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pr-4"
+              : ""
+          }
+        >
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Basic Information */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                Basic Information
+              </h2>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Page Title <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter page title"
-              />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Page Title <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter page title"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Slug <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="slug"
+                    value={formData.slug}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="page-url-slug"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    URL-friendly version of the page name
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Excerpt
+                  </label>
+                  <textarea
+                    name="excerpt"
+                    value={formData.excerpt}
+                    onChange={handleInputChange}
+                    rows={3}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Brief description of the page"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Content
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setEditorMode("rich")}
+                        className={`px-3 py-1 text-sm rounded-lg transition ${
+                          editorMode === "rich"
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        Rich Text
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditorMode("block")}
+                        className={`px-3 py-1 text-sm rounded-lg transition ${
+                          editorMode === "block"
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        Block Editor
+                      </button>
+                    </div>
+                  </div>
+
+                  {editorMode === "rich" ? (
+                    <div className="border border-gray-300 rounded-lg overflow-hidden">
+                      <ReactQuill
+                        theme="snow"
+                        value={formData.content}
+                        onChange={handleContentChange}
+                        modules={quillModules}
+                        className="bg-white"
+                        style={{ minHeight: "300px" }}
+                      />
+                    </div>
+                  ) : (
+                    <BlockEditor
+                      value={
+                        typeof formData.content === "string"
+                          ? []
+                          : formData.content
+                      }
+                      onChange={(blocks) => {
+                        setFormData((prev) => ({ ...prev, content: blocks }));
+                      }}
+                    />
+                  )}
+                </div>
+
+                <div>
+                  <ImageUpload
+                    label="Featured Image"
+                    name="featured_image"
+                    value={formData.featured_image}
+                    onChange={(value) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        featured_image: value,
+                      }))
+                    }
+                  />
+                </div>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Slug <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="slug"
-                value={formData.slug}
-                onChange={handleInputChange}
-                required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="page-url-slug"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                URL-friendly version of the page name
-              </p>
-            </div>
+            {/* Page Settings */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                Page Settings
+              </h2>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Excerpt
-              </label>
-              <textarea
-                name="excerpt"
-                value={formData.excerpt}
-                onChange={handleInputChange}
-                rows={3}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Brief description of the page"
-              />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Content
-                </label>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setEditorMode("rich")}
-                    className={`px-3 py-1 text-sm rounded-lg transition ${
-                      editorMode === "rich"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Template
+                  </label>
+                  <select
+                    name="template"
+                    value={formData.template}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    Rich Text
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setEditorMode("block")}
-                    className={`px-3 py-1 text-sm rounded-lg transition ${
-                      editorMode === "block"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                    <option value="default">Default</option>
+                    <option value="about">About</option>
+                    <option value="services">Services</option>
+                    <option value="contact">Contact</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Status
+                  </label>
+                  <select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    Block Editor
-                  </button>
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Parent Page
+                  </label>
+                  <select
+                    name="parent_id"
+                    value={formData.parent_id || ""}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">None (Top Level)</option>
+                    {allPages
+                      .filter((p) => p.id !== parseInt(id))
+                      .map((page) => (
+                        <option key={page.id} value={page.id}>
+                          {page.title}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Menu Order
+                  </label>
+                  <input
+                    type="number"
+                    name="menu_order"
+                    value={formData.menu_order}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="0"
+                  />
                 </div>
               </div>
 
-              {editorMode === "rich" ? (
-                <div className="border border-gray-300 rounded-lg overflow-hidden">
-                  <ReactQuill
-                    theme="snow"
-                    value={formData.content}
-                    onChange={handleContentChange}
-                    modules={quillModules}
-                    className="bg-white"
-                    style={{ minHeight: "300px" }}
+              <div className="mt-4 space-y-3">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="show_in_menu"
+                    checked={formData.show_in_menu}
+                    onChange={handleInputChange}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">Show in menu</span>
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="is_homepage"
+                    checked={formData.is_homepage}
+                    onChange={handleInputChange}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">Set as homepage</span>
+                </label>
+              </div>
+            </div>
+
+            {/* SEO Settings */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                SEO Settings
+              </h2>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Meta Title
+                  </label>
+                  <input
+                    type="text"
+                    name="meta_title"
+                    value={formData.meta_title}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="SEO title for search engines"
                   />
                 </div>
-              ) : (
-                <BlockEditor
-                  value={typeof formData.content === 'string' ? [] : formData.content}
-                  onChange={(blocks) => {
-                    setFormData((prev) => ({ ...prev, content: blocks }));
-                  }}
-                />
-              )}
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Meta Description
+                  </label>
+                  <textarea
+                    name="meta_description"
+                    value={formData.meta_description}
+                    onChange={handleInputChange}
+                    rows={3}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="SEO description for search engines"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Meta Keywords
+                  </label>
+                  <input
+                    type="text"
+                    name="meta_keywords"
+                    value={formData.meta_keywords}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="keyword1, keyword2, keyword3"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div>
-              <ImageUpload
-                label="Featured Image"
-                name="featured_image"
-                value={formData.featured_image}
-                onChange={(value) =>
-                  setFormData((prev) => ({ ...prev, featured_image: value }))
-                }
-              />
+            {/* Advanced Settings */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                Advanced Settings
+              </h2>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Custom CSS
+                  </label>
+                  <textarea
+                    name="custom_css"
+                    value={formData.custom_css}
+                    onChange={handleInputChange}
+                    rows={5}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="/* Custom CSS for this page */"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Custom JavaScript
+                  </label>
+                  <textarea
+                    name="custom_js"
+                    value={formData.custom_js}
+                    onChange={handleInputChange}
+                    rows={5}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="// Custom JavaScript for this page"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Page Settings */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Page Settings
-          </h2>
+            {/* Tracking & Analytics Scripts */}
+            <TrackingScriptsSection
+              headScripts={formData.head_scripts}
+              bodyScripts={formData.body_scripts}
+              onHeadScriptsChange={(value) =>
+                setFormData((prev) => ({ ...prev, head_scripts: value }))
+              }
+              onBodyScriptsChange={(value) =>
+                setFormData((prev) => ({ ...prev, body_scripts: value }))
+              }
+            />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Template
-              </label>
-              <select
-                name="template"
-                value={formData.template}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            {/* Form Actions */}
+            <div className="flex items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={() => navigate("/admin/pages")}
+                className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
               >
-                <option value="default">Default</option>
-                <option value="about">About</option>
-                <option value="services">Services</option>
-                <option value="contact">Contact</option>
-                <option value="custom">Custom</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
-              </label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-              </select>
+                {saving
+                  ? "Saving..."
+                  : isEditing
+                  ? "Update Page"
+                  : "Create Page"}
+              </button>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Parent Page
-              </label>
-              <select
-                name="parent_id"
-                value={formData.parent_id || ""}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">None (Top Level)</option>
-                {allPages
-                  .filter((p) => p.id !== parseInt(id))
-                  .map((page) => (
-                    <option key={page.id} value={page.id}>
-                      {page.title}
-                    </option>
-                  ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Menu Order
-              </label>
-              <input
-                type="number"
-                name="menu_order"
-                value={formData.menu_order}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="0"
-              />
-            </div>
-          </div>
-
-          <div className="mt-4 space-y-3">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="show_in_menu"
-                checked={formData.show_in_menu}
-                onChange={handleInputChange}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700">Show in menu</span>
-            </label>
-
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="is_homepage"
-                checked={formData.is_homepage}
-                onChange={handleInputChange}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700">
-                Set as homepage
-              </span>
-            </label>
-          </div>
-        </div>
-
-        {/* SEO Settings */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            SEO Settings
-          </h2>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Meta Title
-              </label>
-              <input
-                type="text"
-                name="meta_title"
-                value={formData.meta_title}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="SEO title for search engines"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Meta Description
-              </label>
-              <textarea
-                name="meta_description"
-                value={formData.meta_description}
-                onChange={handleInputChange}
-                rows={3}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="SEO description for search engines"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Meta Keywords
-              </label>
-              <input
-                type="text"
-                name="meta_keywords"
-                value={formData.meta_keywords}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="keyword1, keyword2, keyword3"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Advanced Settings */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Advanced Settings
-          </h2>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Custom CSS
-              </label>
-              <textarea
-                name="custom_css"
-                value={formData.custom_css}
-                onChange={handleInputChange}
-                rows={5}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="/* Custom CSS for this page */"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Custom JavaScript
-              </label>
-              <textarea
-                name="custom_js"
-                value={formData.custom_js}
-                onChange={handleInputChange}
-                rows={5}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="// Custom JavaScript for this page"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Tracking & Analytics Scripts */}
-        <TrackingScriptsSection
-          headScripts={formData.head_scripts}
-          bodyScripts={formData.body_scripts}
-          onHeadScriptsChange={(value) => setFormData(prev => ({ ...prev, head_scripts: value }))}
-          onBodyScriptsChange={(value) => setFormData(prev => ({ ...prev, body_scripts: value }))}
-        />
-
-        {/* Form Actions */}
-        <div className="flex items-center justify-between gap-4">
-          <button
-            type="button"
-            onClick={() => navigate("/admin/pages")}
-            className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={saving}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {saving ? "Saving..." : isEditing ? "Update Page" : "Create Page"}
-          </button>
-        </div>
-      </form>
+          </form>
         </div>
 
         {/* Preview Section */}

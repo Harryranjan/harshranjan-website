@@ -1,7 +1,7 @@
 /**
  * Pagination Component
  * Reusable pagination with page counter and navigation
- * 
+ *
  * @param {number} currentPage - Current page number (1-indexed)
  * @param {number} totalPages - Total number of pages
  * @param {number} totalCount - Total number of items

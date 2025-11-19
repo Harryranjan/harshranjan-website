@@ -1,7 +1,7 @@
 /**
  * StatsCards Component
  * Reusable statistics cards with icons and counts
- * 
+ *
  * @param {Array} stats - Array of stat objects with {label, value, icon, color}
  * @param {number} columns - Number of columns (2, 3, or 4)
  */
@@ -47,14 +47,20 @@ export default function StatsCards({ stats = [], columns = 3 }) {
   };
 
   return (
-    <div className={`grid grid-cols-1 ${gridColsClass[columns] || gridColsClass[3]} gap-6 mb-6`}>
+    <div
+      className={`grid grid-cols-1 ${
+        gridColsClass[columns] || gridColsClass[3]
+      } gap-6 mb-6`}
+    >
       {stats.map((stat, index) => {
         const colors = getColorClasses(stat.color);
         return (
           <div key={index} className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 font-medium">{stat.label}</p>
+                <p className="text-sm text-gray-600 font-medium">
+                  {stat.label}
+                </p>
                 <p className="text-3xl font-bold text-gray-900 mt-1">
                   {stat.value}
                 </p>
