@@ -15,10 +15,12 @@ import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
 
 // Admin Pages
-import AdminLogin from './pages/admin/Login';
-import AdminDashboard from './pages/admin/Dashboard';
-import AdminBlogList from './pages/admin/BlogList';
-import BlogForm from './pages/admin/BlogForm';
+import AdminLogin from "./pages/admin/Login";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminBlogList from "./pages/admin/BlogList";
+import BlogForm from "./pages/admin/BlogForm";
+import CategoryManager from "./pages/admin/CategoryManager";
+import TagManager from "./pages/admin/TagManager";
 
 function App() {
   return (
@@ -123,14 +125,20 @@ function App() {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route
             path="pages"
-            element={<div className="text-2xl">Pages Management - Coming Soon</div>}
+            element={
+              <div className="text-2xl">Pages Management - Coming Soon</div>
+            }
           />
           <Route path="blog" element={<AdminBlogList />} />
           <Route path="blog/create" element={<BlogForm />} />
           <Route path="blog/edit/:id" element={<BlogForm />} />
+          <Route path="categories" element={<CategoryManager />} />
+          <Route path="tags" element={<TagManager />} />
           <Route
             path="portfolio"
-            element={<div className="text-2xl">Portfolio Management - Coming Soon</div>}
+            element={
+              <div className="text-2xl">Portfolio Management - Coming Soon</div>
+            }
           />
           <Route
             path="testimonials"
@@ -138,7 +146,9 @@ function App() {
           />
           <Route
             path="media"
-            element={<div className="text-2xl">Media Library - Coming Soon</div>}
+            element={
+              <div className="text-2xl">Media Library - Coming Soon</div>
+            }
           />
           <Route
             path="seo"
@@ -146,11 +156,15 @@ function App() {
           />
           <Route
             path="landing-pages"
-            element={<div className="text-2xl">Landing Pages - Coming Soon</div>}
+            element={
+              <div className="text-2xl">Landing Pages - Coming Soon</div>
+            }
           />
           <Route
             path="messages"
-            element={<div className="text-2xl">Contact Messages - Coming Soon</div>}
+            element={
+              <div className="text-2xl">Contact Messages - Coming Soon</div>
+            }
           />
           <Route
             path="settings"

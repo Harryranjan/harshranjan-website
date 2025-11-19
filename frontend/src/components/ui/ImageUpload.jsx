@@ -1,56 +1,62 @@
-import React, { useState } from 'react';
-import api from '../../utils/api';
+import React, { useState, useEffect } from "react";
+import api from "../../utils/api";
 
 // Helper function to get full image URL
 const getImageUrl = (url) => {
-  if (!url) return '';
-  if (url.startsWith('http')) return url;
+  if (!url) return "";
+  if (url.startsWith("http")) return url;
   return `http://localhost:5000${url}`;
 };
 
 export default function ImageUpload({
   value,
   onChange,
-  name = 'image',
-  label = 'Image',
+  name = "image",
+  label = "Image",
   required = false,
 }) {
   const [uploading, setUploading] = useState(false);
-  const [preview, setPreview] = useState(value || '');
+  const [preview, setPreview] = useState(value || "");
+
+  // Sync preview with value prop when it changes (e.g., when loading a post for editing)
+  useEffect(() => {
+    setPreview(value || "");
+  }, [value]);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     // Validate file type
-    if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file");
       return;
     }
 
     // Validate file size (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('Image size should be less than 5MB');
+      alert("Image size should be less than 5MB");
       return;
     }
 
     try {
       setUploading(true);
       const formData = new FormData();
-      formData.append('image', file);
+      formData.append("image", file);
 
-      const response = await api.post('/upload/image', formData, {
+      const response = await api.post("/upload/image", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
 
-      const imageUrl = `http://localhost:5000${response.data.url}`;
+      // Store only the relative path, not the full URL
+      const imageUrl = response.data.url; // e.g., /uploads/images/filename.jpg
       setPreview(imageUrl);
       onChange(imageUrl);
     } catch (error) {
-      console.error('Upload failed:', error);
-      alert('Failed to upload image. Please try again.');
+      console.error("Upload failed:", error);
+      alert("Failed to upload image. Please try again.");
     } finally {
       setUploading(false);
     }
@@ -63,15 +69,15 @@ export default function ImageUpload({
   };
 
   const handleRemove = () => {
-    setPreview('');
-    onChange('');
+    setPreview("");
+    onChange("");
   };
 
   return (
     <div>
       {label && (
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          {label} {required && '*'}
+          {label} {required && "*"}
         </label>
       )}
 
@@ -83,8 +89,8 @@ export default function ImageUpload({
             alt="Preview"
             className="w-full h-64 object-contain bg-gray-50"
             onError={(e) => {
-              e.target.style.display = 'none';
-              e.target.nextSibling.style.display = 'flex';
+              e.target.style.display = "none";
+              e.target.nextSibling.style.display = "flex";
             }}
           />
           <div className="hidden items-center justify-center h-64 bg-gray-100">
@@ -96,8 +102,18 @@ export default function ImageUpload({
             className="absolute top-3 right-3 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition shadow-lg"
             title="Remove image"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -114,8 +130,18 @@ export default function ImageUpload({
               </div>
             ) : (
               <>
-                <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
                 </svg>
                 <p className="mt-2 text-sm text-gray-600">
                   Click to upload or drag and drop

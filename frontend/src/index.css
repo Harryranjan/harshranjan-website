@@ -1,9 +1,24 @@
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes modal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-modal-slide-in {
+  animation: modal-slide-in 0.3s ease-out;
+}
 
 /* Prose styles for blog content */
 .prose {
@@ -30,7 +45,8 @@
   @apply text-blue-600 hover:text-blue-800 underline;
 }
 
-.prose ul, .prose ol {
+.prose ul,
+.prose ol {
   @apply mb-4 pl-6;
 }
 

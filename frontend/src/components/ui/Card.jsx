@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-export default function Card({ title, description, children, className = '' }) {
+export default function Card({ title, description, children, className = "" }) {
   return (
     <div className={`bg-white rounded-lg shadow-sm p-6 ${className}`}>
       {(title || description) && (

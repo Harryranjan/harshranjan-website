@@ -1,30 +1,30 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
-import { useAuth } from '../../context/AuthContext'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { useAuth } from "../../context/AuthContext";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const { login } = useAuth()
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    const result = await login(email, password)
-    
+    const result = await login(email, password);
+
     if (result.success) {
-      navigate('/admin/dashboard')
+      navigate("/admin/dashboard");
     } else {
-      setError(result.message)
+      setError(result.message);
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <>
@@ -36,7 +36,9 @@ const AdminLogin = () => {
         <div className="max-w-md w-full">
           <div className="bg-white rounded-lg shadow-lg p-8">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Panel</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Admin Panel
+              </h1>
               <p className="text-gray-600">Sign in to manage your website</p>
             </div>
 
@@ -48,7 +50,10 @@ const AdminLogin = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Email Address
                 </label>
                 <input
@@ -63,7 +68,10 @@ const AdminLogin = () => {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Password
                 </label>
                 <input
@@ -82,7 +90,7 @@ const AdminLogin = () => {
                 disabled={loading}
                 className="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Signing in...' : 'Sign In'}
+                {loading ? "Signing in..." : "Sign In"}
               </button>
             </form>
 
@@ -95,7 +103,7 @@ const AdminLogin = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default AdminLogin
+export default AdminLogin;

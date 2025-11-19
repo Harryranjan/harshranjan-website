@@ -1,8 +1,19 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
-import api from '../../utils/api';
-import { Input, Textarea, Button, Card, ImageUpload } from '../../components/ui';
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import api from "../../utils/api";
+import {
+  Input,
+  Textarea,
+  Button,
+  Card,
+  ImageUpload,
+  RichTextEditor,
+  Modal,
+  TagInput,
+  MultiSelectWithSearch,
+  Spinner,
+} from "../../components/ui";
 
 export default function BlogForm() {
   const navigate = useNavigate();
@@ -10,44 +21,69 @@ export default function BlogForm() {
   const isEditMode = Boolean(id);
 
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
-    title: '',
-    excerpt: '',
-    content: '',
-    featured_image: '',
-    category: '',
-    tags: '',
+    title: "",
+    slug: "",
+    excerpt: "",
+    content: "",
+    featured_image: "",
+    category: [],
+    tags: [],
     is_published: false,
-    meta_title: '',
-    meta_description: '',
+    publish_status: "draft",
+    scheduled_at: "",
+    meta_title: "",
+    meta_description: "",
   });
   const [errors, setErrors] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
+    fetchCategories();
     if (isEditMode) {
       fetchPost();
     }
   }, [id]);
 
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get("/blog/admin/categories");
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    }
+  };
+
   const fetchPost = async () => {
     try {
       setLoading(true);
       const response = await api.get(`/blog/${id}`);
-      const post = response.data;
+      const post = response.data.post; // Backend returns { success: true, post }
       setFormData({
-        title: post.title || '',
-        excerpt: post.excerpt || '',
-        content: post.content || '',
-        featured_image: post.featured_image || '',
-        category: post.category || '',
-        tags: post.tags ? post.tags.join(', ') : '',
+        title: post.title || "",
+        slug: post.slug || "",
+        excerpt: post.excerpt || "",
+        content: post.content || "",
+        featured_image: post.featured_image || "",
+        category: Array.isArray(post.category)
+          ? post.category
+          : post.category
+          ? [post.category]
+          : [],
+        tags: Array.isArray(post.tags) ? post.tags : [],
         is_published: post.is_published || false,
-        meta_title: post.meta_title || '',
-        meta_description: post.meta_description || '',
+        publish_status: post.publish_status || "draft",
+        scheduled_at: post.scheduled_at
+          ? new Date(post.scheduled_at).toISOString().slice(0, 16)
+          : "",
+        meta_title: post.meta_title || "",
+        meta_description: post.meta_description || "",
       });
     } catch (error) {
-      console.error('Failed to fetch post:', error);
-      alert('Failed to load post');
+      console.error("Failed to fetch post:", error);
+      alert("Failed to load post");
     } finally {
       setLoading(false);
     }
@@ -55,14 +91,29 @@ export default function BlogForm() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value,
-    });
-    
+    const newValue = type === "checkbox" ? checked : value;
+
+    // Auto-generate slug from title if slug is empty or hasn't been manually edited
+    if (name === "title" && !formData.slug) {
+      const autoSlug = value
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+      setFormData({
+        ...formData,
+        [name]: newValue,
+        slug: autoSlug,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: newValue,
+      });
+    }
+
     // Clear error for this field
     if (errors[name]) {
-      setErrors({ ...errors, [name]: '' });
+      setErrors({ ...errors, [name]: "" });
     }
   };
 
@@ -75,8 +126,8 @@ export default function BlogForm() {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.title.trim()) newErrors.title = 'Title is required';
-    if (!formData.content.trim()) newErrors.content = 'Content is required';
+    if (!formData.title.trim()) newErrors.title = "Title is required";
+    if (!formData.content.trim()) newErrors.content = "Content is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -89,21 +140,25 @@ export default function BlogForm() {
       setLoading(true);
       const payload = {
         ...formData,
-        tags: formData.tags
-          .split(',')
-          .map((tag) => tag.trim())
-          .filter((tag) => tag),
+        // tags and category are already arrays, no need to transform
       };
 
       if (isEditMode) {
         await api.put(`/blog/${id}`, payload);
+        setModalMessage("Blog post updated successfully!");
       } else {
-        await api.post('/blog', payload);
+        await api.post("/blog", payload);
+        setModalMessage("Blog post created successfully!");
       }
 
-      navigate('/admin/blog');
+      setShowModal(true);
+
+      // Navigate after modal closes
+      setTimeout(() => {
+        navigate("/admin/blog");
+      }, 2000);
     } catch (error) {
-      console.error('Failed to save post:', error);
+      console.error("Failed to save post:", error);
       if (error.response?.data?.errors) {
         const apiErrors = {};
         error.response.data.errors.forEach((err) => {
@@ -111,7 +166,7 @@ export default function BlogForm() {
         });
         setErrors(apiErrors);
       } else {
-        alert('Failed to save post');
+        alert("Failed to save post");
       }
     } finally {
       setLoading(false);
@@ -121,7 +176,7 @@ export default function BlogForm() {
   if (loading && isEditMode) {
     return (
       <div className="text-center py-12">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <Spinner size="md" />
       </div>
     );
   }
@@ -130,16 +185,16 @@ export default function BlogForm() {
     <div>
       <Helmet>
         <title>
-          {isEditMode ? 'Edit Blog Post' : 'Create Blog Post'} - Admin Dashboard
+          {isEditMode ? "Edit Blog Post" : "Create Blog Post"} - Admin Dashboard
         </title>
       </Helmet>
 
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900">
-          {isEditMode ? 'Edit Blog Post' : 'Create New Post'}
+          {isEditMode ? "Edit Blog Post" : "Create New Post"}
         </h1>
         <p className="text-gray-600 mt-1">
-          {isEditMode ? 'Update your blog post' : 'Create a new blog post'}
+          {isEditMode ? "Update your blog post" : "Create a new blog post"}
         </p>
       </div>
 
@@ -158,6 +213,24 @@ export default function BlogForm() {
               required
             />
 
+            {/* URL Slug */}
+            <div>
+              <Input
+                label="URL Slug"
+                name="slug"
+                value={formData.slug}
+                onChange={handleChange}
+                placeholder="url-slug-for-post"
+                error={errors.slug}
+              />
+              <p className="mt-1 text-sm text-gray-500">
+                URL:{" "}
+                <span className="font-mono text-blue-600">
+                  https://yoursite.com/blog/{formData.slug || "url-slug"}
+                </span>
+              </p>
+            </div>
+
             {/* Excerpt */}
             <Textarea
               label="Excerpt"
@@ -169,17 +242,19 @@ export default function BlogForm() {
             />
 
             {/* Content */}
-            <Textarea
+            <RichTextEditor
               label="Content"
-              name="content"
               value={formData.content}
-              onChange={handleChange}
-              rows={15}
+              onChange={(value) => {
+                setFormData({ ...formData, content: value });
+                if (errors.content) {
+                  setErrors({ ...errors, content: "" });
+                }
+              }}
               placeholder="Write your post content here..."
               error={errors.content}
-              helperText="Rich text editor coming soon. For now, you can use Markdown or HTML."
+              helperText="Use the toolbar above to format your content with headings, lists, links, images, and more."
               required
-              className="font-mono text-sm"
             />
           </div>
         </Card>
@@ -194,26 +269,27 @@ export default function BlogForm() {
               label="Featured Image"
             />
 
-            {/* Category */}
-            <Input
-              label="Category"
-              name="category"
+            {/* Categories */}
+            <MultiSelectWithSearch
+              label="Categories"
               value={formData.category}
-              onChange={handleChange}
-              placeholder="e.g., Marketing, SEO, Branding"
+              onChange={(value) =>
+                setFormData({ ...formData, category: value })
+              }
+              options={categories}
+              displayKey="name"
+              valueKey="name"
+              placeholder="Select categories..."
+              allowCustom={true}
+              helperText="Select multiple categories or press Enter to add custom ones"
             />
 
             {/* Tags */}
-            <Input
-              label="Tags"
-              name="tags"
+            <TagInput
               value={formData.tags}
-              onChange={handleChange}
-              placeholder="Separate tags with commas"
+              onChange={(tags) => setFormData({ ...formData, tags })}
+              helperText="Type and press Enter to add tags. Start typing to see suggestions."
             />
-            <p className="text-gray-500 text-sm -mt-2">
-              e.g., digital marketing, strategy, growth
-            </p>
           </div>
         </Card>
 
@@ -245,22 +321,76 @@ export default function BlogForm() {
 
         {/* Publishing Options */}
         <Card title="Publishing">
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="is_published"
-              name="is_published"
-              checked={formData.is_published}
-              onChange={handleChange}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <label htmlFor="is_published" className="ml-2 block text-sm text-gray-700">
-              Publish this post immediately
-            </label>
+          <div className="space-y-4">
+            {/* Publish Status */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Publish Status
+              </label>
+              <div className="space-y-2">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="publish_status"
+                    value="draft"
+                    checked={formData.publish_status === "draft"}
+                    onChange={handleChange}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">
+                    Save as Draft
+                  </span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="publish_status"
+                    value="published"
+                    checked={formData.publish_status === "published"}
+                    onChange={handleChange}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">
+                    Publish Immediately
+                  </span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="publish_status"
+                    value="scheduled"
+                    checked={formData.publish_status === "scheduled"}
+                    onChange={handleChange}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">
+                    Schedule for Later
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            {/* Schedule Date/Time */}
+            {formData.publish_status === "scheduled" && (
+              <Input
+                label="Schedule Date & Time"
+                type="datetime-local"
+                name="scheduled_at"
+                value={formData.scheduled_at}
+                onChange={handleChange}
+                required
+              />
+            )}
+
+            <p className="text-gray-500 text-sm">
+              {formData.publish_status === "draft" &&
+                "This post will be saved as a draft and not visible to the public."}
+              {formData.publish_status === "published" &&
+                "This post will be published immediately and visible to the public."}
+              {formData.publish_status === "scheduled" &&
+                "This post will be automatically published at the scheduled date and time."}
+            </p>
           </div>
-          <p className="text-gray-500 text-sm mt-2">
-            If unchecked, this post will be saved as a draft
-          </p>
         </Card>
 
         {/* Action Buttons */}
@@ -268,19 +398,29 @@ export default function BlogForm() {
           <Button
             type="button"
             variant="outline"
-            onClick={() => navigate('/admin/blog')}
+            onClick={() => navigate("/admin/blog")}
           >
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            loading={loading}
-          >
-            {isEditMode ? 'Update Post' : 'Create Post'}
+          <Button type="submit" variant="primary" loading={loading}>
+            {isEditMode ? "Update Post" : "Create Post"}
           </Button>
         </div>
       </form>
+
+      {/* Success Modal */}
+      <Modal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          navigate("/admin/blog");
+        }}
+        type="success"
+        title="Success!"
+        message={modalMessage}
+        autoClose={true}
+        autoCloseDuration={2000}
+      />
     </div>
   );
 }

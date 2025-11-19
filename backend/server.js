@@ -6,6 +6,7 @@ const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
 const { connectDB } = require("./config/database");
+const { schedulePostPublisher } = require("./services/scheduler");
 
 // Import models to ensure they're registered
 const User = require("./models/User");
@@ -14,12 +15,17 @@ const BlogPost = require("./models/BlogPost");
 const app = express();
 
 // Connect to database (non-blocking)
-connectDB().catch((err) => {
-  console.log("⚠️  Database connection failed. Server will run without DB.");
-  console.log(
-    "💡 Please configure MySQL and update .env file to enable database features."
-  );
-});
+connectDB()
+  .then(() => {
+    // Start the post scheduler after database connection
+    schedulePostPublisher();
+  })
+  .catch((err) => {
+    console.log("⚠️  Database connection failed. Server will run without DB.");
+    console.log(
+      "💡 Please configure MySQL and update .env file to enable database features."
+    );
+  });
 
 // Security middleware - Configure helmet to allow images
 app.use(
@@ -42,7 +48,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files (uploads)
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("uploads"));
 
 // Logging middleware
 app.use(morgan("dev"));
@@ -60,7 +66,7 @@ app.get("/health", (req, res) => {
 });
 
 // Serve static files (uploads)
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("uploads"));
 
 // API routes (will be added)
 app.use("/api/auth", require("./routes/auth.routes"));
@@ -94,21 +100,21 @@ const server = app.listen(PORT, () => {
 });
 
 // Handle uncaught exceptions
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
   process.exit(1);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
   process.exit(1);
 });
 
 // Keep process alive
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received, shutting down gracefully");
   server.close(() => {
-    console.log('Server closed');
+    console.log("Server closed");
     process.exit(0);
   });
 });
@@ -119,4 +125,3 @@ setInterval(() => {
 }, 30000);
 
 module.exports = app;
-

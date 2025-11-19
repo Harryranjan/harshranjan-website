@@ -22,7 +22,7 @@ const BlogPost = sequelize.define(
       type: DataTypes.TEXT,
     },
     content: {
-      type: DataTypes.TEXT('long'),
+      type: DataTypes.TEXT("long"),
       allowNull: false,
     },
     featured_image: {
@@ -33,16 +33,23 @@ const BlogPost = sequelize.define(
       allowNull: false,
     },
     category: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.TEXT,
+      get() {
+        const rawValue = this.getDataValue("category");
+        return rawValue ? JSON.parse(rawValue) : [];
+      },
+      set(value) {
+        this.setDataValue("category", JSON.stringify(value || []));
+      },
     },
     tags: {
       type: DataTypes.TEXT,
       get() {
-        const rawValue = this.getDataValue('tags');
+        const rawValue = this.getDataValue("tags");
         return rawValue ? JSON.parse(rawValue) : [];
       },
       set(value) {
-        this.setDataValue('tags', JSON.stringify(value || []));
+        this.setDataValue("tags", JSON.stringify(value || []));
       },
     },
     reading_time: {
@@ -58,6 +65,14 @@ const BlogPost = sequelize.define(
     },
     published_at: {
       type: DataTypes.DATE,
+    },
+    scheduled_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    publish_status: {
+      type: DataTypes.ENUM("draft", "scheduled", "published"),
+      defaultValue: "draft",
     },
     meta_title: {
       type: DataTypes.STRING(255),
