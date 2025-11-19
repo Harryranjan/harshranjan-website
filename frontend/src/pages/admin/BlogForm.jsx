@@ -72,9 +72,8 @@ export default function BlogForm() {
     if (!file) return;
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-    if (!allowedTypes.includes(file.type)) {
-      alert('Please upload a valid image file (JPEG, PNG, GIF, or WebP)');
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
       return;
     }
 
@@ -95,15 +94,24 @@ export default function BlogForm() {
         },
       });
 
-      const imageUrl = `http://localhost:5000${response.data.url}`;
-      setFormData((prev) => ({ ...prev, featured_image: imageUrl }));
-      setImagePreview(imageUrl);
+      setFormData((prev) => ({
+        ...prev,
+        featured_image: response.data.url,
+      }));
     } catch (error) {
-      console.error('Failed to upload image:', error);
-      alert('Failed to upload image. Please try again.');
+      console.error('Upload failed:', error);
+      alert('Failed to upload image');
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleRemoveImage = () => {
+    setFormData((prev) => ({
+      ...prev,
+      featured_image: '',
+    }));
+    setImagePreview('');
   };
 
   const removeImage = () => {
