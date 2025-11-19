@@ -11,6 +11,7 @@ const { schedulePostPublisher } = require("./services/scheduler");
 // Import models to ensure they're registered
 const User = require("./models/User");
 const BlogPost = require("./models/BlogPost");
+const Page = require("./models/Page");
 
 const app = express();
 
@@ -73,6 +74,7 @@ app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/users", require("./routes/user.routes"));
 app.use("/api/projects", require("./routes/project.routes"));
 app.use("/api/blog", require("./routes/blog.routes"));
+app.use("/api/pages", require("./routes/page.routes"));
 app.use("/api/testimonials", require("./routes/testimonial.routes"));
 app.use("/api/contact", require("./routes/contact.routes"));
 app.use("/api/upload", require("./routes/upload.routes"));

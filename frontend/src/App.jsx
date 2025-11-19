@@ -19,6 +19,9 @@ import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminBlogList from "./pages/admin/BlogList";
 import BlogForm from "./pages/admin/BlogForm";
+import PageList from "./pages/admin/PageList";
+import PageForm from "./pages/admin/PageForm";
+import PageOrdering from "./pages/admin/PageOrdering";
 import CategoryManager from "./pages/admin/CategoryManager";
 import TagManager from "./pages/admin/TagManager";
 
@@ -123,12 +126,10 @@ function App() {
           }
         >
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route
-            path="pages"
-            element={
-              <div className="text-2xl">Pages Management - Coming Soon</div>
-            }
-          />
+          <Route path="pages" element={<PageList />} />
+          <Route path="pages/create" element={<PageForm />} />
+          <Route path="pages/edit/:id" element={<PageForm />} />
+          <Route path="pages/ordering" element={<PageOrdering />} />
           <Route path="blog" element={<AdminBlogList />} />
           <Route path="blog/create" element={<BlogForm />} />
           <Route path="blog/edit/:id" element={<BlogForm />} />
