@@ -21,8 +21,13 @@ connectDB().catch((err) => {
   );
 });
 
-// Security middleware
-app.use(helmet());
+// Security middleware - Configure helmet to allow images
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    contentSecurityPolicy: false, // Disable CSP for now to allow images
+  })
+);
 
 // CORS configuration
 app.use(
