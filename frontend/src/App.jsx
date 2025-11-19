@@ -17,7 +17,7 @@ import Contact from "./pages/Contact";
 // Admin Pages
 import AdminLogin from './pages/admin/Login';
 import AdminDashboard from './pages/admin/Dashboard';
-import BlogList from './pages/admin/BlogList';
+import AdminBlogList from './pages/admin/BlogList';
 import BlogForm from './pages/admin/BlogForm';
 
 function App() {
@@ -125,7 +125,7 @@ function App() {
             path="pages"
             element={<div className="text-2xl">Pages Management - Coming Soon</div>}
           />
-          <Route path="blog" element={<BlogList />} />
+          <Route path="blog" element={<AdminBlogList />} />
           <Route path="blog/create" element={<BlogForm />} />
           <Route path="blog/edit/:id" element={<BlogForm />} />
           <Route

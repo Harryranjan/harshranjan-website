@@ -9,6 +9,7 @@ export default function BlogForm() {
   const isEditMode = Boolean(id);
 
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
@@ -21,6 +22,7 @@ export default function BlogForm() {
     meta_description: '',
   });
   const [errors, setErrors] = useState({});
+  const [imagePreview, setImagePreview] = useState('');
 
   useEffect(() => {
     if (isEditMode) {
@@ -44,6 +46,7 @@ export default function BlogForm() {
         meta_title: post.meta_title || '',
         meta_description: post.meta_description || '',
       });
+      setImagePreview(post.featured_image || '');
     } catch (error) {
       console.error('Failed to fetch post:', error);
       alert('Failed to load post');
@@ -62,6 +65,50 @@ export default function BlogForm() {
     if (errors[name]) {
       setErrors({ ...errors, [name]: '' });
     }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Please upload a valid image file (JPEG, PNG, GIF, or WebP)');
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size should be less than 5MB');
+      return;
+    }
+
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const response = await api.post('/upload/image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const imageUrl = `http://localhost:5000${response.data.url}`;
+      setFormData((prev) => ({ ...prev, featured_image: imageUrl }));
+      setImagePreview(imageUrl);
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = () => {
+    setFormData((prev) => ({ ...prev, featured_image: '' }));
+    setImagePreview('');
   };
 
   const validate = () => {
@@ -208,29 +255,77 @@ export default function BlogForm() {
             {/* Featured Image */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Featured Image URL
+                Featured Image
               </label>
-              <input
-                type="text"
-                name="featured_image"
-                value={formData.featured_image}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
-              />
-              {formData.featured_image && (
-                <img
-                  src={formData.featured_image}
-                  alt="Preview"
-                  className="mt-2 h-32 w-auto rounded-lg object-cover"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
+              
+              {/* Image Preview */}
+              {imagePreview && (
+                <div className="relative mb-4">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-48 object-cover rounded-lg"
+                  />
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
               )}
-              <p className="text-gray-500 text-sm mt-1">
-                Image upload feature coming soon
-              </p>
+
+              {/* Upload Button */}
+              <div className="flex gap-2">
+                <label className="flex-1 cursor-pointer">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg px-4 py-8 text-center hover:border-blue-500 transition">
+                    {uploading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <span className="ml-2 text-gray-600">Uploading...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p className="mt-2 text-sm text-gray-600">
+                          Click to upload or drag and drop
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          PNG, JPG, GIF, WebP up to 5MB
+                        </p>
+                      </>
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              {/* Or URL Input */}
+              <div className="mt-3">
+                <p className="text-sm text-gray-600 mb-2">Or paste image URL:</p>
+                <input
+                  type="text"
+                  name="featured_image"
+                  value={formData.featured_image}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setImagePreview(e.target.value);
+                  }}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
             </div>
 
             {/* Category */}

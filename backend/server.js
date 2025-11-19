@@ -51,6 +51,9 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK", message: "Server is running" });
 });
 
+// Serve static files (uploads)
+app.use('/uploads', express.static('uploads'));
+
 // API routes (will be added)
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/users", require("./routes/user.routes"));
@@ -58,6 +61,7 @@ app.use("/api/projects", require("./routes/project.routes"));
 app.use("/api/blog", require("./routes/blog.routes"));
 app.use("/api/testimonials", require("./routes/testimonial.routes"));
 app.use("/api/contact", require("./routes/contact.routes"));
+app.use("/api/upload", require("./routes/upload.routes"));
 
 // 404 handler
 app.use((req, res) => {
