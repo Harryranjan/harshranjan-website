@@ -61,6 +61,12 @@ export default function BlogForm() {
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
     });
+    
+    // Update image preview when URL changes
+    if (name === 'featured_image') {
+      setImagePreview(value);
+    }
+    
     // Clear error for this field
     if (errors[name]) {
       setErrors({ ...errors, [name]: '' });
@@ -85,22 +91,24 @@ export default function BlogForm() {
 
     try {
       setUploading(true);
-      const formData = new FormData();
-      formData.append('image', file);
+      const uploadFormData = new FormData();
+      uploadFormData.append('image', file);
 
-      const response = await api.post('/upload/image', formData, {
+      const response = await api.post('/upload/image', uploadFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
+      const imageUrl = `http://localhost:5000${response.data.url}`;
       setFormData((prev) => ({
         ...prev,
-        featured_image: response.data.url,
+        featured_image: imageUrl,
       }));
+      setImagePreview(imageUrl);
     } catch (error) {
       console.error('Upload failed:', error);
-      alert('Failed to upload image');
+      alert('Failed to upload image. Please try again.');
     } finally {
       setUploading(false);
     }

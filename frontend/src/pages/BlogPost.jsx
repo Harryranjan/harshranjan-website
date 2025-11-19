@@ -10,6 +10,12 @@ export default function BlogPost() {
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `http://localhost:5000${url}`;
+  };
+
   useEffect(() => {
     fetchPost();
     window.scrollTo(0, 0);
@@ -114,9 +120,12 @@ export default function BlogPost() {
       {post.featured_image && (
         <div className="relative h-96 bg-gray-900">
           <img
-            src={post.featured_image}
+            src={getImageUrl(post.featured_image)}
             alt={post.title}
             className="w-full h-full object-cover opacity-80"
+            onError={(e) => {
+              e.target.parentElement.style.display = 'none';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         </div>
@@ -246,9 +255,12 @@ export default function BlogPost() {
                 >
                   {relatedPost.featured_image && (
                     <img
-                      src={relatedPost.featured_image}
+                      src={getImageUrl(relatedPost.featured_image)}
                       alt={relatedPost.title}
                       className="w-full h-40 object-cover group-hover:scale-105 transition duration-300"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
                     />
                   )}
                   <div className="p-4">

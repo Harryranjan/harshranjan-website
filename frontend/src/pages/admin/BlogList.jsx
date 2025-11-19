@@ -10,6 +10,12 @@ export default function BlogList() {
   const [totalPages, setTotalPages] = useState(1);
   const [filter, setFilter] = useState({ category: '', published: '' });
 
+  const getImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `http://localhost:5000${url}`;
+  };
+
   useEffect(() => {
     fetchPosts();
   }, [currentPage, filter]);
@@ -163,9 +169,12 @@ export default function BlogList() {
                     <div className="flex items-center">
                       {post.featured_image && (
                         <img
-                          src={post.featured_image}
+                          src={getImageUrl(post.featured_image)}
                           alt=""
                           className="h-10 w-10 rounded object-cover mr-3"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                          }}
                         />
                       )}
                       <div>

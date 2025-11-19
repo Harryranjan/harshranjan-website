@@ -13,6 +13,12 @@ export default function BlogList() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
+  const getImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `http://localhost:5000${url}`;
+  };
+
   useEffect(() => {
     const page = parseInt(searchParams.get('page')) || 1;
     const category = searchParams.get('category') || '';
@@ -215,9 +221,12 @@ export default function BlogList() {
                       {post.featured_image && (
                         <Link to={`/blog/${post.slug}`}>
                           <img
-                            src={post.featured_image}
+                            src={getImageUrl(post.featured_image)}
                             alt={post.title}
                             className="w-full h-48 object-cover group-hover:scale-105 transition duration-300"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                            }}
                           />
                         </Link>
                       )}
