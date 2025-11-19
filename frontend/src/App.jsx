@@ -10,7 +10,8 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Services from "./pages/Services";
 import Portfolio from "./pages/Portfolio";
-import Blog from "./pages/Blog";
+import BlogList from "./pages/BlogList";
+import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
 
 // Admin Pages
@@ -78,7 +79,19 @@ function App() {
             <div className="min-h-screen flex flex-col">
               <Navbar />
               <main className="flex-grow">
-                <Blog />
+                <BlogList />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/blog/:slug"
+          element={
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-grow">
+                <BlogPost />
               </main>
               <Footer />
             </div>
