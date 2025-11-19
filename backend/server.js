@@ -18,6 +18,8 @@ const FormSubmission = require("./models/FormSubmission");
 const Modal = require("./models/Modal");
 const Popup = require("./models/Popup");
 const Setting = require("./models/Setting");
+const Download = require("./models/Download");
+const DownloadLead = require("./models/DownloadLead");
 
 const app = express();
 
@@ -121,6 +123,8 @@ app.use("/api/popups", require("./routes/popup.routes"));
 app.use("/api/embed", require("./routes/embed.routes"));
 app.use("/api/email", require("./routes/email.routes"));
 app.use("/api/settings", require("./routes/settings.routes"));
+app.use("/api/downloads", require("./routes/download.routes"));
+app.use("/api/download-leads", require("./routes/downloadLead.routes"));
 
 // 404 handler
 app.use((req, res) => {

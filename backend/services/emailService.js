@@ -225,6 +225,85 @@ class EmailService {
   }
 
   /**
+   * Send download link email
+   * @param {string} recipientEmail - User's email
+   * @param {string} recipientName - User's name
+   * @param {object} download - Download object with title, file_url, etc.
+   */
+  async sendDownloadLink(recipientEmail, recipientName, download) {
+    const subject = `Your Download: ${download.title}`;
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9fafb; padding: 30px; border: 1px solid #e5e7eb; }
+          .download-card { background: white; border-radius: 8px; padding: 20px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+          .download-title { font-size: 20px; font-weight: bold; color: #1f2937; margin-bottom: 10px; }
+          .download-btn { display: inline-block; background: #667eea; color: white; padding: 14px 32px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 20px 0; }
+          .download-btn:hover { background: #5568d3; }
+          .info-box { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin: 15px 0; border-radius: 4px; }
+          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>📥 Your Download is Ready!</h1>
+          </div>
+          <div class="content">
+            <p>Hi ${recipientName},</p>
+            <p>Thank you for your interest! Your download is ready.</p>
+            
+            <div class="download-card">
+              <div class="download-title">${download.title}</div>
+              ${
+                download.short_description
+                  ? `<p style="color: #6b7280;">${download.short_description}</p>`
+                  : ""
+              }
+              ${
+                download.file_size
+                  ? `<p style="color: #9ca3af; font-size: 14px;">File Size: ${download.file_size}</p>`
+                  : ""
+              }
+              
+              <a href="${download.file_url}" class="download-btn">
+                Download Now
+              </a>
+            </div>
+
+            <div class="info-box">
+              <strong>💡 Quick Tip:</strong> Save this email for future reference. The download link will remain active.
+            </div>
+
+            <p>If you have any questions or need assistance, feel free to reach out to us.</p>
+            
+            <p>Best regards,<br>The Team</p>
+          </div>
+          <div class="footer">
+            <p>This email was sent because you requested a download from our website.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const text = this.stripHtml(html);
+
+    return await this.sendEmail({
+      to: recipientEmail,
+      subject,
+      html,
+      text,
+    });
+  }
+
+  /**
    * Test email configuration
    */
   async testConnection() {

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../middleware/upload.middleware");
+const fileUpload = require("../middleware/fileUpload.middleware");
 const { authMiddleware } = require("../middleware/auth.middleware");
 const path = require("path");
 
@@ -78,6 +79,55 @@ router.delete("/image/:filename", authMiddleware, (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to delete image", error: error.message });
+  }
+});
+
+// Upload single file (PDF, DOC, etc.)
+router.post("/file", authMiddleware, fileUpload.single("file"), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const fileUrl = `/uploads/files/${req.file.filename}`;
+    const fileSizeInMB = (req.file.size / (1024 * 1024)).toFixed(2);
+
+    res.json({
+      message: "File uploaded successfully",
+      url: fileUrl,
+      filename: req.file.originalname,
+      size: `${fileSizeInMB} MB`,
+      type: path.extname(req.file.originalname).substring(1).toUpperCase(),
+    });
+  } catch (error) {
+    console.error("Upload error:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to upload file", error: error.message });
+  }
+});
+
+// Delete file
+router.delete("/file/:filename", authMiddleware, (req, res) => {
+  try {
+    const fs = require("fs");
+    const filePath = path.join(
+      __dirname,
+      "../uploads/files",
+      req.params.filename
+    );
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      res.json({ message: "File deleted successfully" });
+    } else {
+      res.status(404).json({ message: "File not found" });
+    }
+  } catch (error) {
+    console.error("Delete error:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to delete file", error: error.message });
   }
 });
 
