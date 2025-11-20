@@ -39,6 +39,9 @@ import MenuList from "./pages/admin/MenuList";
 import MenuForm from "./pages/admin/MenuForm";
 import HeaderBuilder from "./pages/admin/HeaderBuilder";
 import FooterBuilder from "./pages/admin/FooterBuilder";
+import CTABannerDemo from "./pages/CTABannerDemo";
+import CTABannerList from "./pages/admin/CTABannerList";
+import CTABannerForm from "./pages/admin/CTABannerForm";
 
 function App() {
   return (
@@ -54,6 +57,7 @@ function App() {
         <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
         <Route path="/shortcode-demo" element={<PublicLayout><ShortcodeDemo /></PublicLayout>} />
         <Route path="/downloads" element={<PublicLayout><DownloadsLibrary /></PublicLayout>} />
+        <Route path="/cta-demo" element={<CTABannerDemo />} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -98,6 +102,9 @@ function App() {
           <Route path="header-builder/:id" element={<HeaderBuilder />} />
           <Route path="footer-builder/new" element={<FooterBuilder />} />
           <Route path="footer-builder/:id" element={<FooterBuilder />} />
+          <Route path="cta-banners" element={<CTABannerList />} />
+          <Route path="cta-banners/create" element={<CTABannerForm />} />
+          <Route path="cta-banners/edit/:id" element={<CTABannerForm />} />
           <Route
             path="portfolio"
             element={

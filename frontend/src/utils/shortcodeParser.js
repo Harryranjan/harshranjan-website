@@ -2,7 +2,7 @@ import React from "react";
 
 /**
  * Parse shortcodes in content and replace with React components
- * Supports: [form id="123"], [modal id="123"], [popup id="123"]
+ * Supports: [form id="123"], [modal id="123"], [popup id="123"], [cta_banner id="123"]
  */
 export const parseShortcodes = (content) => {
   if (!content) return content;
@@ -12,6 +12,7 @@ export const parseShortcodes = (content) => {
     form: /\[form\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi,
     modal: /\[modal\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi,
     popup: /\[popup\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi,
+    cta_banner: /\[cta_banner\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi,
   };
 
   let parsedContent = content;
@@ -25,6 +26,20 @@ export const parseShortcodes = (content) => {
     parsedContent = parsedContent.replace(fullMatch, placeholder);
     components.push({
       type: "form",
+      id,
+      className,
+      placeholder,
+    });
+  }
+
+  // Parse CTA banner shortcodes
+  patterns.cta_banner.lastIndex = 0; // Reset regex
+  while ((match = patterns.cta_banner.exec(content)) !== null) {
+    const [fullMatch, id, className = ""] = match;
+    const placeholder = `__CTA_BANNER_${id}_${components.length}__`;
+    parsedContent = parsedContent.replace(fullMatch, placeholder);
+    components.push({
+      type: "cta_banner",
       id,
       className,
       placeholder,
@@ -80,7 +95,7 @@ export const extractShortcodes = (content) => {
  */
 export const hasShortcodes = (content) => {
   if (!content) return false;
-  return /\[(form|modal|popup)\s+id=["']\d+["']\]/i.test(content);
+  return /\[(form|modal|popup|cta_banner)\s+id=["']\d+["']\]/i.test(content);
 };
 
 /**

@@ -1,10 +1,12 @@
 import React from "react";
 import { parseShortcodes } from "../utils/shortcodeParser";
 import FormEmbed from "./FormEmbed";
+import CTABannerEmbed from "./CTABannerEmbed";
 
 /**
  * Component that renders content with shortcode support
  * Usage: <ContentRenderer content="Some text [form id='123'] more text" />
+ * Supports: [form id="123"], [cta_banner id="123"]
  */
 export default function ContentRenderer({ content, className = "" }) {
   if (!content) return null;
@@ -22,7 +24,7 @@ export default function ContentRenderer({ content, className = "" }) {
   }
 
   // Split content by placeholders
-  const parts = parsedContent.split(/(__[A-Z]+_\d+_\d+__)/g);
+  const parts = parsedContent.split(/(__[A-Z_]+_\d+_\d+__)/g);
 
   return (
     <div className={className}>
@@ -36,6 +38,14 @@ export default function ContentRenderer({ content, className = "" }) {
                 key={`form-${component.id}-${index}`}
                 formId={parseInt(component.id)}
                 className={component.className}
+              />
+            );
+          }
+          if (component.type === "cta_banner") {
+            return (
+              <CTABannerEmbed
+                key={`cta-banner-${component.id}-${index}`}
+                id={parseInt(component.id)}
               />
             );
           }

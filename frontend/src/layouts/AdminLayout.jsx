@@ -14,6 +14,7 @@ const AdminLayout = () => {
     { name: "Categories", path: "/admin/categories", icon: "🏷️" },
     { name: "Tags", path: "/admin/tags", icon: "🔖" },
     { name: "Forms & Popups", path: "/admin/forms", icon: "📋" },
+    { name: "CTA Banners", path: "/admin/cta-banners", icon: "📢" },
     { name: "Downloads", path: "/admin/downloads", icon: "📥" },
     { name: "Menus", path: "/admin/menus", icon: "☰" },
     { name: "Header Builder", path: "/admin/header-builder/new", icon: "🔝" },
