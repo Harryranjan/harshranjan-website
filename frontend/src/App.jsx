@@ -1,9 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./layouts/AdminLayout";
+import PublicLayout from "./layouts/PublicLayout";
 
 // Public Pages
 import Home from "./pages/Home";
@@ -28,6 +27,7 @@ import TagManager from "./pages/admin/TagManager";
 import FormList from "./pages/admin/FormList";
 import FormBuilder from "./pages/admin/FormBuilderNew";
 import FormSubmissions from "./pages/admin/FormSubmissions";
+import ModalList from "./pages/admin/ModalList";
 import ModalBuilder from "./pages/admin/ModalBuilder";
 import PopupBuilder from "./pages/admin/PopupBuilder";
 import EmailSettings from "./pages/admin/EmailSettings";
@@ -35,120 +35,25 @@ import DownloadList from "./pages/admin/DownloadList";
 import DownloadForm from "./pages/admin/DownloadForm";
 import DownloadLeads from "./pages/admin/DownloadLeads";
 import DownloadsLibrary from "./pages/DownloadsLibrary";
+import MenuList from "./pages/admin/MenuList";
+import MenuForm from "./pages/admin/MenuForm";
+import HeaderBuilder from "./pages/admin/HeaderBuilder";
+import FooterBuilder from "./pages/admin/FooterBuilder";
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
         {/* Public Routes */}
-        <Route
-          path="/"
-          element={
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <Home />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-        <Route
-          path="/about"
-          element={
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <About />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-        <Route
-          path="/services"
-          element={
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <Services />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-        <Route
-          path="/portfolio"
-          element={
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <Portfolio />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-        <Route
-          path="/blog"
-          element={
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <BlogList />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-        <Route
-          path="/blog/:slug"
-          element={
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <BlogPost />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-        <Route
-          path="/contact"
-          element={
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <Contact />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-        <Route
-          path="/shortcode-demo"
-          element={
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <ShortcodeDemo />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-        <Route
-          path="/downloads"
-          element={
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">
-                <DownloadsLibrary />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
+        <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
+        <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
+        <Route path="/services" element={<PublicLayout><Services /></PublicLayout>} />
+        <Route path="/portfolio" element={<PublicLayout><Portfolio /></PublicLayout>} />
+        <Route path="/blog" element={<PublicLayout><BlogList /></PublicLayout>} />
+        <Route path="/blog/:slug" element={<PublicLayout><BlogPost /></PublicLayout>} />
+        <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
+        <Route path="/shortcode-demo" element={<PublicLayout><ShortcodeDemo /></PublicLayout>} />
+        <Route path="/downloads" element={<PublicLayout><DownloadsLibrary /></PublicLayout>} />
 
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -177,6 +82,7 @@ function App() {
             path="forms/:formId/submissions"
             element={<FormSubmissions />}
           />
+          <Route path="forms/modals" element={<ModalList />} />
           <Route path="forms/modals/new" element={<ModalBuilder />} />
           <Route path="forms/modals/:id/edit" element={<ModalBuilder />} />
           <Route path="forms/popups/new" element={<PopupBuilder />} />
@@ -185,6 +91,13 @@ function App() {
           <Route path="downloads/new" element={<DownloadForm />} />
           <Route path="downloads/edit/:id" element={<DownloadForm />} />
           <Route path="downloads/:id/leads" element={<DownloadLeads />} />
+          <Route path="menus" element={<MenuList />} />
+          <Route path="menus/new" element={<MenuForm />} />
+          <Route path="menus/:id" element={<MenuForm />} />
+          <Route path="header-builder/new" element={<HeaderBuilder />} />
+          <Route path="header-builder/:id" element={<HeaderBuilder />} />
+          <Route path="footer-builder/new" element={<FooterBuilder />} />
+          <Route path="footer-builder/:id" element={<FooterBuilder />} />
           <Route
             path="portfolio"
             element={

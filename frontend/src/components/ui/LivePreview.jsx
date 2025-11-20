@@ -20,8 +20,13 @@ const blocksToHTML = (blocks) => {
 
         case "video":
           // Simple video embed (YouTube, Vimeo)
-          if (block.content.includes("youtube.com") || block.content.includes("youtu.be")) {
-            const videoId = block.content.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/)?.[1];
+          if (
+            block.content.includes("youtube.com") ||
+            block.content.includes("youtu.be")
+          ) {
+            const videoId = block.content.match(
+              /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/
+            )?.[1];
             return videoId
               ? `<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.youtube.com/embed/${videoId}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe></div>`
               : `<p class="text-gray-500">Invalid YouTube URL</p>`;
@@ -57,7 +62,14 @@ const blocksToHTML = (blocks) => {
     .join("\n");
 };
 
-export default function LivePreview({ content, title, template = "default" }) {
+export default function LivePreview({
+  content,
+  title,
+  template = "default",
+  onClose,
+  showTitle = false,
+  pageTitle = "",
+}) {
   const [previewMode, setPreviewMode] = useState("desktop"); // desktop, tablet, mobile
   const iframeRef = useRef(null);
 
@@ -70,7 +82,21 @@ export default function LivePreview({ content, title, template = "default" }) {
     // Convert blocks to HTML if needed
     const htmlContent = blocksToHTML(content);
 
-    // Generate preview HTML with styling
+    // Check if content is a complete HTML document (Custom Code mode)
+    const isCustomHTML =
+      typeof htmlContent === "string" &&
+      (htmlContent.trim().startsWith("<!DOCTYPE") ||
+        htmlContent.trim().startsWith("<html"));
+
+    // If it's custom HTML, render it directly
+    if (isCustomHTML) {
+      iframeDoc.open();
+      iframeDoc.write(htmlContent);
+      iframeDoc.close();
+      return;
+    }
+
+    // Generate preview HTML with styling for Rich Text and Block Editor
     const previewHTML = `
       <!DOCTYPE html>
       <html lang="en">
@@ -240,11 +266,12 @@ export default function LivePreview({ content, title, template = "default" }) {
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      {/* Preview Toolbar */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      {/* Compact Single-Row Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between gap-4">
+        {/* Left: Title */}
+        <div className="flex items-center gap-3 min-w-0">
           <svg
-            className="w-5 h-5 text-gray-600"
+            className="w-5 h-5 text-blue-600 flex-shrink-0"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -262,16 +289,26 @@ export default function LivePreview({ content, title, template = "default" }) {
               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
             />
           </svg>
-          <span className="font-semibold text-gray-900">Live Preview</span>
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="font-semibold text-gray-900 whitespace-nowrap">
+              Live Preview
+            </span>
+            {showTitle && pageTitle && (
+              <>
+                <span className="text-gray-400">•</span>
+                <span className="text-gray-600 truncate">{pageTitle}</span>
+              </>
+            )}
+          </div>
         </div>
 
-        {/* Device Mode Buttons */}
-        <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+        {/* Center: Device Mode Buttons */}
+        <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
           {Object.entries(previewModes).map(([mode, { icon }]) => (
             <button
               key={mode}
               onClick={() => setPreviewMode(mode)}
-              className={`px-3 py-1.5 rounded-md transition flex items-center gap-2 ${
+              className={`px-3 py-1.5 rounded-md transition flex items-center gap-1.5 ${
                 previewMode === mode
                   ? "bg-white text-blue-600 shadow-sm"
                   : "text-gray-600 hover:text-gray-900"
@@ -297,6 +334,29 @@ export default function LivePreview({ content, title, template = "default" }) {
             </button>
           ))}
         </div>
+
+        {/* Right: Close Button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="flex items-center gap-2 px-3 py-1.5 text-gray-700 hover:bg-gray-100 rounded-lg transition flex-shrink-0"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            <span className="font-medium hidden sm:inline">Close</span>
+          </button>
+        )}
       </div>
 
       {/* Preview Frame Container */}

@@ -42,8 +42,20 @@ exports.getAllPages = async (req, res) => {
     // Transform to include both snake_case and camelCase for compatibility
     const transformedPages = pages.map((page) => {
       const pageData = page.toJSON();
+
+      // Parse content if it's a JSON string (from block editor)
+      let content = pageData.content;
+      try {
+        if (content && typeof content === "string" && content.startsWith("[")) {
+          content = JSON.parse(content);
+        }
+      } catch (e) {
+        // Keep as string if parsing fails
+      }
+
       return {
         ...pageData,
+        content,
         createdAt: pageData.created_at,
         updatedAt: pageData.updated_at,
       };
@@ -72,9 +84,21 @@ exports.getPageById = async (req, res) => {
     }
 
     const pageData = page.toJSON();
+
+    // Parse content if it's a JSON string (from block editor)
+    let content = pageData.content;
+    try {
+      if (content && typeof content === "string" && content.startsWith("[")) {
+        content = JSON.parse(content);
+      }
+    } catch (e) {
+      // Keep as string if parsing fails
+    }
+
     res.json({
       page: {
         ...pageData,
+        content,
         createdAt: pageData.created_at,
         updatedAt: pageData.updated_at,
       },
@@ -143,10 +167,16 @@ exports.createPage = async (req, res) => {
       );
     }
 
+    // Serialize content if it's an array (from block editor)
+    let processedContent = content;
+    if (Array.isArray(content)) {
+      processedContent = JSON.stringify(content);
+    }
+
     const page = await Page.create({
       title,
       slug,
-      content,
+      content: processedContent,
       excerpt,
       featured_image,
       template: template || "default",
@@ -218,10 +248,16 @@ exports.updatePage = async (req, res) => {
       );
     }
 
+    // Serialize content if it's an array (from block editor)
+    let processedContent = content;
+    if (Array.isArray(content)) {
+      processedContent = JSON.stringify(content);
+    }
+
     await page.update({
       title,
       slug,
-      content,
+      content: processedContent,
       excerpt,
       featured_image,
       template,

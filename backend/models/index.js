@@ -8,6 +8,9 @@ const Category = require("./Category")(sequelize, DataTypes);
 const Tag = require("./Tag")(sequelize, DataTypes);
 const Download = require("./Download");
 const DownloadLead = require("./DownloadLead");
+const Menu = require("./Menu");
+const MenuItem = require("./MenuItem");
+const Page = require("./Page");
 
 // Define associations
 Download.hasMany(DownloadLead, {
@@ -20,6 +23,39 @@ DownloadLead.belongsTo(Download, {
   as: "download",
 });
 
+// Menu associations
+Menu.hasMany(MenuItem, {
+  foreignKey: "menu_id",
+  as: "items",
+});
+
+MenuItem.belongsTo(Menu, {
+  foreignKey: "menu_id",
+  as: "menu",
+});
+
+// MenuItem self-referencing (parent-child)
+MenuItem.hasMany(MenuItem, {
+  foreignKey: "parent_id",
+  as: "children",
+});
+
+MenuItem.belongsTo(MenuItem, {
+  foreignKey: "parent_id",
+  as: "parent",
+});
+
+// MenuItem to Page association
+MenuItem.belongsTo(Page, {
+  foreignKey: "page_id",
+  as: "page",
+});
+
+Page.hasMany(MenuItem, {
+  foreignKey: "page_id",
+  as: "menuItems",
+});
+
 // Export all models
 module.exports = {
   sequelize,
@@ -29,4 +65,7 @@ module.exports = {
   Tag,
   Download,
   DownloadLead,
+  Menu,
+  MenuItem,
+  Page,
 };

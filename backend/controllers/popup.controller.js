@@ -261,3 +261,35 @@ exports.trackPopupConversion = async (req, res) => {
       .json({ message: "Failed to track conversion", error: error.message });
   }
 };
+
+// Get popup statistics
+exports.getStats = async (req, res) => {
+  try {
+    const { Op } = require("sequelize");
+
+    const totalPopups = await Popup.count();
+    const activePopups = await Popup.count({ where: { status: "active" } });
+    const draftPopups = await Popup.count({ where: { status: "draft" } });
+    const inactivePopups = await Popup.count({ where: { status: "inactive" } });
+
+    const totalViews = await Popup.sum("views") || 0;
+    const totalClicks = await Popup.sum("clicks") || 0;
+    const totalDismissals = await Popup.sum("dismissals") || 0;
+
+    const clickRate = totalViews > 0 ? ((totalClicks / totalViews) * 100).toFixed(2) : 0;
+
+    res.json({
+      totalPopups,
+      activePopups,
+      draftPopups,
+      inactivePopups,
+      totalViews,
+      totalClicks,
+      totalDismissals,
+      clickRate: `${clickRate}%`,
+    });
+  } catch (error) {
+    console.error("Error fetching popup stats:", error);
+    res.status(500).json({ message: "Failed to fetch stats", error: error.message });
+  }
+};

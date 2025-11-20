@@ -1,0 +1,223 @@
+import { useState } from "react";
+
+export default function BlogPreview({ post, onClose }) {
+  const [previewMode, setPreviewMode] = useState("desktop"); // desktop, tablet, mobile
+
+  const getImageUrl = (url) => {
+    if (!url) return "";
+    if (url.startsWith("http")) return url;
+    return `http://localhost:5000${url}`;
+  };
+
+  const formatDate = (dateString) => {
+    const date = dateString ? new Date(dateString) : new Date();
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const previewModes = {
+    desktop: { width: "100%", icon: "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" },
+    tablet: { width: "768px", icon: "M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" },
+    mobile: { width: "375px", icon: "M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" },
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      {/* Header with Controls */}
+      <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3 min-w-0">
+          <svg className="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          <span className="font-semibold text-gray-900 whitespace-nowrap">Blog Post Preview</span>
+        </div>
+
+        {/* Device Mode Buttons */}
+        <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+          {Object.entries(previewModes).map(([mode, { icon }]) => (
+            <button
+              key={mode}
+              onClick={() => setPreviewMode(mode)}
+              className={`px-3 py-1.5 rounded-md transition flex items-center gap-1.5 ${
+                previewMode === mode ? "bg-white text-blue-600 shadow-sm" : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
+              </svg>
+              <span className="text-sm font-medium capitalize hidden sm:inline">{mode}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Close Button */}
+        <button onClick={onClose} className="flex items-center gap-2 px-3 py-1.5 text-gray-700 hover:bg-gray-100 rounded-lg transition flex-shrink-0">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          <span className="font-medium hidden sm:inline">Close</span>
+        </button>
+      </div>
+
+      {/* Preview Container */}
+      <div className="flex-1 overflow-auto bg-gray-100 p-4 flex items-start justify-center">
+        <div 
+          className="bg-gray-50 shadow-lg rounded-lg overflow-auto transition-all duration-300"
+          style={{ width: previewModes[previewMode].width, maxWidth: "100%", minHeight: "600px" }}
+        >
+          {/* Hero Image */}
+          {post.featured_image && (
+            <div className="relative h-96 bg-gray-900">
+              <img
+                src={getImageUrl(post.featured_image)}
+                alt={post.title}
+                className="w-full h-full object-cover opacity-80"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+            <article>
+              {/* Breadcrumb */}
+              <nav className="mb-6 lg:mb-8 text-sm">
+                <div className="flex items-center gap-2 text-gray-500">
+                  <span>Home</span>
+                  <span>›</span>
+                  <span>Blog</span>
+                  {post.category && post.category.length > 0 && (
+                    <>
+                      <span>›</span>
+                      <span className="text-blue-600">{Array.isArray(post.category) ? post.category[0] : post.category}</span>
+                    </>
+                  )}
+                </div>
+              </nav>
+
+              {/* Header */}
+              <header className="mb-8">
+                {/* Category Badge */}
+                {post.category && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {(Array.isArray(post.category) ? post.category : [post.category]).map((cat, index) => (
+                      <span key={index} className="inline-block px-3 py-1 text-sm font-semibold text-blue-600 bg-blue-100 rounded-full">
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Title */}
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+                  {post.title || "Untitled Post"}
+                </h1>
+
+                {/* Meta Info */}
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm sm:text-base text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                      A
+                    </div>
+                    <span className="font-medium">Admin</span>
+                  </div>
+                  <span className="hidden sm:inline text-gray-400">•</span>
+                  <time className="text-gray-600">{formatDate(new Date())}</time>
+                  <span className="text-gray-400">•</span>
+                  <div className="flex items-center gap-1">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{Math.ceil((post.content?.length || 0) / 1000)} min read</span>
+                  </div>
+                </div>
+              </header>
+
+              {/* Article Content */}
+              <div className="bg-white rounded-xl shadow-sm p-6 sm:p-8 lg:p-12">
+                {/* Excerpt */}
+                {post.excerpt && (
+                  <div className="text-lg sm:text-xl text-gray-700 mb-8 pb-8 border-b border-gray-200 italic leading-relaxed">
+                    {post.excerpt}
+                  </div>
+                )}
+
+                {/* Content */}
+                <div 
+                  className="prose prose-sm sm:prose-base lg:prose-lg max-w-none blog-content"
+                  dangerouslySetInnerHTML={{ __html: post.content || '<p class="text-gray-400">Start writing content...</p>' }}
+                />
+
+                {/* Tags */}
+                {post.tags && post.tags.length > 0 && (
+                  <div className="mt-8 pt-8 border-t border-gray-200">
+                    <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                      </svg>
+                      Tags
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag, index) => (
+                        <span key={index} className="px-3 py-1.5 text-sm text-gray-700 bg-gray-100 rounded-full">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Share Buttons */}
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    Share this article
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
+                    <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-400 text-white rounded-lg">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                      </svg>
+                      <span className="font-medium">Twitter</span>
+                    </button>
+                    <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                      </svg>
+                      <span className="font-medium">LinkedIn</span>
+                    </button>
+                    <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-800 text-white rounded-lg">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                      </svg>
+                      <span className="font-medium">Facebook</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      {/* Info Footer */}
+      <div className="bg-white border-t border-gray-200 px-4 py-2 text-xs text-gray-500 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>This is a preview of how your blog post will appear</span>
+        </div>
+        <div>
+          <span className="font-medium">{previewMode === "desktop" ? "100%" : previewModes[previewMode].width}</span>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -4,6 +4,7 @@ const popupController = require("../controllers/popup.controller");
 const { authMiddleware } = require("../middleware/auth.middleware");
 
 // Popup routes (protected)
+router.get("/stats", authMiddleware, popupController.getStats || popupController.getAllPopups);
 router.get("/", authMiddleware, popupController.getAllPopups);
 router.get("/active", popupController.getActivePopups); // Public endpoint
 router.get("/:id", authMiddleware, popupController.getPopupById);
@@ -12,8 +13,8 @@ router.put("/:id", authMiddleware, popupController.updatePopup);
 router.delete("/:id", authMiddleware, popupController.deletePopup);
 
 // Tracking routes (public)
-router.post("/:id/view", popupController.trackPopupView);
-router.post("/:id/click", popupController.trackPopupClick);
-router.post("/:id/conversion", popupController.trackPopupConversion);
+router.post("/:id/track/view", popupController.trackPopupView);
+router.post("/:id/track/click", popupController.trackPopupClick);
+router.post("/:id/track/dismissal", popupController.trackPopupConversion); // Use conversion for dismissal tracking
 
 module.exports = router;

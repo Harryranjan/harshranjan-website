@@ -96,7 +96,7 @@ app.use(morgan("dev"));
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: process.env.NODE_ENV === 'production' ? 100 : 1000, // Higher limit for development
 });
 app.use("/api/", limiter);
 
@@ -125,6 +125,7 @@ app.use("/api/email", require("./routes/email.routes"));
 app.use("/api/settings", require("./routes/settings.routes"));
 app.use("/api/downloads", require("./routes/download.routes"));
 app.use("/api/download-leads", require("./routes/downloadLead.routes"));
+app.use("/api/menus", require("./routes/menu.routes"));
 
 // 404 handler
 app.use((req, res) => {

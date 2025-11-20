@@ -16,33 +16,34 @@ const Popup = sequelize.define(
     title: {
       type: DataTypes.STRING,
     },
-    message: {
+    content: {
       type: DataTypes.TEXT,
     },
     type: {
       type: DataTypes.ENUM(
-        "banner",
-        "slide-in",
-        "full-screen",
-        "corner",
-        "bar"
+        "notification",
+        "chat",
+        "cookie_consent",
+        "promo",
+        "social_proof",
+        "newsletter",
+        "custom"
       ),
-      defaultValue: "banner",
+      defaultValue: "notification",
     },
-    position: {
-      type: DataTypes.ENUM(
-        "top",
-        "bottom",
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right",
-        "center"
-      ),
-      defaultValue: "bottom-right",
+    template: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: "Pre-built template name",
     },
+    icon: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: "Icon name or emoji",
+    },
+
     trigger_type: {
-      type: DataTypes.ENUM("immediate", "time", "scroll", "exit", "click"),
+      type: DataTypes.ENUM("manual", "time", "scroll", "exit", "click", "immediate"),
       defaultValue: "immediate",
     },
     trigger_value: {
@@ -62,7 +63,17 @@ const Popup = sequelize.define(
       type: DataTypes.TEXT,
       get() {
         const rawValue = this.getDataValue("styling");
-        return rawValue ? JSON.parse(rawValue) : {};
+        return rawValue ? JSON.parse(rawValue) : {
+          position: "bottom-right",
+          size: "small",
+          backgroundColor: "#ffffff",
+          textColor: "#000000",
+          borderRadius: "8",
+          shadow: true,
+          animation: "slideIn",
+          autoClose: false,
+          autoCloseDelay: 5,
+        };
       },
       set(value) {
         this.setDataValue("styling", JSON.stringify(value));
@@ -77,23 +88,10 @@ const Popup = sequelize.define(
     cta_link: {
       type: DataTypes.STRING,
     },
-    close_button: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-    },
-    auto_close: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
+
     status: {
-      type: DataTypes.ENUM("active", "inactive", "draft", "scheduled"),
+      type: DataTypes.ENUM("active", "inactive", "draft"),
       defaultValue: "draft",
-    },
-    start_date: {
-      type: DataTypes.DATE,
-    },
-    end_date: {
-      type: DataTypes.DATE,
     },
     views: {
       type: DataTypes.INTEGER,
@@ -103,7 +101,7 @@ const Popup = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-    conversions: {
+    dismissals: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },

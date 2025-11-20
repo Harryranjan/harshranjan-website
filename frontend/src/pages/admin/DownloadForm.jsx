@@ -35,6 +35,10 @@ export default function DownloadForm() {
     requires_form: true,
     meta_title: "",
     meta_description: "",
+    author: "",
+    difficulty: "beginner",
+    reading_time: "",
+    tags: [],
   });
 
   useEffect(() => {
@@ -290,6 +294,62 @@ export default function DownloadForm() {
                 value={formData.thumbnail}
                 onChange={(url) => handleChange("thumbnail", url)}
               />
+            </div>
+          </div>
+
+          {/* Metadata Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              Additional Metadata
+            </h2>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Author"
+                  value={formData.author}
+                  onChange={(e) => handleChange("author", e.target.value)}
+                  placeholder="John Doe"
+                />
+
+                <Input
+                  label="Reading Time"
+                  value={formData.reading_time}
+                  onChange={(e) => handleChange("reading_time", e.target.value)}
+                  placeholder="e.g., 15 min read"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Difficulty Level
+                </label>
+                <select
+                  value={formData.difficulty}
+                  onChange={(e) => handleChange("difficulty", e.target.value)}
+                  className="w-full px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
+                >
+                  <option value="beginner">🟢 Beginner</option>
+                  <option value="intermediate">🟡 Intermediate</option>
+                  <option value="advanced">🔴 Advanced</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Tags
+                </label>
+                <input
+                  type="text"
+                  value={Array.isArray(formData.tags) ? formData.tags.join(", ") : formData.tags}
+                  onChange={(e) => handleChange("tags", e.target.value.split(",").map(t => t.trim()).filter(Boolean))}
+                  className="w-full px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
+                  placeholder="SEO, Marketing, Analytics (comma separated)"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Enter tags separated by commas
+                </p>
+              </div>
             </div>
           </div>
 

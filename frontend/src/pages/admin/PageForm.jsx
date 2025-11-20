@@ -24,7 +24,7 @@ export default function PageForm() {
   const [lastSaved, setLastSaved] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  const [editorMode, setEditorMode] = useState("rich"); // "rich" or "block"
+  const [editorMode, setEditorMode] = useState("rich"); // "rich", "block", or "code"
   const [showPreview, setShowPreview] = useState(false);
   const autoSaveTimeoutRef = useRef(null);
   const [formData, setFormData] = useState({
@@ -49,6 +49,7 @@ export default function PageForm() {
   });
 
   const [allPages, setAllPages] = useState([]);
+  const [slugEdited, setSlugEdited] = useState(false);
 
   useEffect(() => {
     fetchAllPages();
@@ -91,7 +92,26 @@ export default function PageForm() {
   const fetchPage = async () => {
     try {
       const response = await api.get(`/pages/${id}`);
-      setFormData(response.data.page);
+      const pageData = response.data.page;
+
+      // Detect editor mode based on content type
+      if (Array.isArray(pageData.content)) {
+        setEditorMode("block");
+      } else if (
+        typeof pageData.content === "string" &&
+        pageData.content.trim().startsWith("<!DOCTYPE")
+      ) {
+        // If content starts with DOCTYPE, it's custom code
+        setEditorMode("code");
+      } else {
+        setEditorMode("rich");
+        // Ensure content is a string for ReactQuill
+        if (!pageData.content) {
+          pageData.content = "";
+        }
+      }
+
+      setFormData(pageData);
     } catch (error) {
       console.error("Failed to fetch page:", error);
       alert("Failed to load page");
@@ -109,13 +129,23 @@ export default function PageForm() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    // If user edits the slug field, mark slug as manually edited.
+    if (name === "slug") {
+      if (value === "") {
+        setSlugEdited(false);
+      } else {
+        setSlugEdited(true);
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
 
-    // Auto-generate slug from title if not editing
-    if (name === "title" && !isEditing && !formData.slug) {
+    // Auto-generate slug from title while creating a new page,
+    // but only if the slug hasn't been manually edited yet.
+    if (name === "title" && !isEditing && !slugEdited) {
       setFormData((prev) => ({
         ...prev,
         slug: generateSlug(value),
@@ -125,6 +155,22 @@ export default function PageForm() {
 
   const handleContentChange = (value) => {
     setFormData((prev) => ({ ...prev, content: value }));
+  };
+
+  const handleEditorModeChange = (mode) => {
+    setEditorMode(mode);
+
+    // Convert content format when switching modes
+    if (mode === "block" && typeof formData.content === "string") {
+      // Converting from rich text/code to blocks: start with empty blocks
+      setFormData((prev) => ({ ...prev, content: [] }));
+    } else if (
+      (mode === "rich" || mode === "code") &&
+      Array.isArray(formData.content)
+    ) {
+      // Converting from blocks to rich text/code: start with empty string
+      setFormData((prev) => ({ ...prev, content: "" }));
+    }
   };
 
   const handleAutoSave = async () => {
@@ -189,6 +235,27 @@ export default function PageForm() {
           {isEditing ? "Edit Page" : "Create Page"} - Admin Dashboard
         </title>
       </Helmet>
+
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/admin/pages")}
+        className="mb-4 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition"
+      >
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back to Pages
+      </button>
 
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -285,382 +352,410 @@ export default function PageForm() {
         </div>
       </div>
 
-      <div
-        className={`grid gap-6 ${
-          showPreview ? "lg:grid-cols-2" : "grid-cols-1"
-        }`}
-      >
-        {/* Form Section */}
-        <div
-          className={
-            showPreview
-              ? "lg:h-[calc(100vh-12rem)] lg:overflow-y-auto lg:pr-4"
-              : ""
-          }
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Basic Information */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Basic Information
-              </h2>
+      {/* Form Section */}
+      <div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Basic Information */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Basic Information
+            </h2>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Page Title <span className="text-red-500">*</span>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Page Title <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter page title"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Slug <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="slug"
+                  value={formData.slug}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="page-url-slug"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  URL-friendly version of the page name
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Excerpt
+                </label>
+                <textarea
+                  name="excerpt"
+                  value={formData.excerpt}
+                  onChange={handleInputChange}
+                  rows={3}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Brief description of the page"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Content
                   </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter page title"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Slug <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="slug"
-                    value={formData.slug}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="page-url-slug"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    URL-friendly version of the page name
-                  </p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Excerpt
-                  </label>
-                  <textarea
-                    name="excerpt"
-                    value={formData.excerpt}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Brief description of the page"
-                  />
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Content
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setEditorMode("rich")}
-                        className={`px-3 py-1 text-sm rounded-lg transition ${
-                          editorMode === "rich"
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
-                      >
-                        Rich Text
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setEditorMode("block")}
-                        className={`px-3 py-1 text-sm rounded-lg transition ${
-                          editorMode === "block"
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
-                      >
-                        Block Editor
-                      </button>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleEditorModeChange("rich")}
+                      className={`px-3 py-1 text-sm rounded-lg transition ${
+                        editorMode === "rich"
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      Rich Text
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleEditorModeChange("block")}
+                      className={`px-3 py-1 text-sm rounded-lg transition ${
+                        editorMode === "block"
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      Block Editor
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleEditorModeChange("code")}
+                      className={`px-3 py-1 text-sm rounded-lg transition ${
+                        editorMode === "code"
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      Custom Code
+                    </button>
                   </div>
+                </div>
 
-                  {editorMode === "rich" ? (
-                    <div className="border border-gray-300 rounded-lg overflow-hidden">
-                      <ReactQuill
-                        theme="snow"
-                        value={formData.content}
-                        onChange={handleContentChange}
-                        modules={quillModules}
-                        className="bg-white"
-                        style={{ minHeight: "300px" }}
-                      />
-                    </div>
-                  ) : (
-                    <BlockEditor
+                {editorMode === "rich" ? (
+                  <div className="border border-gray-300 rounded-lg overflow-hidden">
+                    <ReactQuill
+                      theme="snow"
                       value={
                         typeof formData.content === "string"
-                          ? []
-                          : formData.content
+                          ? formData.content
+                          : ""
                       }
-                      onChange={(blocks) => {
-                        setFormData((prev) => ({ ...prev, content: blocks }));
-                      }}
+                      onChange={handleContentChange}
+                      modules={quillModules}
+                      className="bg-white"
+                      style={{ minHeight: "300px" }}
                     />
-                  )}
-                </div>
-
-                <div>
-                  <ImageUpload
-                    label="Featured Image"
-                    name="featured_image"
-                    value={formData.featured_image}
-                    onChange={(value) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        featured_image: value,
-                      }))
+                  </div>
+                ) : editorMode === "block" ? (
+                  <BlockEditor
+                    value={
+                      Array.isArray(formData.content) ? formData.content : []
                     }
+                    onChange={(blocks) => {
+                      setFormData((prev) => ({ ...prev, content: blocks }));
+                    }}
                   />
-                </div>
-              </div>
-            </div>
-
-            {/* Page Settings */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Page Settings
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Template
-                  </label>
-                  <select
-                    name="template"
-                    value={formData.template}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="default">Default</option>
-                    <option value="about">About</option>
-                    <option value="services">Services</option>
-                    <option value="contact">Contact</option>
-                    <option value="custom">Custom</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Status
-                  </label>
-                  <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="draft">Draft</option>
-                    <option value="published">Published</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Parent Page
-                  </label>
-                  <select
-                    name="parent_id"
-                    value={formData.parent_id || ""}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="">None (Top Level)</option>
-                    {allPages
-                      .filter((p) => p.id !== parseInt(id))
-                      .map((page) => (
-                        <option key={page.id} value={page.id}>
-                          {page.title}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Menu Order
-                  </label>
-                  <input
-                    type="number"
-                    name="menu_order"
-                    value={formData.menu_order}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="0"
-                  />
-                </div>
+                ) : (
+                  <div className="border border-gray-300 rounded-lg overflow-hidden">
+                    <div className="bg-gray-800 px-4 py-2 flex items-center justify-between">
+                      <span className="text-sm text-gray-300 font-mono">
+                        HTML / CSS / JavaScript / React / Tailwind
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        Paste your custom code here
+                      </span>
+                    </div>
+                    <textarea
+                      value={
+                        typeof formData.content === "string"
+                          ? formData.content
+                          : ""
+                      }
+                      onChange={(e) => handleContentChange(e.target.value)}
+                      className="w-full font-mono text-sm p-4 bg-gray-900 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style={{ minHeight: "500px", tabSize: 2 }}
+                      placeholder={`<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Your Custom Page</title>\n  <script src="https://cdn.tailwindcss.com"></script>\n</head>\n<body>\n  <!-- Your custom HTML here -->\n  <div class="container mx-auto p-8">\n    <h1 class="text-4xl font-bold">Hello World!</h1>\n  </div>\n</body>\n</html>`}
+                      spellCheck={false}
+                    />
+                  </div>
+                )}
               </div>
 
-              <div className="mt-4 space-y-3">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    name="show_in_menu"
-                    checked={formData.show_in_menu}
-                    onChange={handleInputChange}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">Show in menu</span>
-                </label>
-
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    name="is_homepage"
-                    checked={formData.is_homepage}
-                    onChange={handleInputChange}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">Set as homepage</span>
-                </label>
+              <div>
+                <ImageUpload
+                  label="Featured Image"
+                  name="featured_image"
+                  value={formData.featured_image}
+                  onChange={(value) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      featured_image: value,
+                    }))
+                  }
+                />
               </div>
             </div>
-
-            {/* SEO Settings */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                SEO Settings
-              </h2>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Meta Title
-                  </label>
-                  <input
-                    type="text"
-                    name="meta_title"
-                    value={formData.meta_title}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="SEO title for search engines"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Meta Description
-                  </label>
-                  <textarea
-                    name="meta_description"
-                    value={formData.meta_description}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="SEO description for search engines"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Meta Keywords
-                  </label>
-                  <input
-                    type="text"
-                    name="meta_keywords"
-                    value={formData.meta_keywords}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="keyword1, keyword2, keyword3"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Advanced Settings */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Advanced Settings
-              </h2>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Custom CSS
-                  </label>
-                  <textarea
-                    name="custom_css"
-                    value={formData.custom_css}
-                    onChange={handleInputChange}
-                    rows={5}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="/* Custom CSS for this page */"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Custom JavaScript
-                  </label>
-                  <textarea
-                    name="custom_js"
-                    value={formData.custom_js}
-                    onChange={handleInputChange}
-                    rows={5}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="// Custom JavaScript for this page"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Tracking & Analytics Scripts */}
-            <TrackingScriptsSection
-              headScripts={formData.head_scripts}
-              bodyScripts={formData.body_scripts}
-              onHeadScriptsChange={(value) =>
-                setFormData((prev) => ({ ...prev, head_scripts: value }))
-              }
-              onBodyScriptsChange={(value) =>
-                setFormData((prev) => ({ ...prev, body_scripts: value }))
-              }
-            />
-
-            {/* Form Actions */}
-            <div className="flex items-center justify-between gap-4">
-              <button
-                type="button"
-                onClick={() => navigate("/admin/pages")}
-                className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={saving}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {saving
-                  ? "Saving..."
-                  : isEditing
-                  ? "Update Page"
-                  : "Create Page"}
-              </button>
-            </div>
-          </form>
-        </div>
-
-        {/* Preview Section */}
-        {showPreview && (
-          <div className="lg:h-[calc(100vh-12rem)] lg:sticky lg:top-6">
-            <LivePreview
-              content={formData.content}
-              title={formData.title}
-              template={formData.template}
-            />
           </div>
-        )}
+
+          {/* Page Settings */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Page Settings
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Template
+                </label>
+                <select
+                  name="template"
+                  value={formData.template}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="default">Default</option>
+                  <option value="about">About</option>
+                  <option value="services">Services</option>
+                  <option value="contact">Contact</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Status
+                </label>
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Parent Page
+                </label>
+                <select
+                  name="parent_id"
+                  value={formData.parent_id || ""}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">None (Top Level)</option>
+                  {allPages
+                    .filter((p) => p.id !== parseInt(id))
+                    .map((page) => (
+                      <option key={page.id} value={page.id}>
+                        {page.title}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Menu Order
+                </label>
+                <input
+                  type="number"
+                  name="menu_order"
+                  value={formData.menu_order}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  name="show_in_menu"
+                  checked={formData.show_in_menu}
+                  onChange={handleInputChange}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">Show in menu</span>
+              </label>
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  name="is_homepage"
+                  checked={formData.is_homepage}
+                  onChange={handleInputChange}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">Set as homepage</span>
+              </label>
+            </div>
+          </div>
+
+          {/* SEO Settings */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              SEO Settings
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Meta Title
+                </label>
+                <input
+                  type="text"
+                  name="meta_title"
+                  value={formData.meta_title}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="SEO title for search engines"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Meta Description
+                </label>
+                <textarea
+                  name="meta_description"
+                  value={formData.meta_description}
+                  onChange={handleInputChange}
+                  rows={3}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="SEO description for search engines"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Meta Keywords
+                </label>
+                <input
+                  type="text"
+                  name="meta_keywords"
+                  value={formData.meta_keywords}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="keyword1, keyword2, keyword3"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Advanced Settings */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Advanced Settings
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Custom CSS
+                </label>
+                <textarea
+                  name="custom_css"
+                  value={formData.custom_css}
+                  onChange={handleInputChange}
+                  rows={5}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="/* Custom CSS for this page */"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Custom JavaScript
+                </label>
+                <textarea
+                  name="custom_js"
+                  value={formData.custom_js}
+                  onChange={handleInputChange}
+                  rows={5}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="// Custom JavaScript for this page"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Tracking & Analytics Scripts */}
+          <TrackingScriptsSection
+            headScripts={formData.head_scripts}
+            bodyScripts={formData.body_scripts}
+            onHeadScriptsChange={(value) =>
+              setFormData((prev) => ({ ...prev, head_scripts: value }))
+            }
+            onBodyScriptsChange={(value) =>
+              setFormData((prev) => ({ ...prev, body_scripts: value }))
+            }
+          />
+
+          {/* Form Actions */}
+          <div className="flex items-center justify-between gap-4">
+            <button
+              type="button"
+              onClick={() => navigate("/admin/pages")}
+              className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {saving ? "Saving..." : isEditing ? "Update Page" : "Create Page"}
+            </button>
+          </div>
+        </form>
       </div>
+
+      {/* Full-Screen Preview Modal */}
+      {showPreview && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="w-full h-full bg-white flex flex-col">
+            {/* Modal Content with Integrated Header */}
+            <div className="flex-1 overflow-hidden">
+              <LivePreview
+                content={formData.content}
+                title={formData.title}
+                template={formData.template}
+                onClose={() => setShowPreview(false)}
+                showTitle={true}
+                pageTitle={formData.title || "Untitled Page"}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Success Modal */}
       <Modal

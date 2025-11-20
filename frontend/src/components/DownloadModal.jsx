@@ -4,12 +4,11 @@ import {
   FiMail,
   FiUser,
   FiPhone,
-  FiBriefcase,
   FiDownload,
 } from "react-icons/fi";
 import api from "../utils/api";
-import Button from "./ui/Button";
 import Input from "./ui/Input";
+import GradientButton from "./ui/GradientButton";
 
 export default function DownloadModal({ download, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
@@ -77,64 +76,31 @@ export default function DownloadModal({ download, onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-6 overflow-y-auto">
+      <div className="bg-white rounded-lg sm:rounded-xl shadow-2xl max-w-md w-full my-auto mx-auto"
+        style={{ maxHeight: 'calc(100vh - 24px)' }}
+      >
+        <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 24px)' }}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 relative">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 sm:p-6 relative">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+            className="absolute top-2 right-2 sm:top-3 sm:right-3 text-white hover:bg-white hover:bg-opacity-20 rounded-full p-1 sm:p-1.5 transition-colors touch-manipulation"
+            aria-label="Close modal"
           >
-            <FiX size={24} />
+            <FiX size={18} className="sm:w-5 sm:h-5" />
           </button>
 
-          <div className="pr-10">
-            <h2 className="text-2xl font-bold mb-2">Get Your Free Download</h2>
-            <p className="text-blue-100">
-              Fill in your details below and we'll send the download link to
-              your email instantly.
+          <div className="text-center pr-6 sm:pr-8">
+            <h2 className="text-lg sm:text-2xl font-bold mb-1 sm:mb-2">Get Your Free Download</h2>
+            <p className="text-xs sm:text-sm text-blue-100 leading-snug">
+              We'll send the download link to your email instantly.
             </p>
           </div>
         </div>
 
-        {/* Download Info */}
-        <div className="p-6 border-b border-gray-200 bg-gray-50">
-          <div className="flex gap-4">
-            {download.thumbnail && (
-              <div className="w-20 h-20 bg-white rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
-                <img
-                  src={download.thumbnail}
-                  alt={download.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-gray-900 mb-1">
-                {download.title}
-              </h3>
-              <p className="text-sm text-gray-600">
-                {download.short_description}
-              </p>
-              <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
-                {download.file_type && (
-                  <span className="uppercase font-semibold">
-                    {download.file_type}
-                  </span>
-                )}
-                {download.file_size && (
-                  <>
-                    <span>•</span>
-                    <span>{download.file_size}</span>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3 sm:space-y-4">
           <Input
             label="Full Name"
             required
@@ -158,7 +124,7 @@ export default function DownloadModal({ download, onClose, onSuccess }) {
           />
 
           <Input
-            label="Phone Number (Optional)"
+            label="Phone Number"
             type="tel"
             value={formData.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
@@ -166,53 +132,27 @@ export default function DownloadModal({ download, onClose, onSuccess }) {
             icon={<FiPhone />}
           />
 
-          <Input
-            label="Company (Optional)"
-            value={formData.company}
-            onChange={(e) => handleChange("company", e.target.value)}
-            placeholder="Your Company Name"
-            icon={<FiBriefcase />}
-          />
-
           {errors.submit && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg text-sm">
               {errors.submit}
             </div>
           )}
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-sm text-blue-900">
-              <strong>📧 Instant Delivery:</strong> You'll receive the download
-              link in your email within seconds. Check your spam folder if you
-              don't see it.
-            </p>
-          </div>
+          <GradientButton
+            type="submit"
+            loading={loading}
+            icon={<FiDownload size={18} />}
+            variant="blue-purple"
+            size="md"
+          >
+            Get Download Link
+          </GradientButton>
 
-          <div className="flex gap-3 pt-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onClose}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              loading={loading}
-              icon={<FiDownload />}
-              className="flex-1"
-            >
-              Get Download Link
-            </Button>
-          </div>
-
-          <p className="text-xs text-gray-500 text-center mt-4">
-            By downloading, you agree to receive updates from us. You can
-            unsubscribe at any time.
+          <p className="text-xs text-gray-500 text-center -mt-1">
+            We'll never spam you. Unsubscribe anytime.
           </p>
         </form>
+        </div>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import {
   TagInput,
   MultiSelectWithSearch,
   Spinner,
+  BlogPreview,
 } from "../../components/ui";
 
 export default function BlogForm() {
@@ -39,6 +40,7 @@ export default function BlogForm() {
   const [errors, setErrors] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -189,14 +191,75 @@ export default function BlogForm() {
         </title>
       </Helmet>
 
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">
-          {isEditMode ? "Edit Blog Post" : "Create New Post"}
-        </h1>
-        <p className="text-gray-600 mt-1">
-          {isEditMode ? "Update your blog post" : "Create a new blog post"}
-        </p>
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/admin/blog")}
+        className="mb-4 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition"
+      >
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back to Blog Posts
+      </button>
+
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {isEditMode ? "Edit Blog Post" : "Create New Post"}
+          </h1>
+          <p className="text-gray-600 mt-1">
+            {isEditMode ? "Update your blog post" : "Create a new blog post"}
+          </p>
+        </div>
+        
+        {/* Preview Button */}
+        <button
+          type="button"
+          onClick={() => setShowPreview(true)}
+          className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition flex items-center gap-2"
+        >
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+            />
+          </svg>
+          Preview
+        </button>
       </div>
+
+      {/* Blog Preview Modal */}
+      {showPreview && (
+        <div className="fixed inset-0 z-50">
+          <BlogPreview
+            post={formData}
+            onClose={() => setShowPreview(false)}
+          />
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Main Content Card */}

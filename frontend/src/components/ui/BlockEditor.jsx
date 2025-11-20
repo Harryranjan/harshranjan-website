@@ -330,7 +330,8 @@ const BlockEditor = ({ value, onChange }) => {
                 rows={8}
               />
               <div className="mt-2 text-xs text-gray-500">
-                💡 Tip: You can use HTML, CSS (inline or in &lt;style&gt; tags), and JavaScript
+                💡 Tip: You can use HTML, CSS (inline or in &lt;style&gt; tags),
+                and JavaScript
               </div>
             </div>
           )}
