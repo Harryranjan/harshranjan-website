@@ -13,10 +13,10 @@ const DynamicHeader = () => {
     try {
       // Fetch the active header for the 'header' location
       const response = await api.get("/menus/location/header");
-      
+
       if (response.data.menu && response.data.menu.is_active) {
         const { settings } = response.data.menu;
-        
+
         // Use custom code if available
         if (settings && settings.customCode) {
           setHeaderHTML(settings.customCode);
@@ -52,7 +52,7 @@ const DynamicHeader = () => {
   const cleanHeaderHTML = extractHeaderContent(headerHTML);
 
   return (
-    <div 
+    <div
       dangerouslySetInnerHTML={{ __html: cleanHeaderHTML }}
       className="dynamic-header"
     />

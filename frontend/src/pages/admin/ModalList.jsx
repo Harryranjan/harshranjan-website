@@ -71,7 +71,7 @@ export default function ModalList() {
       console.log("📋 API Response:", data);
       console.log("📋 Modals array:", data.modals);
       console.log("📋 Modals count:", data.modals?.length);
-      
+
       setModals(data.modals);
       setPagination(data.pagination);
 
@@ -136,7 +136,9 @@ export default function ModalList() {
       await api.put(`/modals/${modal.id}`, { ...modal, status: newStatus });
       setToast({
         type: "success",
-        message: `Modal ${newStatus === "active" ? "activated" : "deactivated"}`,
+        message: `Modal ${
+          newStatus === "active" ? "activated" : "deactivated"
+        }`,
       });
       loadModals();
     } catch (error) {
@@ -227,8 +229,7 @@ export default function ModalList() {
           </Link>
           <p className="text-xs text-gray-500 mt-1">
             {modal.trigger_type === "manual" && "Manual Trigger"}
-            {modal.trigger_type === "time" &&
-              `${modal.trigger_value}s delay`}
+            {modal.trigger_type === "time" && `${modal.trigger_value}s delay`}
             {modal.trigger_type === "scroll" &&
               `${modal.trigger_value}% scroll`}
             {modal.trigger_type === "exit" && "Exit Intent"}

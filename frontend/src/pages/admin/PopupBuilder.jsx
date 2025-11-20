@@ -2,7 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../utils/api";
 import Modal from "../../components/ui/Modal";
-import { POPUP_TEMPLATES, POSITION_OPTIONS, SIZE_OPTIONS, ANIMATION_OPTIONS, TRIGGER_OPTIONS } from "../../components/admin/popups/PopupTemplates";
+import {
+  POPUP_TEMPLATES,
+  POSITION_OPTIONS,
+  SIZE_OPTIONS,
+  ANIMATION_OPTIONS,
+  TRIGGER_OPTIONS,
+} from "../../components/admin/popups/PopupTemplates";
 
 export default function PopupBuilder() {
   const { id } = useParams();
@@ -133,7 +139,9 @@ export default function PopupBuilder() {
       {/* Template Selection */}
       {!isEditing && (
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4">📋 Choose a Template (Optional)</h2>
+          <h2 className="text-xl font-bold mb-4">
+            📋 Choose a Template (Optional)
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Object.entries(POPUP_TEMPLATES).map(([key, template]) => (
               <button
@@ -148,7 +156,9 @@ export default function PopupBuilder() {
               >
                 <div className="text-3xl mb-2">{template.icon}</div>
                 <div className="font-medium text-sm">{template.name}</div>
-                <div className="text-xs text-gray-500 mt-1 capitalize">{template.type.replace("_", " ")}</div>
+                <div className="text-xs text-gray-500 mt-1 capitalize">
+                  {template.type.replace("_", " ")}
+                </div>
               </button>
             ))}
           </div>
@@ -311,7 +321,10 @@ export default function PopupBuilder() {
                 <textarea
                   value={popupData.content}
                   onChange={(e) =>
-                    setPopupData((prev) => ({ ...prev, content: e.target.value }))
+                    setPopupData((prev) => ({
+                      ...prev,
+                      content: e.target.value,
+                    }))
                   }
                   className="w-full border-2 border-gray-300 rounded-lg px-4 py-2 font-mono text-sm"
                   rows={15}
@@ -321,7 +334,10 @@ export default function PopupBuilder() {
                 <textarea
                   value={popupData.content}
                   onChange={(e) =>
-                    setPopupData((prev) => ({ ...prev, content: e.target.value }))
+                    setPopupData((prev) => ({
+                      ...prev,
+                      content: e.target.value,
+                    }))
                   }
                   className="w-full border-2 border-gray-300 rounded-lg px-4 py-2"
                   rows={3}
@@ -537,7 +553,7 @@ export default function PopupBuilder() {
                 <p className="text-sm mb-4 opacity-90">{popupData.content}</p>
               )}
               {isCustomCode && (
-                <div 
+                <div
                   className="text-xs mb-4 p-2 bg-gray-100 rounded border border-gray-300 font-mono"
                   dangerouslySetInnerHTML={{ __html: popupData.content }}
                 />

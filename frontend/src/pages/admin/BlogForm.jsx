@@ -221,7 +221,7 @@ export default function BlogForm() {
             {isEditMode ? "Update your blog post" : "Create a new blog post"}
           </p>
         </div>
-        
+
         {/* Preview Button */}
         <button
           type="button"
@@ -254,10 +254,7 @@ export default function BlogForm() {
       {/* Blog Preview Modal */}
       {showPreview && (
         <div className="fixed inset-0 z-50">
-          <BlogPreview
-            post={formData}
-            onClose={() => setShowPreview(false)}
-          />
+          <BlogPreview post={formData} onClose={() => setShowPreview(false)} />
         </div>
       )}
 

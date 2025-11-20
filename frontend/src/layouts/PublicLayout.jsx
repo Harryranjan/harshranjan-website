@@ -2,6 +2,7 @@ import DynamicHeader from "../components/DynamicHeader";
 import DynamicFooter from "../components/DynamicFooter";
 import ModalManager from "../components/ModalManager";
 import PopupManager from "../components/PopupManager";
+import CTAFormModal from "../components/CTAFormModal";
 
 const PublicLayout = ({ children }) => {
   return (
@@ -11,6 +12,7 @@ const PublicLayout = ({ children }) => {
       <DynamicFooter />
       <ModalManager />
       <PopupManager />
+      <CTAFormModal />
     </div>
   );
 };

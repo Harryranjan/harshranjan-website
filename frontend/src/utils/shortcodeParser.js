@@ -12,7 +12,8 @@ export const parseShortcodes = (content) => {
     form: /\[form\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi,
     modal: /\[modal\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi,
     popup: /\[popup\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi,
-    cta_banner: /\[cta_banner\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi,
+    cta_banner:
+      /\[cta_banner\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi,
   };
 
   let parsedContent = content;

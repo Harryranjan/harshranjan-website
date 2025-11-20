@@ -5,7 +5,7 @@ import Button from "./Button";
 import Input from "./Input";
 import Textarea from "./Textarea";
 
-export default function FormEmbed({ formId, className = "" }) {
+export default function FormEmbed({ formId, className = "", onSuccess }) {
   const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -138,6 +138,11 @@ export default function FormEmbed({ formId, className = "" }) {
       });
       setSubmitted(true);
       setFormData({});
+
+      // Call onSuccess callback if provided
+      if (onSuccess) {
+        onSuccess();
+      }
 
       // Reset form after 5 seconds
       setTimeout(() => {

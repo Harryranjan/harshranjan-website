@@ -48,15 +48,78 @@ function App() {
     <AuthProvider>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
-        <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
-        <Route path="/services" element={<PublicLayout><Services /></PublicLayout>} />
-        <Route path="/portfolio" element={<PublicLayout><Portfolio /></PublicLayout>} />
-        <Route path="/blog" element={<PublicLayout><BlogList /></PublicLayout>} />
-        <Route path="/blog/:slug" element={<PublicLayout><BlogPost /></PublicLayout>} />
-        <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
-        <Route path="/shortcode-demo" element={<PublicLayout><ShortcodeDemo /></PublicLayout>} />
-        <Route path="/downloads" element={<PublicLayout><DownloadsLibrary /></PublicLayout>} />
+        <Route
+          path="/"
+          element={
+            <PublicLayout>
+              <Home />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <PublicLayout>
+              <About />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/services"
+          element={
+            <PublicLayout>
+              <Services />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/portfolio"
+          element={
+            <PublicLayout>
+              <Portfolio />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/blog"
+          element={
+            <PublicLayout>
+              <BlogList />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/blog/:slug"
+          element={
+            <PublicLayout>
+              <BlogPost />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <PublicLayout>
+              <Contact />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/shortcode-demo"
+          element={
+            <PublicLayout>
+              <ShortcodeDemo />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/downloads"
+          element={
+            <PublicLayout>
+              <DownloadsLibrary />
+            </PublicLayout>
+          }
+        />
         <Route path="/cta-demo" element={<CTABannerDemo />} />
 
         {/* Admin Routes */}

@@ -333,7 +333,7 @@ export default function ModalBuilder() {
             value={modalData.content}
             onChange={(value) => handleChange("content", value)}
             placeholder="Enter your modal message here..."
-            helperText="💡 Tip: Use [form id=&quot;123&quot;] shortcodes to embed forms anywhere in your content"
+            helperText='💡 Tip: Use [form id="123"] shortcodes to embed forms anywhere in your content'
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -358,10 +358,15 @@ export default function ModalBuilder() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Embed Form {formsLoading ? (
-                  <span className="text-xs text-gray-400 font-normal">(Loading...)</span>
+                Embed Form{" "}
+                {formsLoading ? (
+                  <span className="text-xs text-gray-400 font-normal">
+                    (Loading...)
+                  </span>
                 ) : forms.length > 0 ? (
-                  <span className="text-xs text-green-600 font-normal">({forms.length} available)</span>
+                  <span className="text-xs text-green-600 font-normal">
+                    ({forms.length} available)
+                  </span>
                 ) : null}
               </label>
               <select
@@ -371,8 +376,11 @@ export default function ModalBuilder() {
                   console.log("📝 Form selected:", formId);
                   handleChange("form_id", formId);
                   // Auto-insert shortcode into content if form is selected
-                  if (formId && !modalData.content.includes(`[form id="${formId}"]`)) {
-                    const updatedContent = modalData.content 
+                  if (
+                    formId &&
+                    !modalData.content.includes(`[form id="${formId}"]`)
+                  ) {
+                    const updatedContent = modalData.content
                       ? `${modalData.content}<p><br></p><p>[form id="${formId}"]</p>`
                       : `<p>[form id="${formId}"]</p>`;
                     handleChange("content", updatedContent);
@@ -382,9 +390,11 @@ export default function ModalBuilder() {
                 disabled={formsLoading || forms.length === 0}
               >
                 <option value="">
-                  {formsLoading ? "Loading forms..." : 
-                   forms.length === 0 ? "No forms available - Create a form first" : 
-                   "No Form"}
+                  {formsLoading
+                    ? "Loading forms..."
+                    : forms.length === 0
+                    ? "No forms available - Create a form first"
+                    : "No Form"}
                 </option>
                 {forms.map((form) => (
                   <option key={form.id} value={form.id}>
@@ -394,20 +404,35 @@ export default function ModalBuilder() {
               </select>
               {!formsLoading && forms.length === 0 ? (
                 <div className="mt-2 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg p-3">
-                  <svg className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  <svg
+                    className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    />
                   </svg>
                   <div>
-                    <p className="text-xs font-semibold text-amber-800">No forms found</p>
+                    <p className="text-xs font-semibold text-amber-800">
+                      No forms found
+                    </p>
                     <p className="text-xs text-amber-700 mt-1">
-                      Create a form in the Forms section before embedding it in modals.
+                      Create a form in the Forms section before embedding it in
+                      modals.
                     </p>
                   </div>
                 </div>
-              ) : !formsLoading && (
-                <p className="text-xs text-gray-500 mt-1">
-                  Select a form to capture leads directly in the modal
-                </p>
+              ) : (
+                !formsLoading && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select a form to capture leads directly in the modal
+                  </p>
+                )
               )}
             </div>
 
@@ -415,8 +440,18 @@ export default function ModalBuilder() {
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div className="flex items-start gap-3">
                 <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-4 h-4 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                 </div>
                 <div className="flex-1">
@@ -424,27 +459,36 @@ export default function ModalBuilder() {
                     💡 Use Shortcodes for Flexibility
                   </h4>
                   <p className="text-xs text-blue-700 mb-2">
-                    You can embed forms directly in your content using shortcodes. This gives you full control over placement and styling.
+                    You can embed forms directly in your content using
+                    shortcodes. This gives you full control over placement and
+                    styling.
                   </p>
                   <div className="space-y-2">
                     <div className="bg-white rounded border border-blue-200 p-2">
-                      <p className="text-xs font-medium text-gray-700 mb-1">Form Shortcode:</p>
+                      <p className="text-xs font-medium text-gray-700 mb-1">
+                        Form Shortcode:
+                      </p>
                       <code className="text-xs bg-gray-100 px-2 py-1 rounded text-blue-600 font-mono">
                         [form id="123"]
                       </code>
                     </div>
                     {forms.length > 0 && (
                       <div className="bg-white rounded border border-blue-200 p-2">
-                        <p className="text-xs font-medium text-gray-700 mb-1">Available Forms:</p>
+                        <p className="text-xs font-medium text-gray-700 mb-1">
+                          Available Forms:
+                        </p>
                         <div className="space-y-1">
                           {forms.slice(0, 3).map((form) => (
-                            <div key={form.id} className="flex items-center justify-between text-xs">
+                            <div
+                              key={form.id}
+                              className="flex items-center justify-between text-xs"
+                            >
                               <span className="text-gray-600">{form.name}</span>
                               <button
                                 type="button"
                                 onClick={() => {
                                   const shortcode = `[form id="${form.id}"]`;
-                                  const updatedContent = modalData.content 
+                                  const updatedContent = modalData.content
                                     ? `${modalData.content}<p><br></p><p>${shortcode}</p>`
                                     : `<p>${shortcode}</p>`;
                                   handleChange("content", updatedContent);
@@ -538,12 +582,16 @@ export default function ModalBuilder() {
               <div className="md:col-span-2 bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h4 className="text-sm font-semibold text-blue-900 mb-3 flex items-center gap-2">
                   🎯 Pixel-Perfect Positioning
-                  <span className="text-xs font-normal text-gray-600">(Responsive)</span>
+                  <span className="text-xs font-normal text-gray-600">
+                    (Responsive)
+                  </span>
                 </h4>
-                
+
                 {/* Desktop/Default Values */}
                 <div className="mb-4">
-                  <p className="text-xs font-medium text-gray-700 mb-2">💻 Desktop (Default)</p>
+                  <p className="text-xs font-medium text-gray-700 mb-2">
+                    💻 Desktop (Default)
+                  </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -618,12 +666,16 @@ export default function ModalBuilder() {
 
                 {/* Tablet Override Values */}
                 <div className="mb-4">
-                  <p className="text-xs font-medium text-gray-700 mb-2">📱 Tablet (768px - 1024px) - Optional Override</p>
+                  <p className="text-xs font-medium text-gray-700 mb-2">
+                    📱 Tablet (768px - 1024px) - Optional Override
+                  </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
                       <input
                         type="number"
-                        value={modalData.styling.customPosition?.topTablet || ""}
+                        value={
+                          modalData.styling.customPosition?.topTablet || ""
+                        }
                         onChange={(e) =>
                           handleNestedChange("styling", "customPosition", {
                             ...modalData.styling.customPosition,
@@ -637,7 +689,9 @@ export default function ModalBuilder() {
                     <div>
                       <input
                         type="number"
-                        value={modalData.styling.customPosition?.rightTablet || ""}
+                        value={
+                          modalData.styling.customPosition?.rightTablet || ""
+                        }
                         onChange={(e) =>
                           handleNestedChange("styling", "customPosition", {
                             ...modalData.styling.customPosition,
@@ -651,7 +705,9 @@ export default function ModalBuilder() {
                     <div>
                       <input
                         type="number"
-                        value={modalData.styling.customPosition?.bottomTablet || ""}
+                        value={
+                          modalData.styling.customPosition?.bottomTablet || ""
+                        }
                         onChange={(e) =>
                           handleNestedChange("styling", "customPosition", {
                             ...modalData.styling.customPosition,
@@ -665,7 +721,9 @@ export default function ModalBuilder() {
                     <div>
                       <input
                         type="number"
-                        value={modalData.styling.customPosition?.leftTablet || ""}
+                        value={
+                          modalData.styling.customPosition?.leftTablet || ""
+                        }
                         onChange={(e) =>
                           handleNestedChange("styling", "customPosition", {
                             ...modalData.styling.customPosition,
@@ -681,12 +739,16 @@ export default function ModalBuilder() {
 
                 {/* Mobile Override Values */}
                 <div className="mb-3">
-                  <p className="text-xs font-medium text-gray-700 mb-2">📱 Mobile (&lt;768px) - Optional Override</p>
+                  <p className="text-xs font-medium text-gray-700 mb-2">
+                    📱 Mobile (&lt;768px) - Optional Override
+                  </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
                       <input
                         type="number"
-                        value={modalData.styling.customPosition?.topMobile || ""}
+                        value={
+                          modalData.styling.customPosition?.topMobile || ""
+                        }
                         onChange={(e) =>
                           handleNestedChange("styling", "customPosition", {
                             ...modalData.styling.customPosition,
@@ -700,7 +762,9 @@ export default function ModalBuilder() {
                     <div>
                       <input
                         type="number"
-                        value={modalData.styling.customPosition?.rightMobile || ""}
+                        value={
+                          modalData.styling.customPosition?.rightMobile || ""
+                        }
                         onChange={(e) =>
                           handleNestedChange("styling", "customPosition", {
                             ...modalData.styling.customPosition,
@@ -714,7 +778,9 @@ export default function ModalBuilder() {
                     <div>
                       <input
                         type="number"
-                        value={modalData.styling.customPosition?.bottomMobile || ""}
+                        value={
+                          modalData.styling.customPosition?.bottomMobile || ""
+                        }
                         onChange={(e) =>
                           handleNestedChange("styling", "customPosition", {
                             ...modalData.styling.customPosition,
@@ -728,7 +794,9 @@ export default function ModalBuilder() {
                     <div>
                       <input
                         type="number"
-                        value={modalData.styling.customPosition?.leftMobile || ""}
+                        value={
+                          modalData.styling.customPosition?.leftMobile || ""
+                        }
                         onChange={(e) =>
                           handleNestedChange("styling", "customPosition", {
                             ...modalData.styling.customPosition,
@@ -741,10 +809,12 @@ export default function ModalBuilder() {
                     </div>
                   </div>
                 </div>
-                
+
                 <p className="text-xs text-gray-600 mt-2">
-                  💡 <strong>Tip:</strong> Desktop values are required. Tablet/Mobile values are optional overrides. 
-                  If not set, desktop values will be used. Example: Desktop Top=100, Mobile Top=20 (closer to top on mobile).
+                  💡 <strong>Tip:</strong> Desktop values are required.
+                  Tablet/Mobile values are optional overrides. If not set,
+                  desktop values will be used. Example: Desktop Top=100, Mobile
+                  Top=20 (closer to top on mobile).
                 </p>
               </div>
             )}
@@ -850,13 +920,16 @@ export default function ModalBuilder() {
             <label className="block text-sm font-medium text-gray-700">
               Show on Pages
             </label>
-            
+
             <div className="flex items-center gap-2 mb-3">
               <input
                 type="radio"
                 id="pages-all"
                 name="pageTargeting"
-                checked={!modalData.display_rules.pageTargeting || modalData.display_rules.pageTargeting === "all"}
+                checked={
+                  !modalData.display_rules.pageTargeting ||
+                  modalData.display_rules.pageTargeting === "all"
+                }
                 onChange={() => {
                   handleNestedChange("display_rules", "pageTargeting", "all");
                   handleNestedChange("display_rules", "pages", []);
@@ -874,7 +947,13 @@ export default function ModalBuilder() {
                 id="pages-specific"
                 name="pageTargeting"
                 checked={modalData.display_rules.pageTargeting === "specific"}
-                onChange={() => handleNestedChange("display_rules", "pageTargeting", "specific")}
+                onChange={() =>
+                  handleNestedChange(
+                    "display_rules",
+                    "pageTargeting",
+                    "specific"
+                  )
+                }
                 className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
               />
               <label htmlFor="pages-specific" className="text-sm text-gray-700">
@@ -888,7 +967,13 @@ export default function ModalBuilder() {
                 id="pages-exclude"
                 name="pageTargeting"
                 checked={modalData.display_rules.pageTargeting === "exclude"}
-                onChange={() => handleNestedChange("display_rules", "pageTargeting", "exclude")}
+                onChange={() =>
+                  handleNestedChange(
+                    "display_rules",
+                    "pageTargeting",
+                    "exclude"
+                  )
+                }
                 className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
               />
               <label htmlFor="pages-exclude" className="text-sm text-gray-700">
@@ -897,183 +982,264 @@ export default function ModalBuilder() {
             </div>
 
             {/* Page Selection */}
-            {modalData.display_rules.pageTargeting && modalData.display_rules.pageTargeting !== "all" && (
-              <div className="ml-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {modalData.display_rules.pageTargeting === "specific" 
-                    ? "Select pages to show modal:" 
-                    : "Select pages to hide modal:"}
-                </label>
-                
-                <div className="space-y-2 mb-3">
-                  {pagesLoading ? (
-                    <div className="text-sm text-gray-500 py-2">Loading pages...</div>
-                  ) : (
-                    <>
-                      {/* Home Page */}
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={(modalData.display_rules.pages || []).includes("/")}
-                          onChange={(e) => {
-                            const pagesList = e.target.checked
-                              ? [...(modalData.display_rules.pages || []), "/"]
-                              : (modalData.display_rules.pages || []).filter((p) => p !== "/");
-                            handleNestedChange("display_rules", "pages", pagesList);
-                          }}
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">🏠 Home Page</span>
-                      </label>
+            {modalData.display_rules.pageTargeting &&
+              modalData.display_rules.pageTargeting !== "all" && (
+                <div className="ml-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {modalData.display_rules.pageTargeting === "specific"
+                      ? "Select pages to show modal:"
+                      : "Select pages to hide modal:"}
+                  </label>
 
-                      {/* Dynamic Pages from Database */}
-                      {pages.map((page) => (
-                        <label key={page.id} className="flex items-center gap-2">
+                  <div className="space-y-2 mb-3">
+                    {pagesLoading ? (
+                      <div className="text-sm text-gray-500 py-2">
+                        Loading pages...
+                      </div>
+                    ) : (
+                      <>
+                        {/* Home Page */}
+                        <label className="flex items-center gap-2">
                           <input
                             type="checkbox"
-                            checked={(modalData.display_rules.pages || []).includes(`/${page.slug}`)}
+                            checked={(
+                              modalData.display_rules.pages || []
+                            ).includes("/")}
                             onChange={(e) => {
-                              const pageUrl = `/${page.slug}`;
                               const pagesList = e.target.checked
-                                ? [...(modalData.display_rules.pages || []), pageUrl]
-                                : (modalData.display_rules.pages || []).filter((p) => p !== pageUrl);
-                              handleNestedChange("display_rules", "pages", pagesList);
+                                ? [
+                                    ...(modalData.display_rules.pages || []),
+                                    "/",
+                                  ]
+                                : (modalData.display_rules.pages || []).filter(
+                                    (p) => p !== "/"
+                                  );
+                              handleNestedChange(
+                                "display_rules",
+                                "pages",
+                                pagesList
+                              );
                             }}
                             className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                           />
                           <span className="text-sm text-gray-700">
-                            📄 {page.title}
-                            <span className="text-xs text-gray-500 ml-1">/{page.slug}</span>
+                            🏠 Home Page
                           </span>
                         </label>
-                      ))}
 
-                      {/* Static System Pages */}
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={(modalData.display_rules.pages || []).includes("/blog")}
-                          onChange={(e) => {
-                            const pagesList = e.target.checked
-                              ? [...(modalData.display_rules.pages || []), "/blog"]
-                              : (modalData.display_rules.pages || []).filter((p) => p !== "/blog");
-                            handleNestedChange("display_rules", "pages", pagesList);
-                          }}
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">📝 Blog List</span>
-                      </label>
+                        {/* Dynamic Pages from Database */}
+                        {pages.map((page) => (
+                          <label
+                            key={page.id}
+                            className="flex items-center gap-2"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={(
+                                modalData.display_rules.pages || []
+                              ).includes(`/${page.slug}`)}
+                              onChange={(e) => {
+                                const pageUrl = `/${page.slug}`;
+                                const pagesList = e.target.checked
+                                  ? [
+                                      ...(modalData.display_rules.pages || []),
+                                      pageUrl,
+                                    ]
+                                  : (
+                                      modalData.display_rules.pages || []
+                                    ).filter((p) => p !== pageUrl);
+                                handleNestedChange(
+                                  "display_rules",
+                                  "pages",
+                                  pagesList
+                                );
+                              }}
+                              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            />
+                            <span className="text-sm text-gray-700">
+                              📄 {page.title}
+                              <span className="text-xs text-gray-500 ml-1">
+                                /{page.slug}
+                              </span>
+                            </span>
+                          </label>
+                        ))}
 
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={(modalData.display_rules.pages || []).includes("/blog/*")}
-                          onChange={(e) => {
-                            const pagesList = e.target.checked
-                              ? [...(modalData.display_rules.pages || []), "/blog/*"]
-                              : (modalData.display_rules.pages || []).filter((p) => p !== "/blog/*");
-                            handleNestedChange("display_rules", "pages", pagesList);
-                          }}
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">📰 All Blog Posts (wildcard)</span>
-                      </label>
+                        {/* Static System Pages */}
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={(
+                              modalData.display_rules.pages || []
+                            ).includes("/blog")}
+                            onChange={(e) => {
+                              const pagesList = e.target.checked
+                                ? [
+                                    ...(modalData.display_rules.pages || []),
+                                    "/blog",
+                                  ]
+                                : (modalData.display_rules.pages || []).filter(
+                                    (p) => p !== "/blog"
+                                  );
+                              handleNestedChange(
+                                "display_rules",
+                                "pages",
+                                pagesList
+                              );
+                            }}
+                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                          <span className="text-sm text-gray-700">
+                            📝 Blog List
+                          </span>
+                        </label>
 
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={(modalData.display_rules.pages || []).includes("/downloads")}
-                          onChange={(e) => {
-                            const pagesList = e.target.checked
-                              ? [...(modalData.display_rules.pages || []), "/downloads"]
-                              : (modalData.display_rules.pages || []).filter((p) => p !== "/downloads");
-                            handleNestedChange("display_rules", "pages", pagesList);
-                          }}
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">📥 Downloads</span>
-                      </label>
-                    </>
-                  )}
-                </div>
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={(
+                              modalData.display_rules.pages || []
+                            ).includes("/blog/*")}
+                            onChange={(e) => {
+                              const pagesList = e.target.checked
+                                ? [
+                                    ...(modalData.display_rules.pages || []),
+                                    "/blog/*",
+                                  ]
+                                : (modalData.display_rules.pages || []).filter(
+                                    (p) => p !== "/blog/*"
+                                  );
+                              handleNestedChange(
+                                "display_rules",
+                                "pages",
+                                pagesList
+                              );
+                            }}
+                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                          <span className="text-sm text-gray-700">
+                            📰 All Blog Posts (wildcard)
+                          </span>
+                        </label>
 
-                {/* Custom URL Input */}
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
-                    Add Custom URL Pattern
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      placeholder="/custom-page or /path/*"
-                      className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter" && e.target.value.trim()) {
-                          const customUrl = e.target.value.trim();
-                          if (!modalData.display_rules.pages.includes(customUrl)) {
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={(
+                              modalData.display_rules.pages || []
+                            ).includes("/downloads")}
+                            onChange={(e) => {
+                              const pagesList = e.target.checked
+                                ? [
+                                    ...(modalData.display_rules.pages || []),
+                                    "/downloads",
+                                  ]
+                                : (modalData.display_rules.pages || []).filter(
+                                    (p) => p !== "/downloads"
+                                  );
+                              handleNestedChange(
+                                "display_rules",
+                                "pages",
+                                pagesList
+                              );
+                            }}
+                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                          <span className="text-sm text-gray-700">
+                            📥 Downloads
+                          </span>
+                        </label>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Custom URL Input */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Add Custom URL Pattern
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="/custom-page or /path/*"
+                        className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter" && e.target.value.trim()) {
+                            const customUrl = e.target.value.trim();
+                            if (
+                              !modalData.display_rules.pages.includes(customUrl)
+                            ) {
+                              handleNestedChange("display_rules", "pages", [
+                                ...(modalData.display_rules.pages || []),
+                                customUrl,
+                              ]);
+                            }
+                            e.target.value = "";
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          const input = e.target.previousElementSibling;
+                          const customUrl = input.value.trim();
+                          if (
+                            customUrl &&
+                            !modalData.display_rules.pages.includes(customUrl)
+                          ) {
                             handleNestedChange("display_rules", "pages", [
                               ...(modalData.display_rules.pages || []),
                               customUrl,
                             ]);
+                            input.value = "";
                           }
-                          e.target.value = "";
-                        }
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        const input = e.target.previousElementSibling;
-                        const customUrl = input.value.trim();
-                        if (customUrl && !modalData.display_rules.pages.includes(customUrl)) {
-                          handleNestedChange("display_rules", "pages", [
-                            ...(modalData.display_rules.pages || []),
-                            customUrl,
-                          ]);
-                          input.value = "";
-                        }
-                      }}
-                      className="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition"
-                    >
-                      Add
-                    </button>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Use * for wildcards (e.g., /blog/* for all blog posts)
-                  </p>
-                </div>
-
-                {/* Selected Pages Display */}
-                {modalData.display_rules.pages && modalData.display_rules.pages.length > 0 && (
-                  <div className="mt-3">
-                    <p className="text-xs font-medium text-gray-700 mb-2">Selected:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {modalData.display_rules.pages.map((page) => (
-                        <span
-                          key={page}
-                          className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded"
-                        >
-                          {page}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              handleNestedChange(
-                                "display_rules",
-                                "pages",
-                                modalData.display_rules.pages.filter((p) => p !== page)
-                              );
-                            }}
-                            className="hover:text-blue-900"
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ))}
+                        }}
+                        className="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition"
+                      >
+                        Add
+                      </button>
                     </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Use * for wildcards (e.g., /blog/* for all blog posts)
+                    </p>
                   </div>
-                )}
-              </div>
-            )}
+
+                  {/* Selected Pages Display */}
+                  {modalData.display_rules.pages &&
+                    modalData.display_rules.pages.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-xs font-medium text-gray-700 mb-2">
+                          Selected:
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {modalData.display_rules.pages.map((page) => (
+                            <span
+                              key={page}
+                              className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded"
+                            >
+                              {page}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  handleNestedChange(
+                                    "display_rules",
+                                    "pages",
+                                    modalData.display_rules.pages.filter(
+                                      (p) => p !== page
+                                    )
+                                  );
+                                }}
+                                className="hover:text-blue-900"
+                              >
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                </div>
+              )}
           </div>
 
           <div>
@@ -1154,14 +1320,22 @@ export default function ModalBuilder() {
           {/* Preview Header */}
           <div className="bg-white border-b px-6 py-4 flex items-center justify-between">
             <div>
-              <h3 className="text-xl font-bold text-gray-900">
-                Live Preview
-              </h3>
+              <h3 className="text-xl font-bold text-gray-900">Live Preview</h3>
               <p className="text-sm text-gray-600 mt-1">
-                Position: <span className="font-medium">{modalData.styling.position}</span> | 
-                Size: <span className="font-medium">{modalData.styling.size}</span> | 
-                Orientation: <span className="font-medium">{modalData.styling.orientation}</span> | 
-                Animation: <span className="font-medium">{modalData.styling.animation}</span>
+                Position:{" "}
+                <span className="font-medium">
+                  {modalData.styling.position}
+                </span>{" "}
+                | Size:{" "}
+                <span className="font-medium">{modalData.styling.size}</span> |
+                Orientation:{" "}
+                <span className="font-medium">
+                  {modalData.styling.orientation}
+                </span>{" "}
+                | Animation:{" "}
+                <span className="font-medium">
+                  {modalData.styling.animation}
+                </span>
               </p>
             </div>
             <button
@@ -1173,93 +1347,155 @@ export default function ModalBuilder() {
           </div>
 
           {/* Preview Area - Simulates Frontend */}
-          <div className={`flex-1 ${
-            modalData.styling.position === "custom" ? "" : "flex"
-          } ${
-            modalData.styling.position === "custom" ? "" :
-            // Position logic for preset positions
-            modalData.styling.position === "center" ? "items-center justify-center" :
-            modalData.styling.position === "center-top" ? "items-start justify-center pt-20" :
-            modalData.styling.position === "center-bottom" ? "items-end justify-center pb-20" :
-            modalData.styling.position === "top-left" ? "items-start justify-start p-6" :
-            modalData.styling.position === "top-right" ? "items-start justify-end p-6" :
-            modalData.styling.position === "bottom-left" ? "items-end justify-start p-6" :
-            modalData.styling.position === "bottom-right" ? "items-end justify-end p-6" :
-            modalData.styling.position === "left" ? "items-center justify-start" :
-            modalData.styling.position === "right" ? "items-center justify-end" :
-            modalData.styling.position === "top" ? "items-start justify-center" :
-            modalData.styling.position === "bottom" ? "items-end justify-center" :
-            "items-center justify-center"
-          } overflow-auto`}
+          <div
+            className={`flex-1 ${
+              modalData.styling.position === "custom" ? "" : "flex"
+            } ${
+              modalData.styling.position === "custom"
+                ? ""
+                : // Position logic for preset positions
+                modalData.styling.position === "center"
+                ? "items-center justify-center"
+                : modalData.styling.position === "center-top"
+                ? "items-start justify-center pt-20"
+                : modalData.styling.position === "center-bottom"
+                ? "items-end justify-center pb-20"
+                : modalData.styling.position === "top-left"
+                ? "items-start justify-start p-6"
+                : modalData.styling.position === "top-right"
+                ? "items-start justify-end p-6"
+                : modalData.styling.position === "bottom-left"
+                ? "items-end justify-start p-6"
+                : modalData.styling.position === "bottom-right"
+                ? "items-end justify-end p-6"
+                : modalData.styling.position === "left"
+                ? "items-center justify-start"
+                : modalData.styling.position === "right"
+                ? "items-center justify-end"
+                : modalData.styling.position === "top"
+                ? "items-start justify-center"
+                : modalData.styling.position === "bottom"
+                ? "items-end justify-center"
+                : "items-center justify-center"
+            } overflow-auto`}
             style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              position: 'relative'
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              position: "relative",
             }}
           >
             {/* Overlay background */}
             {modalData.styling.overlay && (
-              <div 
+              <div
                 className="absolute inset-0"
                 style={{
-                  backgroundColor: modalData.styling.overlayColor || "rgba(0, 0, 0, 0.5)",
+                  backgroundColor:
+                    modalData.styling.overlayColor || "rgba(0, 0, 0, 0.5)",
                 }}
               />
             )}
 
             {/* Actual Modal - Live Preview */}
-            <div className={`${
-              modalData.styling.position === "custom" ? "fixed" : "relative"
-            } z-10 ${
-              modalData.styling.position === "custom" ? "" :
-              // Full width/height positions
-              modalData.styling.position === "top" || modalData.styling.position === "bottom" ? "w-full" :
-              modalData.styling.position === "left" || modalData.styling.position === "right" ? "h-full flex items-center" :
-              "p-4"
-            }`}
-            style={
-              modalData.styling.position === "custom" && modalData.styling.customPosition
-                ? {
-                    top: modalData.styling.customPosition.top ? `${modalData.styling.customPosition.top}px` : 'auto',
-                    right: modalData.styling.customPosition.right ? `${modalData.styling.customPosition.right}px` : 'auto',
-                    bottom: modalData.styling.customPosition.bottom ? `${modalData.styling.customPosition.bottom}px` : 'auto',
-                    left: modalData.styling.customPosition.left ? `${modalData.styling.customPosition.left}px` : 'auto',
-                  }
-                : {}
-            }>
+            <div
+              className={`${
+                modalData.styling.position === "custom" ? "fixed" : "relative"
+              } z-10 ${
+                modalData.styling.position === "custom"
+                  ? ""
+                  : // Full width/height positions
+                  modalData.styling.position === "top" ||
+                    modalData.styling.position === "bottom"
+                  ? "w-full"
+                  : modalData.styling.position === "left" ||
+                    modalData.styling.position === "right"
+                  ? "h-full flex items-center"
+                  : "p-4"
+              }`}
+              style={
+                modalData.styling.position === "custom" &&
+                modalData.styling.customPosition
+                  ? {
+                      top: modalData.styling.customPosition.top
+                        ? `${modalData.styling.customPosition.top}px`
+                        : "auto",
+                      right: modalData.styling.customPosition.right
+                        ? `${modalData.styling.customPosition.right}px`
+                        : "auto",
+                      bottom: modalData.styling.customPosition.bottom
+                        ? `${modalData.styling.customPosition.bottom}px`
+                        : "auto",
+                      left: modalData.styling.customPosition.left
+                        ? `${modalData.styling.customPosition.left}px`
+                        : "auto",
+                    }
+                  : {}
+              }
+            >
               <div
                 className={`relative shadow-2xl transition-all ${
-                  modalData.styling.orientation === "horizontal" ? "flex flex-row items-center gap-6" : ""
+                  modalData.styling.orientation === "horizontal"
+                    ? "flex flex-row items-center gap-6"
+                    : ""
                 }`}
                 style={{
                   maxWidth:
-                    modalData.styling.size === "xs" ? "320px" :
-                    modalData.styling.size === "small" ? "400px" :
-                    modalData.styling.size === "medium" ? "600px" :
-                    modalData.styling.size === "large" ? "800px" :
-                    modalData.styling.size === "xl" ? "1000px" :
-                    modalData.styling.size === "fullscreen" ? "100%" :
-                    modalData.styling.size === "full" ? "90%" : "600px",
-                  width: modalData.styling.size === "fullscreen" ? "100%" :
-                         (modalData.styling.position === "left" || modalData.styling.position === "right") ? "400px" :
-                         "100%",
-                  height: modalData.styling.size === "fullscreen" ? "100%" :
-                          (modalData.styling.position === "left" || modalData.styling.position === "right") ? "auto" :
-                          (modalData.styling.position === "top" || modalData.styling.position === "bottom") ? "auto" : "auto",
-                  maxHeight: modalData.styling.size === "fullscreen" ? "100%" : "90vh",
+                    modalData.styling.size === "xs"
+                      ? "320px"
+                      : modalData.styling.size === "small"
+                      ? "400px"
+                      : modalData.styling.size === "medium"
+                      ? "600px"
+                      : modalData.styling.size === "large"
+                      ? "800px"
+                      : modalData.styling.size === "xl"
+                      ? "1000px"
+                      : modalData.styling.size === "fullscreen"
+                      ? "100%"
+                      : modalData.styling.size === "full"
+                      ? "90%"
+                      : "600px",
+                  width:
+                    modalData.styling.size === "fullscreen"
+                      ? "100%"
+                      : modalData.styling.position === "left" ||
+                        modalData.styling.position === "right"
+                      ? "400px"
+                      : "100%",
+                  height:
+                    modalData.styling.size === "fullscreen"
+                      ? "100%"
+                      : modalData.styling.position === "left" ||
+                        modalData.styling.position === "right"
+                      ? "auto"
+                      : modalData.styling.position === "top" ||
+                        modalData.styling.position === "bottom"
+                      ? "auto"
+                      : "auto",
+                  maxHeight:
+                    modalData.styling.size === "fullscreen" ? "100%" : "90vh",
                   backgroundColor: modalData.styling.backgroundColor,
                   color: modalData.styling.textColor,
-                  borderRadius: modalData.styling.size === "fullscreen" ? "0" : `${modalData.styling.borderRadius}px`,
+                  borderRadius:
+                    modalData.styling.size === "fullscreen"
+                      ? "0"
+                      : `${modalData.styling.borderRadius}px`,
                   padding: "2rem",
                   overflow: "auto",
-                  animation: 
-                    modalData.styling.animation === "fade" ? "fadeIn 0.3s ease-in-out" :
-                    modalData.styling.animation === "slide-up" ? "slideUp 0.3s ease-out" :
-                    modalData.styling.animation === "slide-down" ? "slideDown 0.3s ease-out" :
-                    modalData.styling.animation === "slide-left" ? "slideLeft 0.3s ease-out" :
-                    modalData.styling.animation === "slide-right" ? "slideRight 0.3s ease-out" :
-                    modalData.styling.animation === "zoom" ? "zoomIn 0.3s ease-out" :
-                    modalData.styling.animation === "bounce" ? "bounce 0.5s ease-out" :
-                    "fadeIn 0.3s ease-in-out",
+                  animation:
+                    modalData.styling.animation === "fade"
+                      ? "fadeIn 0.3s ease-in-out"
+                      : modalData.styling.animation === "slide-up"
+                      ? "slideUp 0.3s ease-out"
+                      : modalData.styling.animation === "slide-down"
+                      ? "slideDown 0.3s ease-out"
+                      : modalData.styling.animation === "slide-left"
+                      ? "slideLeft 0.3s ease-out"
+                      : modalData.styling.animation === "slide-right"
+                      ? "slideRight 0.3s ease-out"
+                      : modalData.styling.animation === "zoom"
+                      ? "zoomIn 0.3s ease-out"
+                      : modalData.styling.animation === "bounce"
+                      ? "bounce 0.5s ease-out"
+                      : "fadeIn 0.3s ease-in-out",
                 }}
               >
                 {/* Close Button */}
@@ -1274,20 +1510,29 @@ export default function ModalBuilder() {
                 </button>
 
                 {/* Modal Content */}
-                <div className={`pr-8 ${modalData.styling.orientation === "horizontal" ? "flex-1" : ""}`}>
-                    {modalData.title ? (
-                      <h2 className="text-2xl font-bold mb-4">
-                        {modalData.title}
-                      </h2>
-                    ) : (
-                      <p className="text-sm opacity-50 mb-4">
-                        Add a title in the form...
-                      </p>
-                    )}
+                <div
+                  className={`pr-8 ${
+                    modalData.styling.orientation === "horizontal"
+                      ? "flex-1"
+                      : ""
+                  }`}
+                >
+                  {modalData.title ? (
+                    <h2 className="text-2xl font-bold mb-4">
+                      {modalData.title}
+                    </h2>
+                  ) : (
+                    <p className="text-sm opacity-50 mb-4">
+                      Add a title in the form...
+                    </p>
+                  )}
 
-                    {modalData.content ? (() => {
-                      const { parsedContent, components } = parseShortcodes(modalData.content);
-                      
+                  {modalData.content ? (
+                    (() => {
+                      const { parsedContent, components } = parseShortcodes(
+                        modalData.content
+                      );
+
                       // If no shortcodes, render normally
                       if (components.length === 0) {
                         return (
@@ -1296,24 +1541,37 @@ export default function ModalBuilder() {
                             style={{
                               color: modalData.styling.textColor,
                             }}
-                            dangerouslySetInnerHTML={{ __html: modalData.content }}
+                            dangerouslySetInnerHTML={{
+                              __html: modalData.content,
+                            }}
                           />
                         );
                       }
 
                       // Split content by shortcode placeholders
-                      const contentParts = parsedContent.split(/(__FORM_\d+_\d+__)/g);
-                      
+                      const contentParts =
+                        parsedContent.split(/(__FORM_\d+_\d+__)/g);
+
                       return (
-                        <div className="mb-6" style={{ color: modalData.styling.textColor }}>
+                        <div
+                          className="mb-6"
+                          style={{ color: modalData.styling.textColor }}
+                        >
                           {contentParts.map((part, index) => {
                             // Check if this part is a placeholder
-                            const component = components.find(c => c.placeholder === part);
-                            
+                            const component = components.find(
+                              (c) => c.placeholder === part
+                            );
+
                             if (component && component.type === "form") {
-                              const form = forms.find(f => f.id === parseInt(component.id));
+                              const form = forms.find(
+                                (f) => f.id === parseInt(component.id)
+                              );
                               return (
-                                <div key={index} className="my-5 relative group">
+                                <div
+                                  key={index}
+                                  className="my-5 relative group"
+                                >
                                   {/* Preview Badge - Floats above form with animation */}
                                   <div className="absolute -top-2.5 left-1/2 transform -translate-x-1/2 z-20 transition-all group-hover:scale-105">
                                     <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5 text-[10px] font-bold tracking-wide animate-pulse">
@@ -1321,27 +1579,32 @@ export default function ModalBuilder() {
                                         <div className="w-1.5 h-1.5 bg-white rounded-full animate-ping absolute"></div>
                                         <div className="w-1.5 h-1.5 bg-white rounded-full relative"></div>
                                       </div>
-                                      <span className="uppercase">Live Preview</span>
+                                      <span className="uppercase">
+                                        Live Preview
+                                      </span>
                                       {form && (
                                         <>
                                           <span className="opacity-70">•</span>
-                                          <span className="font-semibold">{form.name}</span>
+                                          <span className="font-semibold">
+                                            {form.name}
+                                          </span>
                                         </>
                                       )}
                                     </div>
                                   </div>
-                                  
+
                                   {/* Form Container with enhanced effects */}
-                                  <div 
+                                  <div
                                     className="relative rounded-lg border-2 overflow-hidden transition-all duration-300 group-hover:shadow-xl"
                                     style={{
-                                      borderColor: 'rgba(59, 130, 246, 0.4)',
-                                      boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
+                                      borderColor: "rgba(59, 130, 246, 0.4)",
+                                      boxShadow:
+                                        "0 0 0 3px rgba(59, 130, 246, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.1)",
                                     }}
                                   >
                                     {/* Animated gradient border effect */}
                                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                                    
+
                                     {/* Corner indicators - both sides */}
                                     <div className="absolute top-0 right-0 w-10 h-10 overflow-hidden pointer-events-none">
                                       <div className="absolute top-0 right-0 w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-500 opacity-15 transform rotate-45 translate-x-7 -translate-y-7 group-hover:opacity-25 transition-opacity"></div>
@@ -1349,39 +1612,66 @@ export default function ModalBuilder() {
                                     <div className="absolute top-0 left-0 w-10 h-10 overflow-hidden pointer-events-none">
                                       <div className="absolute top-0 left-0 w-14 h-14 bg-gradient-to-br from-indigo-500 to-blue-500 opacity-15 transform -rotate-45 -translate-x-7 -translate-y-7 group-hover:opacity-25 transition-opacity"></div>
                                     </div>
-                                    
+
                                     {/* Form content */}
                                     <div className="relative z-10 bg-white">
-                                      <FormEmbed 
+                                      <FormEmbed
                                         formId={parseInt(component.id)}
                                         onSuccess={() => {
                                           setToast({
                                             type: "success",
-                                            message: "✓ Form preview submitted successfully! (Preview mode - data not saved)",
+                                            message:
+                                              "✓ Form preview submitted successfully! (Preview mode - data not saved)",
                                           });
                                         }}
                                       />
                                     </div>
-                                    
+
                                     {/* Enhanced bottom info bar with icon and better styling */}
                                     <div className="relative z-10 bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 border-t border-blue-200 px-3 py-2">
                                       <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2 text-blue-800">
                                           <div className="flex-shrink-0 w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <svg className="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            <svg
+                                              className="w-3 h-3 text-blue-600"
+                                              fill="none"
+                                              stroke="currentColor"
+                                              viewBox="0 0 24 24"
+                                            >
+                                              <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                              />
                                             </svg>
                                           </div>
                                           <div>
-                                            <p className="text-[10px] font-bold leading-tight">Interactive Preview</p>
-                                            <p className="text-[9px] text-blue-600 leading-tight">Test mode - not saved</p>
+                                            <p className="text-[10px] font-bold leading-tight">
+                                              Interactive Preview
+                                            </p>
+                                            <p className="text-[9px] text-blue-600 leading-tight">
+                                              Test mode - not saved
+                                            </p>
                                           </div>
                                         </div>
                                         <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-full border border-blue-200 shadow-sm">
-                                          <svg className="w-2.5 h-2.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                          <svg
+                                            className="w-2.5 h-2.5 text-blue-500"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                          >
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
+                                              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                                            />
                                           </svg>
-                                          <span className="text-[10px] font-bold text-blue-700">ID: {component.id}</span>
+                                          <span className="text-[10px] font-bold text-blue-700">
+                                            ID: {component.id}
+                                          </span>
                                         </div>
                                       </div>
                                     </div>
@@ -1389,38 +1679,39 @@ export default function ModalBuilder() {
                                 </div>
                               );
                             }
-                            
+
                             // Regular HTML content
-                            if (part && !part.startsWith('__FORM_')) {
+                            if (part && !part.startsWith("__FORM_")) {
                               return (
-                                <div 
+                                <div
                                   key={index}
                                   dangerouslySetInnerHTML={{ __html: part }}
                                 />
                               );
                             }
-                            
+
                             return null;
                           })}
                         </div>
                       );
-                    })() : (
-                      <p className="text-sm opacity-50 mb-6">
-                        Add content in the form...
-                      </p>
-                    )}
+                    })()
+                  ) : (
+                    <p className="text-sm opacity-50 mb-6">
+                      Add content in the form...
+                    </p>
+                  )}
 
-                    {modalData.cta_text && (
-                      <button
-                        className="w-full py-3 px-6 rounded-lg font-medium transition shadow-lg"
-                        style={{
-                          backgroundColor: modalData.styling.textColor,
-                          color: modalData.styling.backgroundColor,
-                        }}
-                      >
-                        {modalData.cta_text}
-                      </button>
-                    )}
+                  {modalData.cta_text && (
+                    <button
+                      className="w-full py-3 px-6 rounded-lg font-medium transition shadow-lg"
+                      style={{
+                        backgroundColor: modalData.styling.textColor,
+                        color: modalData.styling.backgroundColor,
+                      }}
+                    >
+                      {modalData.cta_text}
+                    </button>
+                  )}
 
                   {!modalData.cta_text && (
                     <p className="text-sm opacity-50">

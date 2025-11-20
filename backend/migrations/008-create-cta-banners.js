@@ -20,10 +20,30 @@ module.exports = {
       },
       description: {
         type: DataTypes.TEXT,
-        defaultValue: "Discover exactly why top brands trust us with ₹300+ Crores in ad spends",
+        defaultValue:
+          "Discover exactly why top brands trust us with ₹300+ Crores in ad spends",
       },
       variant: {
-        type: DataTypes.ENUM("sticky-top", "floating-button", "slide-bottom", "smart-header", "banner-strip", "corner-popup", "full-screen-takeover", "slide-in-left", "sticky-bottom", "notification-bar"),
+        type: DataTypes.ENUM(
+          "sticky-top",
+          "floating-button",
+          "slide-bottom",
+          "smart-header",
+          "banner-strip",
+          "corner-popup",
+          "full-screen-takeover",
+          "slide-in-left",
+          "sticky-bottom",
+          "notification-bar",
+          "slide-in-right",
+          "expanding-bar",
+          "ribbon-corner",
+          "floating-card",
+          "side-tab",
+          "bottom-drawer",
+          "vertical-left",
+          "vertical-right"
+        ),
         defaultValue: "sticky-top",
       },
       button_text: {
@@ -32,7 +52,8 @@ module.exports = {
       },
       button_url: {
         type: DataTypes.STRING,
-        comment: "URL to navigate on button click, leave empty for default action",
+        comment:
+          "URL to navigate on button click, leave empty for default action",
       },
       phone_number: {
         type: DataTypes.STRING,
@@ -45,7 +66,8 @@ module.exports = {
       show_after_scroll: {
         type: DataTypes.INTEGER,
         defaultValue: 100,
-        comment: "Pixels to scroll before showing (for scroll-triggered variants)",
+        comment:
+          "Pixels to scroll before showing (for scroll-triggered variants)",
       },
       dismissible: {
         type: DataTypes.BOOLEAN,
@@ -56,12 +78,14 @@ module.exports = {
         comment: "JSON object for custom colors",
         get() {
           const rawValue = this.getDataValue("colors");
-          return rawValue ? JSON.parse(rawValue) : {
-            background: "from-red-500 to-red-600",
-            buttonBg: "white",
-            buttonText: "red-600",
-            text: "white"
-          };
+          return rawValue
+            ? JSON.parse(rawValue)
+            : {
+                background: "from-red-500 to-red-600",
+                buttonBg: "white",
+                buttonText: "red-600",
+                text: "white",
+              };
         },
         set(value) {
           this.setDataValue("colors", JSON.stringify(value));
@@ -84,7 +108,8 @@ module.exports = {
       },
       placement: {
         type: DataTypes.TEXT,
-        comment: "Where to show: all, homepage, specific-pages, etc. (JSON array)",
+        comment:
+          "Where to show: all, homepage, specific-pages, etc. (JSON array)",
         get() {
           const rawValue = this.getDataValue("placement");
           return rawValue ? JSON.parse(rawValue) : ["all"];

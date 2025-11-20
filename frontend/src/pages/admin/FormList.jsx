@@ -69,7 +69,15 @@ export default function FormList() {
       fetchPopups();
       fetchPopupStats();
     }
-  }, [activeTab, filters, pagination.page, modalFilters, modalPagination.page, popupFilters, popupPagination.page]);
+  }, [
+    activeTab,
+    filters,
+    pagination.page,
+    modalFilters,
+    modalPagination.page,
+    popupFilters,
+    popupPagination.page,
+  ]);
 
   const fetchForms = async () => {
     try {
@@ -124,12 +132,18 @@ export default function FormList() {
     try {
       const response = await api.get("/modals");
       const data = response.data;
-      
+
       const total = data.pagination.total;
       const active = data.modals.filter((m) => m.status === "active").length;
-      const totalViews = data.modals.reduce((sum, m) => sum + (m.views || 0), 0);
-      const totalConversions = data.modals.reduce((sum, m) => sum + (m.conversions || 0), 0);
-      
+      const totalViews = data.modals.reduce(
+        (sum, m) => sum + (m.views || 0),
+        0
+      );
+      const totalConversions = data.modals.reduce(
+        (sum, m) => sum + (m.conversions || 0),
+        0
+      );
+
       setModalStats({
         total,
         active,
@@ -154,8 +168,8 @@ export default function FormList() {
       const response = await api.get(`/popups?${params}`);
       console.log("💬 Popups response:", response.data);
       setPopups(response.data.popups || []);
-      setPopupPagination((prev) => ({ 
-        ...prev, 
+      setPopupPagination((prev) => ({
+        ...prev,
         total: response.data.pagination?.total || 0,
         pages: response.data.pagination?.pages || 1,
       }));
@@ -630,7 +644,15 @@ export default function FormList() {
                   value: modalStats.totalConversions.toLocaleString(),
                   customIcon: <span className="text-2xl">🎯</span>,
                   color: "indigo",
-                  subtext: `${modalStats.totalViews > 0 ? ((modalStats.totalConversions / modalStats.totalViews) * 100).toFixed(1) : 0}% conversion rate`,
+                  subtext: `${
+                    modalStats.totalViews > 0
+                      ? (
+                          (modalStats.totalConversions /
+                            modalStats.totalViews) *
+                          100
+                        ).toFixed(1)
+                      : 0
+                  }% conversion rate`,
                 },
               ]}
               columns={4}
@@ -691,7 +713,9 @@ export default function FormList() {
                 <div className="text-6xl mb-4">🪟</div>
                 <h3 className="text-xl font-semibold mb-2">No modals found</h3>
                 <p className="text-gray-600 mb-4">
-                  {modalFilters.search || modalFilters.status || modalFilters.type
+                  {modalFilters.search ||
+                  modalFilters.status ||
+                  modalFilters.type
                     ? "Try adjusting your filters"
                     : "Create your first modal to engage visitors"}
                 </p>
@@ -965,9 +989,10 @@ export default function FormList() {
                     key: "position",
                     label: "Position",
                     render: (popup) => {
-                      const styling = typeof popup.styling === "string"
-                        ? JSON.parse(popup.styling)
-                        : popup.styling || {};
+                      const styling =
+                        typeof popup.styling === "string"
+                          ? JSON.parse(popup.styling)
+                          : popup.styling || {};
                       return (
                         <span className="text-sm text-gray-600 capitalize">
                           {styling.position || "bottom-right"}

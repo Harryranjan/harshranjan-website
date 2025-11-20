@@ -2,7 +2,7 @@ import React from "react";
 
 /**
  * GradientButton - A beautiful gradient button component
- * 
+ *
  * @param {string} type - Button type (button, submit, reset)
  * @param {boolean} disabled - Whether the button is disabled
  * @param {boolean} loading - Whether to show loading state
@@ -31,11 +31,15 @@ export default function GradientButton({
   };
 
   const variantClasses = {
-    "blue-purple": "from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700",
-    green: "from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700",
+    "blue-purple":
+      "from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700",
+    green:
+      "from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700",
     red: "from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700",
-    orange: "from-orange-600 to-yellow-600 hover:from-orange-700 hover:to-yellow-700",
-    indigo: "from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700",
+    orange:
+      "from-orange-600 to-yellow-600 hover:from-orange-700 hover:to-yellow-700",
+    indigo:
+      "from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700",
   };
 
   return (

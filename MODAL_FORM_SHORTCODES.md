@@ -9,11 +9,13 @@ The modal system now supports **flexible form embedding using shortcodes**. This
 ## 📝 Shortcode Syntax
 
 ### Basic Form Shortcode
+
 ```
 [form id="123"]
 ```
 
 ### With Custom CSS Class
+
 ```
 [form id="123" class="my-custom-class"]
 ```
@@ -70,6 +72,7 @@ The preview window automatically detects and displays form shortcodes:
 ```
 
 **Preview Features:**
+
 - ✅ Shows form name and ID
 - ✅ Displays placeholder with blue dashed border
 - ✅ Updates in real-time as you edit
@@ -80,6 +83,7 @@ The preview window automatically detects and displays form shortcodes:
 ## 💡 Use Cases
 
 ### Use Case 1: Newsletter Signup
+
 ```html
 <p>Stay updated with our latest news!</p>
 <p>Join our newsletter and get exclusive content.</p>
@@ -87,6 +91,7 @@ The preview window automatically detects and displays form shortcodes:
 ```
 
 ### Use Case 2: Contact Request
+
 ```html
 <h3>Get in Touch</h3>
 <p>We'd love to hear from you. Fill out the form below:</p>
@@ -95,6 +100,7 @@ The preview window automatically detects and displays form shortcodes:
 ```
 
 ### Use Case 3: Multiple Forms
+
 ```html
 <h3>Choose Your Path</h3>
 <p>For general inquiries:</p>
@@ -105,6 +111,7 @@ The preview window automatically detects and displays form shortcodes:
 ```
 
 ### Use Case 4: Conditional Content
+
 ```html
 <div class="offer-section">
   <h2>Limited Time Offer!</h2>
@@ -124,6 +131,7 @@ The preview window automatically detects and displays form shortcodes:
 ### Frontend Rendering
 
 **ModalEmbed Component** automatically:
+
 1. Parses content for `[form id="X"]` patterns
 2. Extracts form IDs and classes
 3. Replaces shortcodes with `<FormEmbed>` components
@@ -134,13 +142,15 @@ The preview window automatically detects and displays form shortcodes:
 Located in: `src/utils/shortcodeParser.js`
 
 **Supported patterns:**
+
 - `[form id="123"]`
 - `[form id='123']`
 - `[form id="123" class="my-class"]`
 
 **Regex pattern:**
+
 ```javascript
-/\[form\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi
+/\[form\s+id=["'](\d+)["']\s*(?:class=["']([^"']*)["'])?\]/gi;
 ```
 
 ---
@@ -150,16 +160,19 @@ Located in: `src/utils/shortcodeParser.js`
 ### ✅ DO
 
 1. **Use shortcodes for flexibility**
+
    - Place forms anywhere in your content
    - Mix text, images, and forms freely
    - Create complex layouts
 
 2. **Test in preview**
+
    - Always check preview before publishing
    - Verify form placement looks good
    - Test on different screen sizes
 
 3. **Keep form IDs accurate**
+
    - Use the "Insert" buttons to avoid typos
    - Double-check form IDs in HTML mode
    - Verify forms are active before using
@@ -172,10 +185,12 @@ Located in: `src/utils/shortcodeParser.js`
 ### ❌ DON'T
 
 1. **Don't use invalid form IDs**
+
    - Forms with invalid IDs won't render
    - Always verify form exists in admin
 
 2. **Don't nest shortcodes**
+
    - One shortcode per line/paragraph
    - Don't put shortcodes inside HTML tags
 
@@ -189,6 +204,7 @@ Located in: `src/utils/shortcodeParser.js`
 ## 🔄 Migration from Legacy `form_id`
 
 ### Old Way (Still Supported)
+
 ```javascript
 {
   "form_id": 123,
@@ -199,6 +215,7 @@ Located in: `src/utils/shortcodeParser.js`
 **Result:** Form appears at the bottom, after content
 
 ### New Way (Recommended)
+
 ```javascript
 {
   "form_id": null,
@@ -211,6 +228,7 @@ Located in: `src/utils/shortcodeParser.js`
 ### Automatic Migration
 
 The system automatically:
+
 - ✅ Detects if `form_id` is set
 - ✅ Checks if shortcode already exists in content
 - ✅ Falls back to legacy rendering if no shortcode
@@ -220,20 +238,21 @@ The system automatically:
 
 ## 📊 Comparison: Legacy vs Shortcodes
 
-| Feature | Legacy `form_id` | Shortcodes |
-|---------|------------------|------------|
-| **Placement** | End of content only | Anywhere |
-| **Multiple Forms** | ❌ No | ✅ Yes |
-| **Custom Styling** | ❌ No | ✅ Yes (via class) |
-| **Content Flow** | Fixed | Flexible |
-| **Preview** | Generic placeholder | Named placeholder |
-| **Recommended** | No (deprecated) | ✅ Yes |
+| Feature            | Legacy `form_id`    | Shortcodes         |
+| ------------------ | ------------------- | ------------------ |
+| **Placement**      | End of content only | Anywhere           |
+| **Multiple Forms** | ❌ No               | ✅ Yes             |
+| **Custom Styling** | ❌ No               | ✅ Yes (via class) |
+| **Content Flow**   | Fixed               | Flexible           |
+| **Preview**        | Generic placeholder | Named placeholder  |
+| **Recommended**    | No (deprecated)     | ✅ Yes             |
 
 ---
 
 ## 🎓 Advanced Examples
 
 ### Example 1: Split Layout (Horizontal Orientation)
+
 ```html
 <div style="display: flex; gap: 2rem;">
   <div style="flex: 1;">
@@ -244,38 +263,32 @@ The system automatically:
       <li>Free shipping</li>
     </ul>
   </div>
-  <div style="flex: 1;">
-    [form id="20"]
-  </div>
+  <div style="flex: 1;">[form id="20"]</div>
 </div>
 ```
 
 ### Example 2: Tabbed Forms
+
 ```html
 <div class="tabs">
   <button onclick="showForm(1)">Individual</button>
   <button onclick="showForm(2)">Business</button>
 </div>
 
-<div id="form-1">
-  [form id="25"]
-</div>
+<div id="form-1">[form id="25"]</div>
 
-<div id="form-2" style="display: none;">
-  [form id="26"]
-</div>
+<div id="form-2" style="display: none;">[form id="26"]</div>
 ```
 
 ### Example 3: Progressive Disclosure
+
 ```html
 <h3>Ready to get started?</h3>
 <button onclick="document.getElementById('signup').style.display='block'">
   Yes, show me the form!
 </button>
 
-<div id="signup" style="display: none; margin-top: 1rem;">
-  [form id="30"]
-</div>
+<div id="signup" style="display: none; margin-top: 1rem;">[form id="30"]</div>
 ```
 
 ---
@@ -286,6 +299,7 @@ The system automatically:
 
 **Problem:** Shortcode doesn't render
 **Solutions:**
+
 1. Verify form ID is correct
 2. Check form is active in admin
 3. Ensure shortcode syntax is exact: `[form id="123"]`
@@ -295,6 +309,7 @@ The system automatically:
 
 **Problem:** Forms appear on top of each other
 **Solutions:**
+
 1. Add spacing: `<p><br></p>` between shortcodes
 2. Wrap in divs with margins
 3. Use horizontal orientation for side-by-side
@@ -303,6 +318,7 @@ The system automatically:
 
 **Problem:** Shows `[form id="123"]` instead of form
 **Solutions:**
+
 1. Form ID doesn't exist - check admin
 2. Typo in shortcode - use Insert button
 3. Frontend not updated - hard refresh (Ctrl+Shift+R)
@@ -321,17 +337,20 @@ The system automatically:
 ## 🚀 Quick Reference
 
 ### Available Shortcodes
+
 ```
 [form id="123"]           - Embed form by ID
 [form id="123" class="custom"] - With custom class
 ```
 
 ### Helper Locations
+
 - **Content Editor:** Shows tip about shortcodes
 - **Form Integration:** Shows quick insert buttons
 - **Preview Window:** Shows form placeholders
 
 ### Keyboard Shortcuts
+
 - `Ctrl+Shift+H` - Toggle HTML mode (in editor)
 - Use HTML mode to manually add/edit shortcodes
 

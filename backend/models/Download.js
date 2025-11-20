@@ -49,16 +49,16 @@ const Download = sequelize.define(
       type: DataTypes.STRING(500),
       allowNull: true,
       get() {
-        const rawValue = this.getDataValue('thumbnail');
+        const rawValue = this.getDataValue("thumbnail");
         if (!rawValue) return null;
         // If it's already a full URL, return as is
-        if (rawValue.startsWith('http://') || rawValue.startsWith('https://')) {
+        if (rawValue.startsWith("http://") || rawValue.startsWith("https://")) {
           return rawValue;
         }
         // Otherwise, prepend the base URL
-        const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
-        return `${baseUrl}${rawValue.startsWith('/') ? '' : '/'}${rawValue}`;
-      }
+        const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+        return `${baseUrl}${rawValue.startsWith("/") ? "" : "/"}${rawValue}`;
+      },
     },
     file_url: {
       type: DataTypes.STRING(500),
@@ -67,16 +67,16 @@ const Download = sequelize.define(
         notEmpty: { msg: "File URL is required" },
       },
       get() {
-        const rawValue = this.getDataValue('file_url');
+        const rawValue = this.getDataValue("file_url");
         if (!rawValue) return null;
         // If it's already a full URL, return as is
-        if (rawValue.startsWith('http://') || rawValue.startsWith('https://')) {
+        if (rawValue.startsWith("http://") || rawValue.startsWith("https://")) {
           return rawValue;
         }
         // Otherwise, prepend the base URL
-        const baseUrl = process.env.BASE_URL || 'http://localhost:5000';
-        return `${baseUrl}${rawValue.startsWith('/') ? '' : '/'}${rawValue}`;
-      }
+        const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+        return `${baseUrl}${rawValue.startsWith("/") ? "" : "/"}${rawValue}`;
+      },
     },
     file_type: {
       type: DataTypes.STRING(50),
@@ -119,8 +119,8 @@ const Download = sequelize.define(
       allowNull: true,
     },
     difficulty: {
-      type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
-      defaultValue: 'beginner',
+      type: DataTypes.ENUM("beginner", "intermediate", "advanced"),
+      defaultValue: "beginner",
     },
     reading_time: {
       type: DataTypes.STRING(50),
@@ -130,23 +130,26 @@ const Download = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
       get() {
-        const rawValue = this.getDataValue('tags');
+        const rawValue = this.getDataValue("tags");
         if (!rawValue) return [];
         try {
           return JSON.parse(rawValue);
         } catch {
-          return rawValue.split(',').map(tag => tag.trim()).filter(Boolean);
+          return rawValue
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean);
         }
       },
       set(value) {
         if (Array.isArray(value)) {
-          this.setDataValue('tags', JSON.stringify(value));
-        } else if (typeof value === 'string') {
-          this.setDataValue('tags', value);
+          this.setDataValue("tags", JSON.stringify(value));
+        } else if (typeof value === "string") {
+          this.setDataValue("tags", value);
         } else {
-          this.setDataValue('tags', null);
+          this.setDataValue("tags", null);
         }
-      }
+      },
     },
   },
   {

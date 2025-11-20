@@ -13,10 +13,10 @@ const DynamicFooter = () => {
     try {
       // Fetch the active footer for the 'footer' location
       const response = await api.get("/menus/location/footer");
-      
+
       if (response.data.menu && response.data.menu.is_active) {
         const { settings } = response.data.menu;
-        
+
         // Use custom code if available
         if (settings && settings.customCode) {
           setFooterHTML(settings.customCode);
@@ -52,7 +52,7 @@ const DynamicFooter = () => {
   const cleanFooterHTML = extractFooterContent(footerHTML);
 
   return (
-    <div 
+    <div
       dangerouslySetInnerHTML={{ __html: cleanFooterHTML }}
       className="dynamic-footer"
     />

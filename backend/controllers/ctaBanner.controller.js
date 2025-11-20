@@ -39,7 +39,7 @@ exports.getActiveBanners = async (req, res) => {
     // Filter by placement if page is specified
     let filteredBanners = banners;
     if (page) {
-      filteredBanners = banners.filter(banner => {
+      filteredBanners = banners.filter((banner) => {
         const placement = banner.placement || ["all"];
         return placement.includes("all") || placement.includes(page);
       });

@@ -43,7 +43,14 @@ const Popup = sequelize.define(
     },
 
     trigger_type: {
-      type: DataTypes.ENUM("manual", "time", "scroll", "exit", "click", "immediate"),
+      type: DataTypes.ENUM(
+        "manual",
+        "time",
+        "scroll",
+        "exit",
+        "click",
+        "immediate"
+      ),
       defaultValue: "immediate",
     },
     trigger_value: {
@@ -63,17 +70,19 @@ const Popup = sequelize.define(
       type: DataTypes.TEXT,
       get() {
         const rawValue = this.getDataValue("styling");
-        return rawValue ? JSON.parse(rawValue) : {
-          position: "bottom-right",
-          size: "small",
-          backgroundColor: "#ffffff",
-          textColor: "#000000",
-          borderRadius: "8",
-          shadow: true,
-          animation: "slideIn",
-          autoClose: false,
-          autoCloseDelay: 5,
-        };
+        return rawValue
+          ? JSON.parse(rawValue)
+          : {
+              position: "bottom-right",
+              size: "small",
+              backgroundColor: "#ffffff",
+              textColor: "#000000",
+              borderRadius: "8",
+              shadow: true,
+              animation: "slideIn",
+              autoClose: false,
+              autoCloseDelay: 5,
+            };
       },
       set(value) {
         this.setDataValue("styling", JSON.stringify(value));

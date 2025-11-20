@@ -31,9 +31,7 @@ export default function FormSection({
               {title && (
                 <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                   {title}
-                  {required && (
-                    <span className="text-red-500 text-sm">*</span>
-                  )}
+                  {required && <span className="text-red-500 text-sm">*</span>}
                 </h3>
               )}
               {description && (

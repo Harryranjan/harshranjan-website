@@ -22,7 +22,7 @@ import {
  * @param {string} actionVariant - Button variant (default: "primary")
  * @param {ReactNode} secondaryAction - Additional action button
  * @param {string} className - Additional CSS classes
- * 
+ *
  * @deprecated Legacy props (description, action) still supported for backward compatibility
  */
 export default function EmptyState({
@@ -48,7 +48,7 @@ export default function EmptyState({
   };
 
   const IconComponent = customIcon || iconMap[icon] || FiInbox;
-  
+
   // Support legacy props
   const displayMessage = message || description;
   const displayAction = action;
@@ -70,7 +70,9 @@ export default function EmptyState({
       <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
 
       {/* Message */}
-      {displayMessage && <p className="text-gray-600 mb-6 max-w-md mx-auto">{displayMessage}</p>}
+      {displayMessage && (
+        <p className="text-gray-600 mb-6 max-w-md mx-auto">{displayMessage}</p>
+      )}
 
       {/* Actions */}
       {(actionText || secondaryAction || displayAction) && (

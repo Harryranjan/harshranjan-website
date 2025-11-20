@@ -20,7 +20,7 @@ export const POPUP_TEMPLATES = {
     cta_text: "Learn More",
     cta_link: "#",
   },
-  
+
   chat: {
     name: "Chat Widget",
     type: "chat",
@@ -47,7 +47,8 @@ export const POPUP_TEMPLATES = {
     type: "cookie_consent",
     icon: "🍪",
     title: "We Use Cookies",
-    content: "This website uses cookies to improve your experience. By continuing, you agree to our cookie policy.",
+    content:
+      "This website uses cookies to improve your experience. By continuing, you agree to our cookie policy.",
     styling: {
       position: "bottom-center",
       size: "large",
@@ -110,7 +111,8 @@ export const POPUP_TEMPLATES = {
     type: "newsletter",
     icon: "📧",
     title: "Stay Updated!",
-    content: "Subscribe to our newsletter for latest updates and exclusive content.",
+    content:
+      "Subscribe to our newsletter for latest updates and exclusive content.",
     styling: {
       position: "bottom-right",
       size: "medium",
@@ -256,10 +258,33 @@ export const ANIMATION_OPTIONS = [
 
 // Trigger type options
 export const TRIGGER_OPTIONS = [
-  { value: "immediate", label: "Immediate", description: "Show popup as soon as page loads" },
-  { value: "time", label: "Time Delay", description: "Show after X seconds", requiresValue: true },
-  { value: "scroll", label: "Scroll %", description: "Show after scrolling X%", requiresValue: true },
-  { value: "exit", label: "Exit Intent", description: "Show when user tries to leave" },
-  { value: "click", label: "On Click", description: "Show when element is clicked", requiresValue: true },
+  {
+    value: "immediate",
+    label: "Immediate",
+    description: "Show popup as soon as page loads",
+  },
+  {
+    value: "time",
+    label: "Time Delay",
+    description: "Show after X seconds",
+    requiresValue: true,
+  },
+  {
+    value: "scroll",
+    label: "Scroll %",
+    description: "Show after scrolling X%",
+    requiresValue: true,
+  },
+  {
+    value: "exit",
+    label: "Exit Intent",
+    description: "Show when user tries to leave",
+  },
+  {
+    value: "click",
+    label: "On Click",
+    description: "Show when element is clicked",
+    requiresValue: true,
+  },
   { value: "manual", label: "Manual", description: "Triggered by code" },
 ];

@@ -41,9 +41,7 @@ export default function PageHeader({
 
         {/* Actions */}
         {actions && (
-          <div className="flex items-center gap-3 flex-shrink-0">
-            {actions}
-          </div>
+          <div className="flex items-center gap-3 flex-shrink-0">{actions}</div>
         )}
       </div>
 

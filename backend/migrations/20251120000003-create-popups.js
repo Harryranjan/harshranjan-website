@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('popups', {
+    await queryInterface.createTable("popups", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -22,24 +22,31 @@ module.exports = {
       },
       type: {
         type: Sequelize.ENUM(
-          'notification',
-          'chat',
-          'cookie_consent',
-          'promo',
-          'social_proof',
-          'newsletter',
-          'custom'
+          "notification",
+          "chat",
+          "cookie_consent",
+          "promo",
+          "social_proof",
+          "newsletter",
+          "custom"
         ),
-        defaultValue: 'notification',
+        defaultValue: "notification",
       },
       template: {
         type: Sequelize.STRING,
         allowNull: true,
-        comment: 'Pre-built template name',
+        comment: "Pre-built template name",
       },
       trigger_type: {
-        type: Sequelize.ENUM('manual', 'time', 'scroll', 'exit', 'click', 'immediate'),
-        defaultValue: 'immediate',
+        type: Sequelize.ENUM(
+          "manual",
+          "time",
+          "scroll",
+          "exit",
+          "click",
+          "immediate"
+        ),
+        defaultValue: "immediate",
       },
       trigger_value: {
         type: Sequelize.STRING,
@@ -49,21 +56,21 @@ module.exports = {
         type: Sequelize.TEXT,
         defaultValue: JSON.stringify({
           pages: [],
-          pageTargeting: 'all',
-          devices: ['desktop', 'mobile', 'tablet'],
-          frequency: 'always',
+          pageTargeting: "all",
+          devices: ["desktop", "mobile", "tablet"],
+          frequency: "always",
         }),
       },
       styling: {
         type: Sequelize.TEXT,
         defaultValue: JSON.stringify({
-          position: 'bottom-right',
-          size: 'small',
-          backgroundColor: '#ffffff',
-          textColor: '#000000',
-          borderRadius: '8',
+          position: "bottom-right",
+          size: "small",
+          backgroundColor: "#ffffff",
+          textColor: "#000000",
+          borderRadius: "8",
           shadow: true,
-          animation: 'slideIn',
+          animation: "slideIn",
           autoClose: false,
           autoCloseDelay: 5,
         }),
@@ -72,10 +79,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: 'forms',
-          key: 'id',
+          model: "forms",
+          key: "id",
         },
-        onDelete: 'SET NULL',
+        onDelete: "SET NULL",
       },
       cta_text: {
         type: Sequelize.STRING,
@@ -88,11 +95,11 @@ module.exports = {
       icon: {
         type: Sequelize.STRING,
         allowNull: true,
-        comment: 'Icon name or emoji',
+        comment: "Icon name or emoji",
       },
       status: {
-        type: Sequelize.ENUM('draft', 'active', 'inactive'),
-        defaultValue: 'draft',
+        type: Sequelize.ENUM("draft", "active", "inactive"),
+        defaultValue: "draft",
       },
       views: {
         type: Sequelize.INTEGER,
@@ -109,22 +116,22 @@ module.exports = {
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
 
     // Add indexes
-    await queryInterface.addIndex('popups', ['status']);
-    await queryInterface.addIndex('popups', ['type']);
-    await queryInterface.addIndex('popups', ['template']);
+    await queryInterface.addIndex("popups", ["status"]);
+    await queryInterface.addIndex("popups", ["type"]);
+    await queryInterface.addIndex("popups", ["template"]);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('popups');
+    await queryInterface.dropTable("popups");
   },
 };

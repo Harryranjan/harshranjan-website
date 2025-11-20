@@ -3,13 +3,19 @@ import { FiX } from "react-icons/fi";
 import FormEmbed from "./FormEmbed";
 import { parseShortcodes } from "../utils/shortcodeParser";
 
-export default function PopupEmbed({ popup, onClose, onTrackView, onTrackClick, onTrackDismissal }) {
+export default function PopupEmbed({
+  popup,
+  onClose,
+  onTrackView,
+  onTrackClick,
+  onTrackDismissal,
+}) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     // Show popup with slight delay for animation
     setTimeout(() => setVisible(true), 100);
-    
+
     // Track view
     if (onTrackView) {
       onTrackView();
@@ -32,7 +38,7 @@ export default function PopupEmbed({ popup, onClose, onTrackView, onTrackClick, 
     if (onTrackClick) {
       onTrackClick();
     }
-    
+
     if (popup.cta_link && popup.cta_link !== "#") {
       if (popup.cta_link.startsWith("http")) {
         window.open(popup.cta_link, "_blank");
@@ -48,47 +54,48 @@ export default function PopupEmbed({ popup, onClose, onTrackView, onTrackClick, 
       const timer = setTimeout(() => {
         handleClose();
       }, popup.styling.autoCloseDelay * 1000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [popup.styling]);
 
   const getPositionClasses = () => {
     const position = popup.styling?.position || "bottom-right";
-    
+
     const positions = {
       "top-left": "top-4 left-4 md:top-6 md:left-6",
       "top-center": "top-4 left-1/2 transform -translate-x-1/2 md:top-6",
       "top-right": "top-4 right-4 md:top-6 md:right-6",
       "center-left": "top-1/2 left-4 transform -translate-y-1/2 md:left-6",
-      "center": "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
+      center: "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
       "center-right": "top-1/2 right-4 transform -translate-y-1/2 md:right-6",
       "bottom-left": "bottom-4 left-4 md:bottom-6 md:left-6",
-      "bottom-center": "bottom-4 left-1/2 transform -translate-x-1/2 md:bottom-6",
+      "bottom-center":
+        "bottom-4 left-1/2 transform -translate-x-1/2 md:bottom-6",
       "bottom-right": "bottom-4 right-4 md:bottom-6 md:right-6",
     };
-    
+
     return positions[position] || positions["bottom-right"];
   };
 
   const getSizeClasses = () => {
     const size = popup.styling?.size || "small";
-    
+
     const sizes = {
       small: "w-80 max-w-[90vw]",
       medium: "w-96 max-w-[90vw]",
       large: "w-[600px] max-w-[90vw]",
       full: "w-full max-w-[95vw]",
     };
-    
+
     return sizes[size] || sizes.small;
   };
 
   const getAnimationClass = () => {
     if (!visible) return "opacity-0 scale-95";
-    
+
     const animation = popup.styling?.animation || "fadeIn";
-    
+
     switch (animation) {
       case "slideIn":
         const position = popup.styling?.position || "bottom-right";
@@ -136,9 +143,7 @@ export default function PopupEmbed({ popup, onClose, onTrackView, onTrackClick, 
         </button>
 
         {/* Icon */}
-        {popup.icon && (
-          <div className="text-3xl mb-3">{popup.icon}</div>
-        )}
+        {popup.icon && <div className="text-3xl mb-3">{popup.icon}</div>}
 
         {/* Title */}
         {popup.title && (
@@ -150,7 +155,10 @@ export default function PopupEmbed({ popup, onClose, onTrackView, onTrackClick, 
           <div
             className="text-sm mb-4 opacity-90 prose prose-sm max-w-none"
             dangerouslySetInnerHTML={{
-              __html: popup.template === 'custom_code' ? popup.content : parseShortcodes(popup.content),
+              __html:
+                popup.template === "custom_code"
+                  ? popup.content
+                  : parseShortcodes(popup.content),
             }}
           />
         )}

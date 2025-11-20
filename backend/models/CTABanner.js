@@ -20,10 +20,30 @@ const CTABanner = sequelize.define(
     },
     description: {
       type: DataTypes.TEXT,
-      defaultValue: "Discover exactly why top brands trust us with ₹300+ Crores in ad spends",
+      defaultValue:
+        "Discover exactly why top brands trust us with ₹300+ Crores in ad spends",
     },
     variant: {
-      type: DataTypes.ENUM("sticky-top", "floating-button", "slide-bottom", "smart-header", "banner-strip", "corner-popup", "full-screen-takeover", "slide-in-left", "sticky-bottom", "notification-bar"),
+      type: DataTypes.ENUM(
+        "sticky-top",
+        "floating-button",
+        "slide-bottom",
+        "smart-header",
+        "banner-strip",
+        "corner-popup",
+        "full-screen-takeover",
+        "slide-in-left",
+        "sticky-bottom",
+        "notification-bar",
+        "slide-in-right",
+        "expanding-bar",
+        "ribbon-corner",
+        "floating-card",
+        "side-tab",
+        "bottom-drawer",
+        "vertical-left",
+        "vertical-right"
+      ),
       defaultValue: "sticky-top",
     },
     button_text: {
@@ -32,6 +52,14 @@ const CTABanner = sequelize.define(
     },
     button_url: {
       type: DataTypes.STRING,
+    },
+    form_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "forms",
+        key: "id",
+      },
     },
     phone_number: {
       type: DataTypes.STRING,
@@ -53,12 +81,14 @@ const CTABanner = sequelize.define(
       type: DataTypes.TEXT,
       get() {
         const rawValue = this.getDataValue("colors");
-        return rawValue ? JSON.parse(rawValue) : {
-          background: "from-red-500 to-red-600",
-          buttonBg: "white",
-          buttonText: "red-600",
-          text: "white"
-        };
+        return rawValue
+          ? JSON.parse(rawValue)
+          : {
+              background: "from-red-500 to-red-600",
+              buttonBg: "white",
+              buttonText: "red-600",
+              text: "white",
+            };
       },
       set(value) {
         this.setDataValue("colors", JSON.stringify(value));

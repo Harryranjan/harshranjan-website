@@ -16,7 +16,7 @@ export default function PopupManager() {
     try {
       const { data } = await api.get("/popups/active");
       setPopups(data || []);
-      
+
       // Initialize trigger handlers for each popup
       data.forEach((popup) => {
         if (shouldShowOnCurrentPage(popup)) {

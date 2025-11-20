@@ -175,12 +175,14 @@ export default function MenuList() {
 
                 <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
                   <span>
-                    {menu.settings?.type === "header-builder" || menu.settings?.type === "footer-builder" 
-                      ? menu.settings?.customCode 
-                        ? "Custom Code" 
+                    {menu.settings?.type === "header-builder" ||
+                    menu.settings?.type === "footer-builder"
+                      ? menu.settings?.customCode
+                        ? "Custom Code"
                         : "Visual Builder"
-                      : `${menu.items?.length || 0} item${menu.items?.length !== 1 ? "s" : ""}`
-                    }
+                      : `${menu.items?.length || 0} item${
+                          menu.items?.length !== 1 ? "s" : ""
+                        }`}
                   </span>
                   <span className="flex items-center gap-1">
                     <span
@@ -195,30 +197,60 @@ export default function MenuList() {
                 {/* Date and Time */}
                 <div className="text-xs text-gray-500 mb-3 space-y-1">
                   <div className="flex items-center gap-1">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
-                    <span>Created: {new Date(menu.created_at).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'short', 
-                      day: 'numeric' 
-                    })} at {new Date(menu.created_at).toLocaleTimeString('en-US', { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    })}</span>
+                    <span>
+                      Created:{" "}
+                      {new Date(menu.created_at).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}{" "}
+                      at{" "}
+                      {new Date(menu.created_at).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
                     </svg>
-                    <span>Updated: {new Date(menu.updated_at).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'short', 
-                      day: 'numeric' 
-                    })} at {new Date(menu.updated_at).toLocaleTimeString('en-US', { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    })}</span>
+                    <span>
+                      Updated:{" "}
+                      {new Date(menu.updated_at).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}{" "}
+                      at{" "}
+                      {new Date(menu.updated_at).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
                   </div>
                 </div>
 
@@ -235,8 +267,8 @@ export default function MenuList() {
                     }}
                     className="flex-1 px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-xs font-medium"
                   >
-                    {menu.settings?.type === "header-builder" 
-                      ? "Edit Header" 
+                    {menu.settings?.type === "header-builder"
+                      ? "Edit Header"
                       : menu.settings?.type === "footer-builder"
                       ? "Edit Footer"
                       : "Edit Menu"}

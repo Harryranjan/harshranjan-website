@@ -112,7 +112,10 @@ export default function DownloadsLibrary() {
           {/* Search Bar */}
           <div className="flex gap-3 mb-6">
             <div className="flex-1 relative">
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <FiSearch
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                size={20}
+              />
               <input
                 type="text"
                 value={filters.search}
@@ -126,7 +129,12 @@ export default function DownloadsLibrary() {
 
             {/* Mobile Filter Button */}
             <button
-              onClick={() => setFilters((prev) => ({ ...prev, showMobileFilter: !prev.showMobileFilter }))}
+              onClick={() =>
+                setFilters((prev) => ({
+                  ...prev,
+                  showMobileFilter: !prev.showMobileFilter,
+                }))
+              }
               className="md:hidden flex items-center gap-2 px-4 py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <FiFilter className="text-gray-600" size={20} />
@@ -135,18 +143,26 @@ export default function DownloadsLibrary() {
           </div>
 
           {/* Category Pills/Tabs - Hidden on mobile unless filter is open */}
-          <div className={`${filters.showMobileFilter ? 'block' : 'hidden md:block'}`}>
+          <div
+            className={`${
+              filters.showMobileFilter ? "block" : "hidden md:block"
+            }`}
+          >
             <div className="flex flex-wrap gap-3">
               {categories.map((cat) => (
                 <button
                   key={cat.value}
                   onClick={() =>
-                    setFilters((prev) => ({ ...prev, category: cat.value, showMobileFilter: false }))
+                    setFilters((prev) => ({
+                      ...prev,
+                      category: cat.value,
+                      showMobileFilter: false,
+                    }))
                   }
                   className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all ${
                     filters.category === cat.value
-                      ? 'bg-blue-600 text-white shadow-md transform scale-105'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-sm'
+                      ? "bg-blue-600 text-white shadow-md transform scale-105"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-sm"
                   }`}
                 >
                   {cat.label}
@@ -180,10 +196,15 @@ export default function DownloadsLibrary() {
 
         {/* All Downloads Section */}
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">All Downloads</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            All Downloads
+          </h2>
           <p className="text-gray-600">
-            Showing {filteredDownloads.filter(d => !d.featured).length} download
-            {filteredDownloads.filter(d => !d.featured).length !== 1 ? "s" : ""}
+            Showing {filteredDownloads.filter((d) => !d.featured).length}{" "}
+            download
+            {filteredDownloads.filter((d) => !d.featured).length !== 1
+              ? "s"
+              : ""}
           </p>
         </div>
 
@@ -204,13 +225,15 @@ export default function DownloadsLibrary() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredDownloads.filter(d => !d.featured).map((download) => (
-              <DownloadCard
-                key={download.id}
-                download={download}
-                onClick={() => handleDownloadClick(download)}
-              />
-            ))}
+            {filteredDownloads
+              .filter((d) => !d.featured)
+              .map((download) => (
+                <DownloadCard
+                  key={download.id}
+                  download={download}
+                  onClick={() => handleDownloadClick(download)}
+                />
+              ))}
           </div>
         )}
       </div>
@@ -252,9 +275,21 @@ function DownloadCard({ download, onClick, featured = false }) {
 
   const getDifficultyBadge = (difficulty) => {
     const badges = {
-      beginner: { color: "bg-green-100 text-green-700", icon: "🟢", label: "Beginner" },
-      intermediate: { color: "bg-yellow-100 text-yellow-700", icon: "🟡", label: "Intermediate" },
-      advanced: { color: "bg-red-100 text-red-700", icon: "🔴", label: "Advanced" },
+      beginner: {
+        color: "bg-green-100 text-green-700",
+        icon: "🟢",
+        label: "Beginner",
+      },
+      intermediate: {
+        color: "bg-yellow-100 text-yellow-700",
+        icon: "🟡",
+        label: "Intermediate",
+      },
+      advanced: {
+        color: "bg-red-100 text-red-700",
+        icon: "🔴",
+        label: "Advanced",
+      },
     };
     return badges[difficulty] || badges.beginner;
   };
@@ -343,7 +378,9 @@ function DownloadCard({ download, onClick, featured = false }) {
           )}
           {download.file_type && (
             <div className="flex items-center gap-1">
-              <span className="uppercase font-semibold">{download.file_type}</span>
+              <span className="uppercase font-semibold">
+                {download.file_type}
+              </span>
               {download.file_size && <span>• {download.file_size}</span>}
             </div>
           )}

@@ -156,14 +156,14 @@ export default function ModalEmbed({ modalId, onClose, isOpen = true }) {
   // Build custom position styles with responsive support
   const getCustomPositionStyle = () => {
     if (!isCustomPosition) return {};
-    
+
     const customPos = styling.customPosition || {};
     const style = {};
-    
+
     // Check screen width for responsive positioning
     const isMobile = window.innerWidth < 768;
     const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
-    
+
     // Apply responsive values or fallback to base values
     if (customPos.top) {
       if (isMobile && customPos.topMobile) {
@@ -174,7 +174,7 @@ export default function ModalEmbed({ modalId, onClose, isOpen = true }) {
         style.top = `${customPos.top}px`;
       }
     }
-    
+
     if (customPos.right) {
       if (isMobile && customPos.rightMobile) {
         style.right = `${customPos.rightMobile}px`;
@@ -184,7 +184,7 @@ export default function ModalEmbed({ modalId, onClose, isOpen = true }) {
         style.right = `${customPos.right}px`;
       }
     }
-    
+
     if (customPos.bottom) {
       if (isMobile && customPos.bottomMobile) {
         style.bottom = `${customPos.bottomMobile}px`;
@@ -194,7 +194,7 @@ export default function ModalEmbed({ modalId, onClose, isOpen = true }) {
         style.bottom = `${customPos.bottom}px`;
       }
     }
-    
+
     if (customPos.left) {
       if (isMobile && customPos.leftMobile) {
         style.left = `${customPos.leftMobile}px`;
@@ -204,7 +204,7 @@ export default function ModalEmbed({ modalId, onClose, isOpen = true }) {
         style.left = `${customPos.left}px`;
       }
     }
-    
+
     return style;
   };
 
@@ -251,71 +251,77 @@ export default function ModalEmbed({ modalId, onClose, isOpen = true }) {
               <h2 className="text-3xl font-bold mb-4">{modal.title}</h2>
             )}
 
-            {modal.content && (() => {
-              const { parsedContent, components } = parseShortcodes(modal.content);
-              
-              // If no shortcodes, render normally
-              if (components.length === 0) {
-                return (
-                  <div
-                    className="prose max-w-none mb-6"
-                    dangerouslySetInnerHTML={{ __html: modal.content }}
-                  />
+            {modal.content &&
+              (() => {
+                const { parsedContent, components } = parseShortcodes(
+                  modal.content
                 );
-              }
 
-              // Render content with shortcodes replaced
-              let contentWithComponents = parsedContent;
-              components.forEach((component) => {
-                if (component.type === "form") {
-                  const formEmbed = `<div id="form-${component.id}-placeholder"></div>`;
-                  contentWithComponents = contentWithComponents.replace(
-                    component.placeholder,
-                    formEmbed
+                // If no shortcodes, render normally
+                if (components.length === 0) {
+                  return (
+                    <div
+                      className="prose max-w-none mb-6"
+                      dangerouslySetInnerHTML={{ __html: modal.content }}
+                    />
                   );
                 }
-              });
 
-              return (
-                <div className="mb-6">
-                  <div
-                    className="prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: contentWithComponents }}
-                  />
-                  {/* Render forms outside HTML */}
-                  {components.map((component, index) => {
-                    if (component.type === "form") {
-                      return (
-                        <div key={index} className="my-4">
-                          <FormEmbed
-                            formId={parseInt(component.id)}
-                            className={component.className}
-                            onSuccess={() => {
-                              handleConversion();
-                              setTimeout(handleClose, 2000);
-                            }}
-                          />
-                        </div>
-                      );
-                    }
-                    return null;
-                  })}
-                </div>
-              );
-            })()}
+                // Render content with shortcodes replaced
+                let contentWithComponents = parsedContent;
+                components.forEach((component) => {
+                  if (component.type === "form") {
+                    const formEmbed = `<div id="form-${component.id}-placeholder"></div>`;
+                    contentWithComponents = contentWithComponents.replace(
+                      component.placeholder,
+                      formEmbed
+                    );
+                  }
+                });
+
+                return (
+                  <div className="mb-6">
+                    <div
+                      className="prose max-w-none"
+                      dangerouslySetInnerHTML={{
+                        __html: contentWithComponents,
+                      }}
+                    />
+                    {/* Render forms outside HTML */}
+                    {components.map((component, index) => {
+                      if (component.type === "form") {
+                        return (
+                          <div key={index} className="my-4">
+                            <FormEmbed
+                              formId={parseInt(component.id)}
+                              className={component.className}
+                              onSuccess={() => {
+                                handleConversion();
+                                setTimeout(handleClose, 2000);
+                              }}
+                            />
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
+                  </div>
+                );
+              })()}
 
             {/* Legacy form_id support (deprecated, use shortcodes instead) */}
-            {modal.form_id && !modal.content?.includes(`[form id="${modal.form_id}"]`) && (
-              <div className="mb-6">
-                <FormEmbed
-                  formId={modal.form_id}
-                  onSuccess={() => {
-                    handleConversion();
-                    setTimeout(handleClose, 2000);
-                  }}
-                />
-              </div>
-            )}
+            {modal.form_id &&
+              !modal.content?.includes(`[form id="${modal.form_id}"]`) && (
+                <div className="mb-6">
+                  <FormEmbed
+                    formId={modal.form_id}
+                    onSuccess={() => {
+                      handleConversion();
+                      setTimeout(handleClose, 2000);
+                    }}
+                  />
+                </div>
+              )}
 
             {/* CTA Button */}
             {modal.cta_text && (

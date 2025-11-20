@@ -4,7 +4,11 @@ const popupController = require("../controllers/popup.controller");
 const { authMiddleware } = require("../middleware/auth.middleware");
 
 // Popup routes (protected)
-router.get("/stats", authMiddleware, popupController.getStats || popupController.getAllPopups);
+router.get(
+  "/stats",
+  authMiddleware,
+  popupController.getStats || popupController.getAllPopups
+);
 router.get("/", authMiddleware, popupController.getAllPopups);
 router.get("/active", popupController.getActivePopups); // Public endpoint
 router.get("/:id", authMiddleware, popupController.getPopupById);

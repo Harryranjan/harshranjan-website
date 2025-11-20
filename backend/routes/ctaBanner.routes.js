@@ -14,7 +14,17 @@ router.get("/", authMiddleware, adminOnly, ctaBannerController.getAllBanners);
 router.get("/:id", authMiddleware, adminOnly, ctaBannerController.getBanner);
 router.post("/", authMiddleware, adminOnly, ctaBannerController.createBanner);
 router.put("/:id", authMiddleware, adminOnly, ctaBannerController.updateBanner);
-router.delete("/:id", authMiddleware, adminOnly, ctaBannerController.deleteBanner);
-router.post("/:id/duplicate", authMiddleware, adminOnly, ctaBannerController.duplicateBanner);
+router.delete(
+  "/:id",
+  authMiddleware,
+  adminOnly,
+  ctaBannerController.deleteBanner
+);
+router.post(
+  "/:id/duplicate",
+  authMiddleware,
+  adminOnly,
+  ctaBannerController.duplicateBanner
+);
 
 module.exports = router;

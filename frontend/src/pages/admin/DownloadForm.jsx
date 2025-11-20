@@ -341,8 +341,20 @@ export default function DownloadForm() {
                 </label>
                 <input
                   type="text"
-                  value={Array.isArray(formData.tags) ? formData.tags.join(", ") : formData.tags}
-                  onChange={(e) => handleChange("tags", e.target.value.split(",").map(t => t.trim()).filter(Boolean))}
+                  value={
+                    Array.isArray(formData.tags)
+                      ? formData.tags.join(", ")
+                      : formData.tags
+                  }
+                  onChange={(e) =>
+                    handleChange(
+                      "tags",
+                      e.target.value
+                        .split(",")
+                        .map((t) => t.trim())
+                        .filter(Boolean)
+                    )
+                  }
                   className="w-full px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                   placeholder="SEO, Marketing, Analytics (comma separated)"
                 />

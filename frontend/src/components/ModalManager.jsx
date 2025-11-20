@@ -72,10 +72,13 @@ export default function ModalManager() {
 
   const handleScrollTrigger = (modal) => {
     const scrollPercent = parseInt(modal.trigger_value) || 50;
-    
+
     const checkScroll = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const docHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
       const scrolled = (scrollTop / docHeight) * 100;
 
       if (scrolled >= scrollPercent) {
@@ -103,7 +106,7 @@ export default function ModalManager() {
     const triggerElements = document.querySelectorAll(
       `[data-modal-trigger="${modal.id}"]`
     );
-    
+
     triggerElements.forEach((element) => {
       element.addEventListener("click", () => showModal(modal.id));
     });
@@ -112,14 +115,14 @@ export default function ModalManager() {
   const shouldShowOnCurrentPage = (modal) => {
     const currentPath = window.location.pathname;
     const pageRules = modal.display_rules || {};
-    
+
     // Check page targeting
     if (!pageRules.pageTargeting || pageRules.pageTargeting === "all") {
       return true; // Show on all pages
     }
-    
+
     const targetPages = pageRules.pages || [];
-    
+
     if (pageRules.pageTargeting === "specific") {
       // Show only on specific pages
       return targetPages.some((pattern) => {
@@ -131,7 +134,7 @@ export default function ModalManager() {
         return currentPath === pattern;
       });
     }
-    
+
     if (pageRules.pageTargeting === "exclude") {
       // Show on all pages except specified
       return !targetPages.some((pattern) => {
@@ -143,26 +146,26 @@ export default function ModalManager() {
         return currentPath === pattern;
       });
     }
-    
+
     return true;
   };
 
   const showModal = (modalId) => {
     if (closedModals[modalId]) return; // Don't show if user closed it
-    
+
     // Check if modal should show on current page
     const modal = activeModals.find((m) => m.id === modalId);
     if (modal && !shouldShowOnCurrentPage(modal)) {
       console.log(`🚫 Modal ${modalId} not shown - page targeting rules`);
       return;
     }
-    
+
     setVisibleModals((prev) => ({ ...prev, [modalId]: true }));
   };
 
   const handleClose = (modalId) => {
     setVisibleModals((prev) => ({ ...prev, [modalId]: false }));
-    
+
     // Save to localStorage to prevent showing again
     const newClosedModals = { ...closedModals, [modalId]: Date.now() };
     setClosedModals(newClosedModals);
