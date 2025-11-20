@@ -78,7 +78,13 @@ const CTABannerList = () => {
       'sticky-top': 'Sticky Top',
       'floating-button': 'Floating Button',
       'slide-bottom': 'Slide Bottom',
-      'smart-header': 'Smart Header'
+      'smart-header': 'Smart Header',
+      'banner-strip': 'Banner Strip',
+      'corner-popup': 'Corner Popup',
+      'full-screen-takeover': 'Full Screen',
+      'slide-in-left': 'Slide Left',
+      'sticky-bottom': 'Sticky Bottom',
+      'notification-bar': 'Notification'
     };
     return labels[variant] || variant;
   };

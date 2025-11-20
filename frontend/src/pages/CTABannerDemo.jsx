@@ -8,10 +8,10 @@ const CTABannerDemo = () => {
     {
       id: 'sticky-top',
       name: 'Sticky Top Banner',
-      description: 'Fixed at top, always visible (like your image)',
+      description: 'Fixed at top, always visible',
       icon: '⬆️',
       pros: ['Always visible', 'Professional look', 'High visibility'],
-      cons: ['Takes header space', 'Can be annoying if not dismissible']
+      cons: ['Takes header space']
     },
     {
       id: 'floating-button',
@@ -19,7 +19,7 @@ const CTABannerDemo = () => {
       description: 'Bottom right corner, appears after scroll',
       icon: '🎯',
       pros: ['Non-intrusive', 'Modern design', 'Mobile friendly'],
-      cons: ['Lower visibility', 'Can hide content']
+      cons: ['Lower initial visibility']
     },
     {
       id: 'slide-bottom',
@@ -27,15 +27,63 @@ const CTABannerDemo = () => {
       description: 'Slides up from bottom after scroll',
       icon: '⬇️',
       pros: ['Good timing', 'Easy to dismiss', 'High conversion'],
-      cons: ['Can be missed', 'Takes bottom space']
+      cons: ['Can be missed']
     },
     {
       id: 'smart-header',
       name: 'Smart Header',
       description: 'Full size initially, shrinks on scroll',
       icon: '🧠',
-      pros: ['Adaptive design', 'Best of both worlds', 'Professional'],
-      cons: ['Complex animation', 'Requires header space']
+      pros: ['Adaptive design', 'Best of both worlds'],
+      cons: ['Complex animation']
+    },
+    {
+      id: 'banner-strip',
+      name: 'Banner Strip',
+      description: 'Thin minimal strip at top',
+      icon: '📏',
+      pros: ['Minimal space', 'Clean design', 'Fast loading'],
+      cons: ['Limited content space']
+    },
+    {
+      id: 'corner-popup',
+      name: 'Corner Popup',
+      description: 'Pops up from bottom left corner',
+      icon: '💬',
+      pros: ['Chat-like feel', 'Good engagement', 'Non-intrusive'],
+      cons: ['Can hide bottom content']
+    },
+    {
+      id: 'full-screen-takeover',
+      name: 'Full Screen Takeover',
+      description: 'Full screen overlay (aggressive)',
+      icon: '🖥️',
+      pros: ['Maximum attention', 'High impact', 'Can\'t miss'],
+      cons: ['Very intrusive', 'Can annoy users']
+    },
+    {
+      id: 'slide-in-left',
+      name: 'Slide In Left',
+      description: 'Slides from left side',
+      icon: '◀️',
+      pros: ['Unique animation', 'Side placement', 'Good visibility'],
+      cons: ['Can block content']
+    },
+    {
+      id: 'sticky-bottom',
+      name: 'Sticky Bottom',
+      description: 'Fixed at bottom of page',
+      icon: '⬇️',
+      pros: ['Always visible', 'Doesn\'t block header', 'Mobile friendly'],
+      cons: ['Takes bottom space']
+    },
+    {
+      id: 'notification-bar',
+      name: 'Notification Bar',
+      description: 'Minimal notification style at top',
+      icon: 'ℹ️',
+      pros: ['Very minimal', 'Professional', 'Fast loading'],
+      cons: ['Low visual impact']
     }
   ];
 
@@ -71,7 +119,7 @@ const CTABannerDemo = () => {
           </div>
 
           {/* Variant Selector */}
-          <div className="grid md:grid-cols-2 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
             {variants.map((variant) => (
               <div
                 key={variant.id}

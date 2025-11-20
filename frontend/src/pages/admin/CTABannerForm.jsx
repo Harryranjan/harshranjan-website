@@ -83,7 +83,13 @@ const CTABannerForm = () => {
     { value: 'sticky-top', label: 'Sticky Top Banner', icon: '⬆️', description: 'Fixed at top, always visible' },
     { value: 'floating-button', label: 'Floating Button', icon: '🎯', description: 'Bottom right corner' },
     { value: 'slide-bottom', label: 'Slide-in Bottom', icon: '⬇️', description: 'Slides up from bottom' },
-    { value: 'smart-header', label: 'Smart Header', icon: '🧠', description: 'Full size, shrinks on scroll' }
+    { value: 'smart-header', label: 'Smart Header', icon: '🧠', description: 'Full size, shrinks on scroll' },
+    { value: 'banner-strip', label: 'Banner Strip', icon: '📏', description: 'Thin minimal strip at top' },
+    { value: 'corner-popup', label: 'Corner Popup', icon: '💬', description: 'Pops from bottom left' },
+    { value: 'full-screen-takeover', label: 'Full Screen', icon: '🖥️', description: 'Full screen overlay' },
+    { value: 'slide-in-left', label: 'Slide In Left', icon: '◀️', description: 'Slides from left side' },
+    { value: 'sticky-bottom', label: 'Sticky Bottom', icon: '⬇️', description: 'Fixed at bottom' },
+    { value: 'notification-bar', label: 'Notification Bar', icon: 'ℹ️', description: 'Minimal notification' }
   ];
 
   const colorPresets = [
@@ -179,9 +185,9 @@ const CTABannerForm = () => {
 
           {/* Variant Selection */}
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Banner Variant</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Banner Variant (10 Styles)</h2>
             
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {variants.map((variant) => (
                 <div
                   key={variant.value}

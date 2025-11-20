@@ -23,7 +23,7 @@ module.exports = {
         defaultValue: "Discover exactly why top brands trust us with ₹300+ Crores in ad spends",
       },
       variant: {
-        type: DataTypes.ENUM("sticky-top", "floating-button", "slide-bottom", "smart-header"),
+        type: DataTypes.ENUM("sticky-top", "floating-button", "slide-bottom", "smart-header", "banner-strip", "corner-popup", "full-screen-takeover", "slide-in-left", "sticky-bottom", "notification-bar"),
         defaultValue: "sticky-top",
       },
       button_text: {
