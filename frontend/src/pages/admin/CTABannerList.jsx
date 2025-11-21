@@ -122,7 +122,7 @@ const CTABannerList = () => {
     const shortcode = `[cta_banner id="${id}"]`;
     navigator.clipboard.writeText(shortcode);
     setCopiedId(id);
-    
+
     // Reset after 2 seconds
     setTimeout(() => {
       setCopiedId(null);
@@ -212,7 +212,8 @@ const CTABannerList = () => {
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-gray-600 line-clamp-1">
-                    <strong className="text-gray-900">Title:</strong> {banner.title}
+                    <strong className="text-gray-900">Title:</strong>{" "}
+                    {banner.title}
                   </p>
                   <p className="text-xs text-gray-500 line-clamp-2">
                     {banner.description}
@@ -238,7 +239,10 @@ const CTABannerList = () => {
                   <div>
                     <div className="text-lg font-bold text-green-600">
                       {banner.click_count > 0 && banner.view_count > 0
-                        ? `${((banner.click_count / banner.view_count) * 100).toFixed(1)}%`
+                        ? `${(
+                            (banner.click_count / banner.view_count) *
+                            100
+                          ).toFixed(1)}%`
                         : "0%"}
                     </div>
                     <div className="text-xs text-gray-500">CTR</div>
@@ -256,7 +260,9 @@ const CTABannerList = () => {
                         ? "bg-green-50 text-green-600 hover:bg-green-100"
                         : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                     }`}
-                    title={banner.status === "active" ? "Deactivate" : "Activate"}
+                    title={
+                      banner.status === "active" ? "Deactivate" : "Activate"
+                    }
                   >
                     {banner.status === "active" ? (
                       <FiEye size={16} />
@@ -278,7 +284,9 @@ const CTABannerList = () => {
                         ? "bg-green-500 text-white"
                         : "bg-purple-50 text-purple-600 hover:bg-purple-100"
                     }`}
-                    title={copiedId === banner.id ? "Copied!" : "Copy Shortcode"}
+                    title={
+                      copiedId === banner.id ? "Copied!" : "Copy Shortcode"
+                    }
                   >
                     {copiedId === banner.id ? (
                       <FiCheckCircle size={16} />
@@ -322,7 +330,11 @@ const CTABannerList = () => {
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} size="md">
+        <Modal
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          size="md"
+        >
           <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Delete CTA Banner
@@ -351,7 +363,11 @@ const CTABannerList = () => {
 
       {/* Preview Modal */}
       {showPreviewModal && selectedBanner && (
-        <Modal isOpen={showPreviewModal} onClose={() => setShowPreviewModal(false)} size="xl">
+        <Modal
+          isOpen={showPreviewModal}
+          onClose={() => setShowPreviewModal(false)}
+          size="xl"
+        >
           <div className="p-6 max-w-5xl">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Preview: {selectedBanner.name}
@@ -359,42 +375,75 @@ const CTABannerList = () => {
 
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
               <p className="text-sm text-yellow-800">
-                👁️ This is a live preview of your CTA banner. Scroll within the preview area to see scroll-based animations.
+                👁️ This is a live preview of your CTA banner. Scroll within the
+                preview area to see scroll-based animations.
               </p>
             </div>
 
             {/* Preview Area with scrollable content */}
-            <div className="relative bg-gray-100 rounded-lg overflow-y-auto border-2 border-gray-300" style={{ height: "500px" }}>
+            <div
+              className="relative bg-gray-100 rounded-lg overflow-y-auto border-2 border-gray-300"
+              style={{ height: "500px" }}
+            >
               {/* Spacer content to enable scrolling */}
-              <div style={{ height: "200px" }} className="bg-gradient-to-b from-white to-gray-50 flex items-center justify-center">
-                <p className="text-gray-400 text-sm">Scroll down to see scroll-triggered banners</p>
+              <div
+                style={{ height: "200px" }}
+                className="bg-gradient-to-b from-white to-gray-50 flex items-center justify-center"
+              >
+                <p className="text-gray-400 text-sm">
+                  Scroll down to see scroll-triggered banners
+                </p>
               </div>
-              
-              <div className="relative bg-white" style={{ minHeight: "800px", paddingTop: "100px" }}>
+
+              <div
+                className="relative bg-white"
+                style={{ minHeight: "800px", paddingTop: "100px" }}
+              >
                 <CTABanner
                   variant={selectedBanner.variant}
                   title={selectedBanner.title}
                   description={selectedBanner.description}
                   buttonText={selectedBanner.button_text}
-                  phoneNumber={selectedBanner.show_phone ? selectedBanner.phone_number : null}
+                  phoneNumber={
+                    selectedBanner.show_phone
+                      ? selectedBanner.phone_number
+                      : null
+                  }
                   showAfterScroll={50}
                   dismissible={false}
-                  customColors={selectedBanner.colors ? {
-                    bgFrom: selectedBanner.colors.bgFrom || "#ef4444",
-                    bgTo: selectedBanner.colors.bgTo || "#dc2626",
-                    buttonBg: selectedBanner.colors.buttonBg || "#ffffff",
-                    buttonText: selectedBanner.colors.buttonText || "#dc2626",
-                    text: selectedBanner.colors.text || "#ffffff",
-                  } : null}
+                  customColors={
+                    selectedBanner.colors
+                      ? {
+                          bgFrom: selectedBanner.colors.bgFrom || "#ef4444",
+                          bgTo: selectedBanner.colors.bgTo || "#dc2626",
+                          buttonBg: selectedBanner.colors.buttonBg || "#ffffff",
+                          buttonText:
+                            selectedBanner.colors.buttonText || "#dc2626",
+                          text: selectedBanner.colors.text || "#ffffff",
+                        }
+                      : null
+                  }
                   storageKey={`preview-${selectedBanner.id}-${Date.now()}`}
-                  onButtonClick={() => alert("Button clicked! In live mode, this would trigger the configured action.")}
+                  onButtonClick={() =>
+                    alert(
+                      "Button clicked! In live mode, this would trigger the configured action."
+                    )
+                  }
                 />
-                
+
                 {/* Dummy content */}
                 <div className="p-8 space-y-4">
-                  <h4 className="text-xl font-bold text-gray-800">Sample Page Content</h4>
-                  <p className="text-gray-600">This is sample content to demonstrate how the CTA banner appears on your page.</p>
-                  <p className="text-gray-600">The banner position and behavior will match what visitors see on the actual website.</p>
+                  <h4 className="text-xl font-bold text-gray-800">
+                    Sample Page Content
+                  </h4>
+                  <p className="text-gray-600">
+                    This is sample content to demonstrate how the CTA banner
+                    appears on your page.
+                  </p>
+                  <p className="text-gray-600">
+                    The banner position and behavior will match what visitors
+                    see on the actual website.
+                  </p>
                   <div className="h-40 bg-gray-200 rounded"></div>
                 </div>
               </div>
@@ -423,7 +472,11 @@ const CTABannerList = () => {
 
       {/* Shortcode Modal */}
       {showShortcodeModal && selectedBanner && (
-        <Modal isOpen={showShortcodeModal} onClose={() => setShowShortcodeModal(false)} size="lg">
+        <Modal
+          isOpen={showShortcodeModal}
+          onClose={() => setShowShortcodeModal(false)}
+          size="lg"
+        >
           <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               CTA Banner Shortcode

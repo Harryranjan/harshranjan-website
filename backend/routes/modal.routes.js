@@ -6,7 +6,7 @@ const { authMiddleware } = require("../middleware/auth.middleware");
 // Modal routes (protected)
 router.get("/", authMiddleware, modalController.getAllModals);
 router.get("/active", modalController.getActiveModals); // Public endpoint
-router.get("/:id", authMiddleware, modalController.getModalById);
+router.get("/:id", modalController.getModalById); // Public endpoint - needed for modal display
 router.post("/", authMiddleware, modalController.createModal);
 router.put("/:id", authMiddleware, modalController.updateModal);
 router.delete("/:id", authMiddleware, modalController.deleteModal);

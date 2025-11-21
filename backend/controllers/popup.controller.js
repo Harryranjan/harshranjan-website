@@ -56,13 +56,9 @@ exports.getPopupById = async (req, res) => {
 // Get active popups (public endpoint)
 exports.getActivePopups = async (req, res) => {
   try {
-    const now = new Date();
-
     const popups = await Popup.findAll({
       where: {
         status: "active",
-        [Op.or]: [{ start_date: null }, { start_date: { [Op.lte]: now } }],
-        [Op.or]: [{ end_date: null }, { end_date: { [Op.gte]: now } }],
       },
       order: [["created_at", "DESC"]],
     });

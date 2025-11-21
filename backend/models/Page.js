@@ -103,15 +103,8 @@ const Page = sequelize.define(
     tableName: "pages",
     timestamps: true,
     underscored: true,
-    // Transform snake_case to camelCase in JSON responses
-    getterMethods: {
-      createdAt() {
-        return this.getDataValue("created_at");
-      },
-      updatedAt() {
-        return this.getDataValue("updated_at");
-      },
-    },
+    createdAt: "created_at",
+    updatedAt: "updated_at",
   }
 );
 

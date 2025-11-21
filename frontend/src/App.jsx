@@ -31,6 +31,7 @@ import ModalList from "./pages/admin/ModalList";
 import ModalBuilder from "./pages/admin/ModalBuilder";
 import PopupBuilder from "./pages/admin/PopupBuilder";
 import EmailSettings from "./pages/admin/EmailSettings";
+import Settings from "./pages/admin/Settings";
 import DownloadList from "./pages/admin/DownloadList";
 import DownloadForm from "./pages/admin/DownloadForm";
 import DownloadLeads from "./pages/admin/DownloadLeads";
@@ -42,6 +43,10 @@ import FooterBuilder from "./pages/admin/FooterBuilder";
 import CTABannerDemo from "./pages/CTABannerDemo";
 import CTABannerList from "./pages/admin/CTABannerList";
 import CTABannerForm from "./pages/admin/CTABannerForm";
+import LandingPageList from "./pages/admin/LandingPageList";
+import LandingPageBuilder from "./pages/admin/LandingPageBuilder";
+import LandingPageBuilderAdvanced from "./pages/admin/LandingPageBuilderAdvanced";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
@@ -121,8 +126,10 @@ function App() {
           }
         />
         <Route path="/cta-demo" element={<CTABannerDemo />} />
+        <Route path="/landing/:slug" element={<LandingPage />} />
 
         {/* Admin Routes */}
+        <Route path="/login" element={<AdminLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin"
@@ -188,11 +195,22 @@ function App() {
             path="seo"
             element={<div className="text-2xl">SEO Settings - Coming Soon</div>}
           />
+          <Route path="landing-pages" element={<LandingPageList />} />
           <Route
-            path="landing-pages"
-            element={
-              <div className="text-2xl">Landing Pages - Coming Soon</div>
-            }
+            path="landing-pages/create"
+            element={<LandingPageBuilderAdvanced />}
+          />
+          <Route
+            path="landing-pages/edit/:id"
+            element={<LandingPageBuilderAdvanced />}
+          />
+          <Route
+            path="landing-pages/create-simple"
+            element={<LandingPageBuilder />}
+          />
+          <Route
+            path="landing-pages/edit-simple/:id"
+            element={<LandingPageBuilder />}
           />
           <Route
             path="messages"
@@ -201,10 +219,7 @@ function App() {
             }
           />
           <Route path="email-settings" element={<EmailSettings />} />
-          <Route
-            path="settings"
-            element={<div className="text-2xl">Settings - Coming Soon</div>}
-          />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </AuthProvider>

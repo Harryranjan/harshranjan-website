@@ -53,11 +53,17 @@ exports.getAllPages = async (req, res) => {
         // Keep as string if parsing fails
       }
 
+      // Ensure timestamps are included in both formats
+      const created = pageData.created_at || pageData.createdAt;
+      const updated = pageData.updated_at || pageData.updatedAt;
+
       return {
         ...pageData,
         content,
-        createdAt: pageData.created_at,
-        updatedAt: pageData.updated_at,
+        created_at: created,
+        updated_at: updated,
+        createdAt: created,
+        updatedAt: updated,
       };
     });
 
@@ -95,12 +101,18 @@ exports.getPageById = async (req, res) => {
       // Keep as string if parsing fails
     }
 
+    // Ensure timestamps are included in both formats
+    const created = pageData.created_at || pageData.createdAt;
+    const updated = pageData.updated_at || pageData.updatedAt;
+
     res.json({
       page: {
         ...pageData,
         content,
-        createdAt: pageData.created_at,
-        updatedAt: pageData.updated_at,
+        created_at: created,
+        updated_at: updated,
+        createdAt: created,
+        updatedAt: updated,
       },
     });
   } catch (error) {
