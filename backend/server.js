@@ -128,6 +128,7 @@ app.use("/api/downloads", require("./routes/download.routes"));
 app.use("/api/download-leads", require("./routes/downloadLead.routes"));
 app.use("/api/menus", require("./routes/menu.routes"));
 app.use("/api/cta-banners", require("./routes/ctaBanner.routes"));
+app.use("/api/analytics", require("./routes/analytics.routes"));
 
 // 404 handler
 app.use((req, res) => {
