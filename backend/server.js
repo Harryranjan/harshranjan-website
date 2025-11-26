@@ -23,6 +23,7 @@ const Setting = require("./models/Setting");
 const Download = require("./models/Download");
 const DownloadLead = require("./models/DownloadLead");
 const CTABanner = require("./models/CTABanner");
+const Lead = require("./models/Lead");
 
 const app = express();
 
@@ -165,6 +166,7 @@ app.use(
 app.use("/api/menus", require("./routes/menu.routes"));
 app.use("/api/cta-banners", require("./routes/ctaBanner.routes"));
 app.use("/api/analytics", require("./routes/analytics.routes"));
+app.use("/api/leads", require("./routes/lead.routes"));
 
 // 404 handler
 app.use((req, res) => {

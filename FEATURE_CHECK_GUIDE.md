@@ -20,7 +20,7 @@ $response.Headers
 Invoke-RestMethod -Uri "http://localhost:5000/api/sitemap.xml"
 # Should return XML with <urlset> and multiple <url> entries
 
-# 4. Test Robots.txt  
+# 4. Test Robots.txt
 Invoke-RestMethod -Uri "http://localhost:5000/api/robots.txt"
 # Should return robots.txt with User-agent, Allow, Disallow, Sitemap
 
@@ -34,11 +34,11 @@ $response.Headers["Content-Encoding"]
 # May show "gzip" if compression active
 
 # 7. Test Rate Limiting (try 6+ requests quickly)
-1..6 | ForEach-Object { 
-    try { 
+1..6 | ForEach-Object {
+    try {
         Invoke-RestMethod -Uri "http://localhost:5000/api/auth/login" -Method POST -Body (@{email="test@test.com";password="test"} | ConvertTo-Json) -ContentType "application/json"
-    } catch { 
-        Write-Host "Request $_ : $($_.Exception.Response.StatusCode)" 
+    } catch {
+        Write-Host "Request $_ : $($_.Exception.Response.StatusCode)"
     }
 }
 # Should eventually return "429 Too Many Requests"
@@ -107,6 +107,7 @@ http://localhost:5000/api/robots.txt
 Open Developer Tools (F12) → Network tab → Reload page → Click on any request → Headers tab
 
 Look for:
+
 - `X-Content-Type-Options: nosniff`
 - `X-Frame-Options: DENY`
 - `X-XSS-Protection: 1; mode=block`
@@ -118,12 +119,12 @@ Open Developer Tools Console and run:
 
 ```javascript
 // Rapidly make 10 requests to auth endpoint
-for(let i = 0; i < 10; i++) {
-  fetch('http://localhost:5000/api/auth/login', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({email: 'test@test.com', password: 'test'})
-  }).then(r => console.log(`Request ${i+1}: ${r.status}`));
+for (let i = 0; i < 10; i++) {
+  fetch("http://localhost:5000/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "test@test.com", password: "test" }),
+  }).then((r) => console.log(`Request ${i + 1}: ${r.status}`));
 }
 // After 5-6 requests, should see: "429 Too Many Requests"
 ```
@@ -157,6 +158,7 @@ Get-ChildItem "backend\uploads\images" | Where-Object { $_.Name -like "*_optimiz
 ```
 
 Should see:
+
 - `{timestamp}_original.jpg` - Original upload
 - `{timestamp}_optimized.jpg` - Compressed version
 - `{timestamp}.webp` - WebP version
@@ -202,15 +204,15 @@ foreach($file in $files) {
 
 ### Before vs After Optimization
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| API Response Time | 150-300ms | 5-50ms* | 80-95% faster |
-| Blog Post Load | 80ms | 3-5ms* | 94% faster |
-| Image Size (avg) | 2.5MB | 380KB | 85% smaller |
-| Database Query | 80-120ms | 30-50ms | 50% faster |
-| Page Load Time | 3.5s | 0.9s | 74% faster |
+| Metric            | Before    | After    | Improvement   |
+| ----------------- | --------- | -------- | ------------- |
+| API Response Time | 150-300ms | 5-50ms\* | 80-95% faster |
+| Blog Post Load    | 80ms      | 3-5ms\*  | 94% faster    |
+| Image Size (avg)  | 2.5MB     | 380KB    | 85% smaller   |
+| Database Query    | 80-120ms  | 30-50ms  | 50% faster    |
+| Page Load Time    | 3.5s      | 0.9s     | 74% faster    |
 
-*With Redis cache enabled
+\*With Redis cache enabled
 
 ### How to Measure
 
@@ -252,11 +254,13 @@ Measure-Command { Invoke-RestMethod -Uri "http://localhost:5000/api/blog" } | Se
 ### 🔄 To Enable Redis Caching (Optional)
 
 **Option 1: Docker (Easiest)**
+
 ```powershell
 docker run --name redis-cache -p 6379:6379 -d redis:7-alpine
 ```
 
 **Option 2: Windows Install**
+
 1. Download: https://github.com/tporadowski/redis/releases
 2. Install Redis
 3. Start service: `net start Redis`
@@ -264,6 +268,7 @@ docker run --name redis-cache -p 6379:6379 -d redis:7-alpine
 5. Restart backend
 
 **Option 3: Skip Cache**
+
 - Keep `SKIP_CACHE=true` in `.env` (current setting)
 - System works perfectly without Redis
 - No performance penalty for uncached requests
@@ -288,18 +293,23 @@ docker run --name redis-cache -p 6379:6379 -d redis:7-alpine
 ## 📞 **Troubleshooting**
 
 ### Issue: "Redis connection failed"
+
 **Solution**: This is normal if Redis not installed. Add `SKIP_CACHE=true` to `.env` to silence warnings.
 
 ### Issue: "Email service initialization failed"
+
 **Solution**: Configure SMTP credentials in `.env` or ignore if email not needed yet.
 
 ### Issue: "Rate limit not working"
+
 **Solution**: Make 6+ rapid requests to same endpoint. First 5 succeed, 6th gets 429 status.
 
 ### Issue: "Images not optimizing"
+
 **Solution**: Verify Sharp installed: `npm list sharp`. Check `imageOptimization.js` middleware applied to upload routes.
 
 ### Issue: "Slow database queries"
+
 **Solution**: Run `backend\database-indexes.sql` to create indexes: `mysql -u root harsh_ranjan_website < database-indexes.sql`
 
 ---
@@ -313,6 +323,7 @@ Write-Host "Backend Server:" -NoNewline; try { Invoke-RestMethod "http://localho
 ```
 
 Should output:
+
 ```
 Backend Server: ✅
 Sitemap: ✅

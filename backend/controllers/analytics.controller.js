@@ -159,14 +159,7 @@ exports.getSEOStats = async (req, res) => {
       where: {
         is_published: true,
       },
-      attributes: [
-        "id",
-        "title",
-        "slug",
-        "views",
-        "tags",
-        "updated_at",
-      ],
+      attributes: ["id", "title", "slug", "views", "tags", "updated_at"],
       order: [["views", "DESC"]],
     });
 
@@ -198,10 +191,12 @@ exports.getSEOStats = async (req, res) => {
       .map((item) => {
         const isBlog = item.is_published !== undefined;
         // For blog posts, use tags; for pages, use meta_keywords
-        const keywords = isBlog 
-          ? (Array.isArray(item.tags) ? item.tags.join(", ") : item.tags || "")
-          : (item.meta_keywords || "");
-        
+        const keywords = isBlog
+          ? Array.isArray(item.tags)
+            ? item.tags.join(", ")
+            : item.tags || ""
+          : item.meta_keywords || "";
+
         return {
           id: item.id,
           title: item.title,
@@ -218,12 +213,12 @@ exports.getSEOStats = async (req, res) => {
       if (item.keywords) {
         // Handle both comma-separated strings and arrays
         let keywords = [];
-        if (typeof item.keywords === 'string') {
+        if (typeof item.keywords === "string") {
           keywords = item.keywords.split(",").map((k) => k.trim());
         } else if (Array.isArray(item.keywords)) {
           keywords = item.keywords;
         }
-        
+
         keywords.forEach((keyword) => {
           if (keyword) {
             keywordMap[keyword] = (keywordMap[keyword] || 0) + item.views;
@@ -337,9 +332,9 @@ exports.getTrafficTrends = async (req, res) => {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split("T")[0];
-      
+
       const dayData = viewsByDate[dateStr] || { views: 0, content_count: 0 };
-      
+
       trends.push({
         date: dateStr,
         views: dayData.views,
@@ -355,7 +350,8 @@ exports.getTrafficTrends = async (req, res) => {
         trends,
         summary: {
           total_views: totalViews,
-          avg_daily_views: trends.length > 0 ? Math.round(totalViews / trends.length) : 0,
+          avg_daily_views:
+            trends.length > 0 ? Math.round(totalViews / trends.length) : 0,
           period_days: days,
         },
       },

@@ -16,11 +16,27 @@ const tagController = require("../controllers/tag.controller");
 // Public routes - specific routes MUST come before dynamic routes (/:id)
 // Apply caching to public read-only routes
 router.get("/", cacheStrategies.blogList, blogController.getAllPosts);
-router.get("/categories", cacheStrategies.blogList, blogController.getCategories);
+router.get(
+  "/categories",
+  cacheStrategies.blogList,
+  blogController.getCategories
+);
 router.get("/tags", cacheStrategies.blogList, tagController.getAllTags);
-router.get("/tags/popular", cacheStrategies.blogList, tagController.getPopularTags);
-router.get("/slug/:slug", cacheStrategies.blogPost, blogController.getPostBySlug);
-router.get("/:id/related", cacheStrategies.blogList, blogController.getRelatedPosts);
+router.get(
+  "/tags/popular",
+  cacheStrategies.blogList,
+  tagController.getPopularTags
+);
+router.get(
+  "/slug/:slug",
+  cacheStrategies.blogPost,
+  blogController.getPostBySlug
+);
+router.get(
+  "/:id/related",
+  cacheStrategies.blogList,
+  blogController.getRelatedPosts
+);
 router.get("/:id", cacheStrategies.blogPost, blogController.getPost);
 
 // Category management routes (Admin only)

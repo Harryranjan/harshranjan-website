@@ -21,11 +21,15 @@ const ConversionDashboard = () => {
       if (response.data.success) {
         setConversionData(response.data.data);
       } else {
-        setError('Failed to load conversion data');
+        setError("Failed to load conversion data");
       }
     } catch (error) {
       console.error("Failed to fetch conversion data:", error);
-      setError(error.response?.data?.message || error.message || 'Failed to load conversion data');
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to load conversion data"
+      );
     } finally {
       setLoading(false);
     }

@@ -15,7 +15,11 @@
  * @param {number} columns - Number of columns (2, 3, or 4)
  * @param {boolean} loading - Global loading state for all cards
  */
-export default function StatsCards({ stats = [], columns = 3, loading = false }) {
+export default function StatsCards({
+  stats = [],
+  columns = 3,
+  loading = false,
+}) {
   const getColorClasses = (color) => {
     const colorMap = {
       blue: {
@@ -87,7 +91,9 @@ export default function StatsCards({ stats = [], columns = 3, loading = false })
     );
 
     return (
-      <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${trendBg} ${trendColor} text-xs font-medium mt-2`}>
+      <div
+        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${trendBg} ${trendColor} text-xs font-medium mt-2`}
+      >
         {trendIcon}
         <span>{trend.value}%</span>
         {trend.label && <span className="text-gray-600">{trend.label}</span>}
@@ -163,7 +169,9 @@ export default function StatsCards({ stats = [], columns = 3, loading = false })
                     )}
                     {renderTrendIndicator(stat.trend)}
                   </div>
-                  <div className={`${colors.bg} p-3 rounded-full flex-shrink-0`}>
+                  <div
+                    className={`${colors.bg} p-3 rounded-full flex-shrink-0`}
+                  >
                     {stat.customIcon ? (
                       stat.customIcon
                     ) : (

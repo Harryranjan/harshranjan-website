@@ -7,8 +7,7 @@ const { Op } = require("sequelize");
  */
 exports.generateSitemap = async (req, res) => {
   try {
-    const baseUrl =
-      process.env.FRONTEND_URL || "https://www.harshranjan.com";
+    const baseUrl = process.env.FRONTEND_URL || "https://www.harshranjan.com";
 
     // Get all published pages
     const pages = await Page.findAll({
@@ -30,8 +29,7 @@ exports.generateSitemap = async (req, res) => {
 
     // Build sitemap XML
     let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
-    sitemap +=
-      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+    sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
     // Add homepage
     sitemap += "  <url>\n";
@@ -45,7 +43,9 @@ exports.generateSitemap = async (req, res) => {
     pages.forEach((page) => {
       sitemap += "  <url>\n";
       sitemap += `    <loc>${baseUrl}/${page.slug}</loc>\n`;
-      sitemap += `    <lastmod>${new Date(page.updated_at).toISOString()}</lastmod>\n`;
+      sitemap += `    <lastmod>${new Date(
+        page.updated_at
+      ).toISOString()}</lastmod>\n`;
       sitemap += "    <changefreq>weekly</changefreq>\n";
       sitemap += "    <priority>0.8</priority>\n";
       sitemap += "  </url>\n";
@@ -55,7 +55,9 @@ exports.generateSitemap = async (req, res) => {
     blogPosts.forEach((post) => {
       sitemap += "  <url>\n";
       sitemap += `    <loc>${baseUrl}/blog/${post.slug}</loc>\n`;
-      sitemap += `    <lastmod>${new Date(post.updated_at).toISOString()}</lastmod>\n`;
+      sitemap += `    <lastmod>${new Date(
+        post.updated_at
+      ).toISOString()}</lastmod>\n`;
       sitemap += "    <changefreq>monthly</changefreq>\n";
       sitemap += "    <priority>0.7</priority>\n";
       sitemap += "  </url>\n";
@@ -85,8 +87,7 @@ exports.generateSitemap = async (req, res) => {
  */
 exports.generateRobotsTxt = async (req, res) => {
   try {
-    const baseUrl =
-      process.env.FRONTEND_URL || "https://www.harshranjan.com";
+    const baseUrl = process.env.FRONTEND_URL || "https://www.harshranjan.com";
 
     let robotsTxt = "# Robots.txt for Harsh Ranjan Website\n\n";
     robotsTxt += "User-agent: *\n";

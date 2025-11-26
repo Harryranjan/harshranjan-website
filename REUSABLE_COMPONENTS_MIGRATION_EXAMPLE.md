@@ -1,33 +1,40 @@
 # Reusable Components - Migration Example
 
 ## Overview
+
 This guide shows how to migrate existing admin pages to use the new reusable components, significantly reducing code duplication and improving maintainability.
 
 ## Components Created
 
 ### 1. useCRUDResource Hook
+
 **Location:** `frontend/src/hooks/useCRUDResource.js`  
 **Lines:** 500+  
 **Eliminates:** ~2,000 lines of duplicate CRUD logic
 
 ### 2. AdminListPage Component
+
 **Location:** `frontend/src/components/admin/AdminListPage.jsx`  
 **Lines:** 450+  
 **Eliminates:** ~3,000 lines across 10+ admin pages
 
 ### 3. ConfirmationModal Component
+
 **Location:** `frontend/src/components/ui/ConfirmationModal.jsx`  
 **Lines:** 100+  
 **Eliminates:** ~500 lines across 5+ delete confirmations
 
 ### 4. EmptyStateWithAction Component
+
 **Location:** `frontend/src/components/ui/EmptyStateWithAction.jsx`  
 **Lines:** 130+  
 **Eliminates:** ~800 lines across 15+ empty states
 
 ### 5. Enhanced StatsCards Component
+
 **Location:** `frontend/src/components/ui/StatsCards.jsx`  
 **Enhanced with:**
+
 - Trend indicators (percentage change with up/down arrows)
 - Loading states (skeleton placeholders)
 - Click handlers (with keyboard support)
@@ -40,19 +47,19 @@ This guide shows how to migrate existing admin pages to use the new reusable com
 ### Before (BlogList.jsx - ~350 lines)
 
 ```jsx
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import api from '../../utils/api';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import api from "../../utils/api";
 
 export default function BlogList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [selectedPosts, setSelectedPosts] = useState([]);
 
   useEffect(() => {
@@ -62,45 +69,45 @@ export default function BlogList() {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/api/blog', {
+      const response = await api.get("/api/blog", {
         params: {
           page,
           limit: 10,
           search: searchTerm,
           category: categoryFilter,
-          status: statusFilter
-        }
+          status: statusFilter,
+        },
       });
       setPosts(response.data.posts);
       setTotalPages(response.data.pages);
     } catch (err) {
-      setError('Failed to fetch blog posts');
+      setError("Failed to fetch blog posts");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this post?')) return;
+    if (!window.confirm("Delete this post?")) return;
     try {
       await api.delete(`/api/blog/${id}`);
       fetchPosts();
     } catch (err) {
-      setError('Failed to delete post');
+      setError("Failed to delete post");
     }
   };
 
   const handleBulkPublish = async () => {
     try {
       await Promise.all(
-        selectedPosts.map(id => 
-          api.patch(`/api/blog/${id}`, { status: 'published' })
+        selectedPosts.map((id) =>
+          api.patch(`/api/blog/${id}`, { status: "published" })
         )
       );
       setSelectedPosts([]);
       fetchPosts();
     } catch (err) {
-      setError('Failed to publish posts');
+      setError("Failed to publish posts");
     }
   };
 
@@ -109,7 +116,7 @@ export default function BlogList() {
       await api.patch(`/api/blog/${id}`, { status });
       fetchPosts();
     } catch (err) {
-      setError('Failed to update status');
+      setError("Failed to update status");
     }
   };
 
@@ -157,9 +164,7 @@ export default function BlogList() {
         </div>
       ) : (
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <table className="w-full">
-            {/* Table header and rows... */}
-          </table>
+          <table className="w-full">{/* Table header and rows... */}</table>
         </div>
       )}
 
@@ -173,16 +178,16 @@ export default function BlogList() {
 ### After (BlogList.jsx - ~80 lines)
 
 ```jsx
-import { Link } from 'react-router-dom';
-import AdminListPage from '../../components/admin/AdminListPage';
-import api from '../../utils/api';
+import { Link } from "react-router-dom";
+import AdminListPage from "../../components/admin/AdminListPage";
+import api from "../../utils/api";
 
 export default function BlogList() {
   // Define column configuration
   const columns = [
     {
-      key: 'title',
-      label: 'Title',
+      key: "title",
+      label: "Title",
       sortable: true,
       render: (post) => (
         <div>
@@ -203,29 +208,29 @@ export default function BlogList() {
       ),
     },
     {
-      key: 'author',
-      label: 'Author',
+      key: "author",
+      label: "Author",
       sortable: true,
-      render: (post) => post.author || 'Unknown',
+      render: (post) => post.author || "Unknown",
     },
     {
-      key: 'category',
-      label: 'Category',
+      key: "category",
+      label: "Category",
       sortable: true,
-      render: (post) => post.Category?.name || 'Uncategorized',
+      render: (post) => post.Category?.name || "Uncategorized",
     },
     {
-      key: 'status',
-      label: 'Status',
+      key: "status",
+      label: "Status",
       sortable: true,
       render: (post) => (
         <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${
-            post.status === 'published'
-              ? 'bg-green-100 text-green-800'
-              : post.status === 'draft'
-              ? 'bg-yellow-100 text-yellow-800'
-              : 'bg-gray-100 text-gray-800'
+            post.status === "published"
+              ? "bg-green-100 text-green-800"
+              : post.status === "draft"
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-gray-100 text-gray-800"
           }`}
         >
           {post.status}
@@ -233,14 +238,14 @@ export default function BlogList() {
       ),
     },
     {
-      key: 'views',
-      label: 'Views',
+      key: "views",
+      label: "Views",
       sortable: true,
-      render: (post) => post.views?.toLocaleString() || '0',
+      render: (post) => post.views?.toLocaleString() || "0",
     },
     {
-      key: 'created_at',
-      label: 'Created',
+      key: "created_at",
+      label: "Created",
       sortable: true,
       render: (post) => new Date(post.created_at).toLocaleDateString(),
     },
@@ -249,57 +254,57 @@ export default function BlogList() {
   // Define available filters
   const filters = [
     {
-      key: 'status',
-      label: 'Status',
-      type: 'select',
+      key: "status",
+      label: "Status",
+      type: "select",
       options: [
-        { value: '', label: 'All' },
-        { value: 'published', label: 'Published' },
-        { value: 'draft', label: 'Draft' },
-        { value: 'archived', label: 'Archived' },
+        { value: "", label: "All" },
+        { value: "published", label: "Published" },
+        { value: "draft", label: "Draft" },
+        { value: "archived", label: "Archived" },
       ],
     },
     {
-      key: 'category',
-      label: 'Category',
-      type: 'async-select',
-      endpoint: '/api/categories',
-      labelKey: 'name',
-      valueKey: 'id',
+      key: "category",
+      label: "Category",
+      type: "async-select",
+      endpoint: "/api/categories",
+      labelKey: "name",
+      valueKey: "id",
     },
   ];
 
   // Define bulk actions
   const bulkActions = [
     {
-      label: 'Publish',
+      label: "Publish",
       action: async (selectedIds, { updateBulk, showSuccess }) => {
-        await updateBulk(selectedIds, { status: 'published' });
+        await updateBulk(selectedIds, { status: "published" });
         showSuccess(`Published ${selectedIds.length} posts`);
       },
-      variant: 'primary',
+      variant: "primary",
     },
     {
-      label: 'Unpublish',
+      label: "Unpublish",
       action: async (selectedIds, { updateBulk, showSuccess }) => {
-        await updateBulk(selectedIds, { status: 'draft' });
+        await updateBulk(selectedIds, { status: "draft" });
         showSuccess(`Unpublished ${selectedIds.length} posts`);
       },
-      variant: 'secondary',
+      variant: "secondary",
     },
   ];
 
   // Define row actions
   const actions = [
     {
-      label: 'Edit',
+      label: "Edit",
       path: (post) => `/admin/blog/edit/${post.id}`,
-      variant: 'primary',
+      variant: "primary",
     },
     {
-      label: 'View',
+      label: "View",
       path: (post) => `/blog/${post.slug}`,
-      variant: 'secondary',
+      variant: "secondary",
       external: true,
     },
   ];
@@ -314,16 +319,16 @@ export default function BlogList() {
       actions={actions}
       searchPlaceholder="Search posts by title, content..."
       createButton={{
-        label: 'Add New Post',
-        path: '/admin/blog/new',
+        label: "Add New Post",
+        path: "/admin/blog/new",
       }}
       emptyState={{
-        title: 'No blog posts yet',
-        description: 'Create your first blog post to get started',
-        actionText: 'Create Post',
-        actionLink: '/admin/blog/new',
+        title: "No blog posts yet",
+        description: "Create your first blog post to get started",
+        actionText: "Create Post",
+        actionLink: "/admin/blog/new",
       }}
-      defaultSort={{ field: 'created_at', order: 'desc' }}
+      defaultSort={{ field: "created_at", order: "desc" }}
       pageSize={10}
     />
   );
@@ -334,45 +339,50 @@ export default function BlogList() {
 
 ## Line Count Comparison
 
-| File | Before | After | Saved |
-|------|--------|-------|-------|
-| BlogList.jsx | ~350 lines | ~80 lines | **270 lines** |
-| CategoryList.jsx | ~320 lines | ~70 lines | **250 lines** |
-| TagList.jsx | ~310 lines | ~65 lines | **245 lines** |
-| PageList.jsx | ~340 lines | ~85 lines | **255 lines** |
-| FormList.jsx | ~330 lines | ~75 lines | **255 lines** |
-| DownloadList.jsx | ~325 lines | ~80 lines | **245 lines** |
-| MenuList.jsx | ~315 lines | ~70 lines | **245 lines** |
-| ModalList.jsx | ~320 lines | ~75 lines | **245 lines** |
-| CTABannerList.jsx | ~310 lines | ~70 lines | **240 lines** |
-| UserList.jsx | ~330 lines | ~80 lines | **250 lines** |
-| **Total** | **~3,250 lines** | **~750 lines** | **~2,500 lines (77% reduction)** |
+| File              | Before           | After          | Saved                            |
+| ----------------- | ---------------- | -------------- | -------------------------------- |
+| BlogList.jsx      | ~350 lines       | ~80 lines      | **270 lines**                    |
+| CategoryList.jsx  | ~320 lines       | ~70 lines      | **250 lines**                    |
+| TagList.jsx       | ~310 lines       | ~65 lines      | **245 lines**                    |
+| PageList.jsx      | ~340 lines       | ~85 lines      | **255 lines**                    |
+| FormList.jsx      | ~330 lines       | ~75 lines      | **255 lines**                    |
+| DownloadList.jsx  | ~325 lines       | ~80 lines      | **245 lines**                    |
+| MenuList.jsx      | ~315 lines       | ~70 lines      | **245 lines**                    |
+| ModalList.jsx     | ~320 lines       | ~75 lines      | **245 lines**                    |
+| CTABannerList.jsx | ~310 lines       | ~70 lines      | **240 lines**                    |
+| UserList.jsx      | ~330 lines       | ~80 lines      | **250 lines**                    |
+| **Total**         | **~3,250 lines** | **~750 lines** | **~2,500 lines (77% reduction)** |
 
 ---
 
 ## Benefits
 
 ### 1. **Code Consistency**
+
 - All admin pages follow the same pattern
 - Standardized UI/UX across the application
 - Easier for new developers to understand
 
 ### 2. **Maintainability**
+
 - Bug fixes in one place benefit all pages
 - New features (export, import, etc.) available everywhere
 - Reduced technical debt
 
 ### 3. **Development Speed**
+
 - New admin pages take 10 minutes instead of hours
 - Copy-paste column configuration
 - No need to rewrite CRUD logic
 
 ### 4. **Type Safety & Documentation**
+
 - Clear prop interfaces
 - JSDoc comments for autocomplete
 - Reduced runtime errors
 
 ### 5. **Performance**
+
 - Optimized rendering with useMemo/useCallback
 - Debounced search and filters
 - Efficient pagination
@@ -384,27 +394,32 @@ export default function BlogList() {
 For each admin list page:
 
 1. **Analyze Current Implementation**
+
    - [ ] Identify unique columns and their rendering logic
    - [ ] List filter requirements
    - [ ] Note any custom bulk actions
    - [ ] Check for special features (export, import, etc.)
 
 2. **Create Column Configuration**
+
    - [ ] Map each column to configuration object
    - [ ] Add custom render functions for complex cells
    - [ ] Enable sorting where appropriate
 
 3. **Configure Filters**
+
    - [ ] Create filter array with types (text, select, date, etc.)
    - [ ] Set up async selects for relational data
    - [ ] Define default filter values
 
 4. **Define Actions**
+
    - [ ] Add row-level actions (edit, view, delete)
    - [ ] Configure bulk actions with proper confirmation
    - [ ] Set action variants and labels
 
 5. **Test Migration**
+
    - [ ] Verify all CRUD operations work
    - [ ] Test search functionality
    - [ ] Check filter combinations
@@ -422,6 +437,7 @@ For each admin list page:
 ## Common Patterns
 
 ### Custom Cell Rendering with Links
+
 ```jsx
 {
   key: 'name',
@@ -435,6 +451,7 @@ For each admin list page:
 ```
 
 ### Status Badges
+
 ```jsx
 {
   key: 'status',
@@ -448,6 +465,7 @@ For each admin list page:
 ```
 
 ### Image Thumbnails
+
 ```jsx
 {
   key: 'image',
@@ -459,6 +477,7 @@ For each admin list page:
 ```
 
 ### Relational Data
+
 ```jsx
 {
   key: 'category',
@@ -469,6 +488,7 @@ For each admin list page:
 ```
 
 ### Date Formatting
+
 ```jsx
 {
   key: 'created_at',
@@ -483,6 +503,7 @@ For each admin list page:
 ```
 
 ### Number Formatting
+
 ```jsx
 {
   key: 'price',
@@ -497,6 +518,7 @@ For each admin list page:
 ## Advanced Features
 
 ### Custom Bulk Actions with Confirmation
+
 ```jsx
 {
   label: 'Delete',
@@ -518,21 +540,22 @@ For each admin list page:
 ```
 
 ### Dynamic Filters
+
 ```jsx
 const [categories, setCategories] = useState([]);
 
 useEffect(() => {
-  api.get('/api/categories').then(res => setCategories(res.data));
+  api.get("/api/categories").then((res) => setCategories(res.data));
 }, []);
 
 const filters = [
   {
-    key: 'category',
-    label: 'Category',
-    type: 'select',
+    key: "category",
+    label: "Category",
+    type: "select",
     options: [
-      { value: '', label: 'All Categories' },
-      ...categories.map(cat => ({
+      { value: "", label: "All Categories" },
+      ...categories.map((cat) => ({
         value: cat.id,
         label: cat.name,
       })),
@@ -542,21 +565,22 @@ const filters = [
 ```
 
 ### Export Functionality
+
 ```jsx
 const handleExport = async () => {
   try {
-    const response = await api.get('/api/blog/export', {
-      responseType: 'blob',
+    const response = await api.get("/api/blog/export", {
+      responseType: "blob",
     });
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.setAttribute('download', 'blog-posts.csv');
+    link.setAttribute("download", "blog-posts.csv");
     document.body.appendChild(link);
     link.click();
     link.remove();
   } catch (error) {
-    console.error('Export failed:', error);
+    console.error("Export failed:", error);
   }
 };
 
@@ -565,12 +589,12 @@ const handleExport = async () => {
   // ... other props
   additionalActions={[
     {
-      label: 'Export CSV',
+      label: "Export CSV",
       onClick: handleExport,
-      variant: 'secondary',
+      variant: "secondary",
     },
   ]}
-/>
+/>;
 ```
 
 ---
@@ -578,18 +602,23 @@ const handleExport = async () => {
 ## Troubleshooting
 
 ### Issue: Filters not working
+
 **Solution:** Ensure backend supports query parameters matching filter keys
 
 ### Issue: Sorting not applied
+
 **Solution:** Check that `sortable: true` is set and backend handles `sortBy`/`sortOrder`
 
 ### Issue: Images not loading
+
 **Solution:** Verify image URLs are absolute or properly prefixed with base URL
 
 ### Issue: Bulk actions fail
+
 **Solution:** Check that backend endpoint supports batch updates/deletes
 
 ### Issue: Pagination incorrect
+
 **Solution:** Ensure backend returns `totalPages` or `totalItems` in response
 
 ---
@@ -608,6 +637,7 @@ const handleExport = async () => {
 ## Support
 
 For questions or issues during migration:
+
 - Review this guide and common patterns
 - Check existing migrated pages for reference
 - Test in isolation before deploying

@@ -49,6 +49,8 @@ import LandingPageList from "./pages/admin/LandingPageList";
 import LandingPageBuilder from "./pages/admin/LandingPageBuilder";
 import LandingPageBuilderAdvanced from "./pages/admin/LandingPageBuilderAdvanced";
 import LandingPage from "./pages/LandingPage";
+import DemoShowcase from "./pages/DemoShowcase";
+import Profile from "./pages/admin/Profile";
 
 function App() {
   return (
@@ -129,6 +131,14 @@ function App() {
         />
         <Route path="/cta-demo" element={<CTABannerDemo />} />
         <Route path="/landing/:slug" element={<LandingPage />} />
+        <Route
+          path="/demos"
+          element={
+            <PublicLayout>
+              <DemoShowcase />
+            </PublicLayout>
+          }
+        />
 
         {/* Admin Routes */}
         <Route path="/login" element={<AdminLogin />} />
@@ -228,6 +238,52 @@ function App() {
           />
           <Route path="email-settings" element={<EmailSettings />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="profile" element={<Profile />} />
+          <Route
+            path="help"
+            element={
+              <div className="max-w-4xl mx-auto">
+                <h1 className="text-3xl font-bold text-gray-900 mb-6">
+                  Help & Support
+                </h1>
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+                  <div className="space-y-6">
+                    <div>
+                      <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                        Documentation
+                      </h2>
+                      <p className="text-gray-600">
+                        Check out our comprehensive documentation for detailed
+                        guides and tutorials.
+                      </p>
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                        Contact Support
+                      </h2>
+                      <p className="text-gray-600 mb-2">
+                        Need help? Reach out to our support team:
+                      </p>
+                      <p className="text-primary-600 font-medium">
+                        support@example.com
+                      </p>
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                        Quick Links
+                      </h2>
+                      <ul className="space-y-2 text-gray-600">
+                        <li>• Getting Started Guide</li>
+                        <li>• Video Tutorials</li>
+                        <li>• FAQ</li>
+                        <li>• Community Forum</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          />
         </Route>
       </Routes>
     </AuthProvider>

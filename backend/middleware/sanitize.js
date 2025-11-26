@@ -70,7 +70,10 @@ const sanitizeObject = (obj, isRichTextContext = false) => {
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value === "string") {
       // Don't sanitize password fields
-      if (key.toLowerCase().includes("password") || key.toLowerCase().includes("token")) {
+      if (
+        key.toLowerCase().includes("password") ||
+        key.toLowerCase().includes("token")
+      ) {
         sanitized[key] = value;
       } else if (
         key === "content" ||

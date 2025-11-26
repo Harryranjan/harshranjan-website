@@ -69,9 +69,16 @@ const optimizeUploadedImage = async (req, res, next) => {
     req.file.responsive = optimizedImages.responsive;
 
     // Store relative paths for database
-    req.file.optimizedPath = optimizedImages.optimized.replace(uploadDir, "/uploads/images");
-    req.file.webpPath = optimizedImages.webp ? optimizedImages.webp.replace(uploadDir, "/uploads/images") : null;
-    req.file.thumbnailPath = optimizedImages.thumbnail ? optimizedImages.thumbnail.replace(uploadDir, "/uploads/images") : null;
+    req.file.optimizedPath = optimizedImages.optimized.replace(
+      uploadDir,
+      "/uploads/images"
+    );
+    req.file.webpPath = optimizedImages.webp
+      ? optimizedImages.webp.replace(uploadDir, "/uploads/images")
+      : null;
+    req.file.thumbnailPath = optimizedImages.thumbnail
+      ? optimizedImages.thumbnail.replace(uploadDir, "/uploads/images")
+      : null;
 
     console.log(`✓ Image optimized and uploaded: ${req.file.filename}`);
     next();

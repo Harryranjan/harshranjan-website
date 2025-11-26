@@ -37,10 +37,15 @@ const optimizeImage = async (inputPath, options = {}) => {
 
     // Load image metadata
     const metadata = await sharp(inputPath).metadata();
-    console.log(`Processing image: ${baseName}, size: ${metadata.width}x${metadata.height}`);
+    console.log(
+      `Processing image: ${baseName}, size: ${metadata.width}x${metadata.height}`
+    );
 
     // 1. Create optimized JPEG/PNG (compressed)
-    const optimizedPath = path.join(outputDir, `${baseName}_optimized${parsedPath.ext}`);
+    const optimizedPath = path.join(
+      outputDir,
+      `${baseName}_optimized${parsedPath.ext}`
+    );
     if (metadata.format === "jpeg" || metadata.format === "jpg") {
       await sharp(inputPath)
         .jpeg({ quality, mozjpeg: true })
@@ -51,8 +56,7 @@ const optimizeImage = async (inputPath, options = {}) => {
         .toFile(optimizedPath);
     } else {
       // For other formats, just copy
-      await sharp(inputPath)
-        .toFile(optimizedPath);
+      await sharp(inputPath).toFile(optimizedPath);
     }
     results.optimized = optimizedPath;
 
@@ -67,7 +71,10 @@ const optimizeImage = async (inputPath, options = {}) => {
 
     // 3. Create thumbnail
     if (createThumbnail) {
-      const thumbPath = path.join(outputDir, `${baseName}_thumb${parsedPath.ext}`);
+      const thumbPath = path.join(
+        outputDir,
+        `${baseName}_thumb${parsedPath.ext}`
+      );
       await sharp(inputPath)
         .resize(thumbnailWidth, null, {
           fit: "inside",
@@ -107,11 +114,18 @@ const optimizeImage = async (inputPath, options = {}) => {
     // Get file sizes for comparison
     const originalStats = await fs.stat(inputPath);
     const optimizedStats = await fs.stat(results.optimized);
-    const savings = ((originalStats.size - optimizedStats.size) / originalStats.size * 100).toFixed(1);
+    const savings = (
+      ((originalStats.size - optimizedStats.size) / originalStats.size) *
+      100
+    ).toFixed(1);
 
     console.log(`✓ Image optimized: ${baseName}`);
     console.log(`  Original: ${(originalStats.size / 1024).toFixed(1)}KB`);
-    console.log(`  Optimized: ${(optimizedStats.size / 1024).toFixed(1)}KB (${savings}% smaller)`);
+    console.log(
+      `  Optimized: ${(optimizedStats.size / 1024).toFixed(
+        1
+      )}KB (${savings}% smaller)`
+    );
 
     return results;
   } catch (error) {
@@ -138,7 +152,13 @@ const optimizeDirectory = async (dirPath, options = {}) => {
     const results = [];
     for (const file of imageFiles) {
       // Skip already optimized files
-      if (file.includes("_optimized") || file.includes("_thumb") || file.includes("_sm") || file.includes("_md") || file.includes("_lg")) {
+      if (
+        file.includes("_optimized") ||
+        file.includes("_thumb") ||
+        file.includes("_sm") ||
+        file.includes("_md") ||
+        file.includes("_lg")
+      ) {
         continue;
       }
 
@@ -208,7 +228,9 @@ const cleanupOldImages = async (dirPath, daysOld = 30) => {
     }
 
     if (deletedCount > 0) {
-      console.log(`✓ Cleaned up ${deletedCount} old image files from ${dirPath}`);
+      console.log(
+        `✓ Cleaned up ${deletedCount} old image files from ${dirPath}`
+      );
     }
 
     return deletedCount;
@@ -225,7 +247,12 @@ const cleanupOldImages = async (dirPath, daysOld = 30) => {
  * @param {number} height - Target height (optional, maintains aspect ratio if null)
  * @param {string} outputPath - Path for resized image
  */
-const resizeImage = async (inputPath, width, height = null, outputPath = null) => {
+const resizeImage = async (
+  inputPath,
+  width,
+  height = null,
+  outputPath = null
+) => {
   try {
     if (!outputPath) {
       const parsedPath = path.parse(inputPath);
@@ -259,9 +286,7 @@ const convertToWebP = async (inputPath, quality = 85) => {
     const parsedPath = path.parse(inputPath);
     const webpPath = path.join(parsedPath.dir, `${parsedPath.name}.webp`);
 
-    await sharp(inputPath)
-      .webp({ quality })
-      .toFile(webpPath);
+    await sharp(inputPath).webp({ quality }).toFile(webpPath);
 
     return webpPath;
   } catch (error) {

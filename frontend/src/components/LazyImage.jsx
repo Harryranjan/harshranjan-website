@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 /**
  * LazyImage Component
@@ -8,11 +8,11 @@ import React, { useState, useEffect, useRef } from 'react';
 const LazyImage = ({
   src,
   webpSrc = null,
-  alt = '',
-  className = '',
+  alt = "",
+  className = "",
   thumbnailSrc = null,
   srcSet = null,
-  sizes = '100vw',
+  sizes = "100vw",
   onLoad = null,
   ...props
 }) => {
@@ -32,7 +32,7 @@ const LazyImage = ({
         });
       },
       {
-        rootMargin: '50px', // Start loading 50px before image enters viewport
+        rootMargin: "50px", // Start loading 50px before image enters viewport
       }
     );
 
@@ -55,7 +55,11 @@ const LazyImage = ({
   };
 
   return (
-    <div ref={imgRef} className={`lazy-image-container ${className}`} {...props}>
+    <div
+      ref={imgRef}
+      className={`lazy-image-container ${className}`}
+      {...props}
+    >
       {/* Show thumbnail while loading (blur-up effect) */}
       {thumbnailSrc && !isLoaded && (
         <img
@@ -63,11 +67,11 @@ const LazyImage = ({
           alt={alt}
           className="lazy-image-thumbnail"
           style={{
-            filter: 'blur(10px)',
-            transition: 'filter 0.3s ease',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
+            filter: "blur(10px)",
+            transition: "filter 0.3s ease",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
           }}
         />
       )}
@@ -77,11 +81,7 @@ const LazyImage = ({
         <picture>
           {/* WebP version for modern browsers */}
           {webpSrc && (
-            <source
-              type="image/webp"
-              srcSet={webpSrc}
-              sizes={sizes}
-            />
+            <source type="image/webp" srcSet={webpSrc} sizes={sizes} />
           )}
 
           {/* Fallback to JPEG/PNG with srcset for responsive images */}
@@ -95,10 +95,10 @@ const LazyImage = ({
             decoding="async"
             style={{
               opacity: isLoaded ? 1 : 0,
-              transition: 'opacity 0.3s ease',
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
+              transition: "opacity 0.3s ease",
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
             }}
           />
         </picture>
@@ -109,9 +109,9 @@ const LazyImage = ({
         <div
           className="lazy-image-placeholder"
           style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#f0f0f0',
+            width: "100%",
+            height: "100%",
+            backgroundColor: "#f0f0f0",
           }}
         />
       )}

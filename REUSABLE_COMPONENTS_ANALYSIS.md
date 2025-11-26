@@ -7,6 +7,7 @@
 Your codebase already has excellent reusable components:
 
 **Form Components:**
+
 - Input, Textarea, Button, Badge, StatusBadge
 - ImageUpload, FileUpload, RichTextEditor
 - TagInput, ColorPicker, PasswordInput
@@ -14,11 +15,13 @@ Your codebase already has excellent reusable components:
 - FormField, FormSection, FormActions, FormModal
 
 **Layout Components:**
+
 - Card, Modal, Table, Grid
 - PageHeader, BackButton
 - EmptyState, LoadingGrid, Spinner
 
 **Admin-Specific:**
+
 - FilterBar, BulkActionsBar, StatsCards, DataTable
 - Pagination, AutoSaveIndicator
 - DraggableList, DraggablePageList
@@ -27,6 +30,7 @@ Your codebase already has excellent reusable components:
 - ToggleWithDescription
 
 **Business Logic:**
+
 - CTABanner, CTABannerEmbed, CTAFormModal
 - ModalEmbed, PopupEmbed, FormEmbed
 - ModalManager, PopupManager
@@ -38,9 +42,11 @@ Your codebase already has excellent reusable components:
 ## 🎯 TOP 10 NEW REUSABLE COMPONENT OPPORTUNITIES
 
 ### 1. **`<AdminListPage>` Component** ⭐⭐⭐⭐⭐
+
 **Priority: CRITICAL**
 
 **Problem:** Massive duplication across list pages
+
 - BlogList.jsx (469 lines)
 - PageList.jsx (1002 lines)
 - FormList.jsx (1115 lines)
@@ -53,6 +59,7 @@ Your codebase already has excellent reusable components:
 - MenuList.jsx
 
 **Pattern Identified:**
+
 ```jsx
 // Every list page has this exact pattern:
 - useState for: items, loading, pagination, filters, stats, selectedItems
@@ -68,32 +75,46 @@ Your codebase already has excellent reusable components:
 ```
 
 **Proposed Component:**
+
 ```jsx
 <AdminListPage
   resourceName="posts"
   endpoint="/blog"
   columns={[
-    { key: 'title', label: 'Title', sortable: true },
-    { key: 'status', label: 'Status', render: (item) => <StatusBadge status={item.status} /> },
-    { key: 'views', label: 'Views', sortable: true },
-    { key: 'created_at', label: 'Created', render: formatDate }
+    { key: "title", label: "Title", sortable: true },
+    {
+      key: "status",
+      label: "Status",
+      render: (item) => <StatusBadge status={item.status} />,
+    },
+    { key: "views", label: "Views", sortable: true },
+    { key: "created_at", label: "Created", render: formatDate },
   ]}
   filters={[
-    { type: 'select', name: 'status', options: ['all', 'published', 'draft'] },
-    { type: 'search', name: 'query', placeholder: 'Search posts...' }
+    { type: "select", name: "status", options: ["all", "published", "draft"] },
+    { type: "search", name: "query", placeholder: "Search posts..." },
   ]}
   actions={[
-    { icon: FiEdit, label: 'Edit', onClick: (item) => navigate(`/admin/blog/${item.id}`) },
-    { icon: FiTrash2, label: 'Delete', onClick: handleDelete, variant: 'danger' }
+    {
+      icon: FiEdit,
+      label: "Edit",
+      onClick: (item) => navigate(`/admin/blog/${item.id}`),
+    },
+    {
+      icon: FiTrash2,
+      label: "Delete",
+      onClick: handleDelete,
+      variant: "danger",
+    },
   ]}
   bulkActions={[
-    { label: 'Publish', action: 'publish' },
-    { label: 'Delete', action: 'delete', variant: 'danger' }
+    { label: "Publish", action: "publish" },
+    { label: "Delete", action: "delete", variant: "danger" },
   ]}
   showStats={true}
   createButton={{
-    label: 'Create Post',
-    to: '/admin/blog/create'
+    label: "Create Post",
+    to: "/admin/blog/create",
   }}
 />
 ```
@@ -103,24 +124,35 @@ Your codebase already has excellent reusable components:
 ---
 
 ### 2. **`<useCRUDResource>` Custom Hook** ⭐⭐⭐⭐⭐
+
 **Priority: CRITICAL**
 
 **Problem:** Every admin page reimplements CRUD logic
 
 **Pattern Found:**
+
 ```jsx
 // Every admin page has these same functions:
 const [items, setItems] = useState([]);
 const [loading, setLoading] = useState(true);
 const [pagination, setPagination] = useState({ page: 1, limit: 10 });
 
-const fetchItems = async () => { /* same pattern */ };
-const handleCreate = async (data) => { /* same pattern */ };
-const handleUpdate = async (id, data) => { /* same pattern */ };
-const handleDelete = async (id) => { /* same pattern */ };
+const fetchItems = async () => {
+  /* same pattern */
+};
+const handleCreate = async (data) => {
+  /* same pattern */
+};
+const handleUpdate = async (id, data) => {
+  /* same pattern */
+};
+const handleDelete = async (id) => {
+  /* same pattern */
+};
 ```
 
 **Proposed Hook:**
+
 ```jsx
 const {
   items,
@@ -134,16 +166,17 @@ const {
   deleteItem,
   bulkDelete,
   setFilters,
-  setPage
+  setPage,
 } = useCRUDResource({
-  endpoint: '/blog',
-  initialFilters: { status: '', category: '' },
+  endpoint: "/blog",
+  initialFilters: { status: "", category: "" },
   onSuccess: (action, data) => showToast(`${action} successful`),
-  onError: (action, error) => showToast(error.message, 'error')
+  onError: (action, error) => showToast(error.message, "error"),
 });
 ```
 
 **Used In:**
+
 - BlogList, BlogForm
 - PageList, PageForm
 - FormList, FormBuilder
@@ -159,11 +192,13 @@ const {
 ---
 
 ### 3. **`<ConfirmationModal>` Component** ⭐⭐⭐⭐
+
 **Priority: HIGH**
 
 **Problem:** Delete confirmations duplicated everywhere
 
 **Found In:**
+
 - BlogList.jsx: `if (!window.confirm("Are you sure...")) return;`
 - PageList.jsx: Custom modal with state
 - FormList.jsx: Custom dialog component
@@ -172,11 +207,13 @@ const {
 - At least 15+ more places
 
 **Current State:** 5 different implementations!
+
 - window.confirm (old, poor UX)
 - Custom modals with state
 - ConfirmDialog component (good, but not used everywhere)
 
 **Proposed:**
+
 ```jsx
 <ConfirmationModal
   isOpen={confirmDelete.isOpen}
@@ -187,15 +224,15 @@ const {
   confirmText="Delete"
   confirmVariant="danger"
   icon={<FiTrash2 />}
-/>
+/>;
 
 // Or with hook:
 const { confirm } = useConfirmation();
 await confirm({
-  title: 'Delete Post?',
-  message: 'This cannot be undone',
-  confirmText: 'Delete',
-  variant: 'danger'
+  title: "Delete Post?",
+  message: "This cannot be undone",
+  confirmText: "Delete",
+  variant: "danger",
 });
 ```
 
@@ -204,36 +241,41 @@ await confirm({
 ---
 
 ### 4. **`<EmptyStateWithAction>` Component** ⭐⭐⭐⭐
+
 **Priority: HIGH**
 
 **Problem:** Empty states duplicated with slight variations
 
 **Pattern:**
+
 ```jsx
 // When no items exist, every page shows:
-{items.length === 0 && !loading && (
-  <div className="text-center py-12">
-    <Icon className="mx-auto h-12 w-12 text-gray-400" />
-    <h3 className="mt-2 text-sm font-medium text-gray-900">No {resource}</h3>
-    <p className="mt-1 text-sm text-gray-500">Get started by creating one.</p>
-    <Button onClick={handleCreate}>Create {Resource}</Button>
-  </div>
-)}
+{
+  items.length === 0 && !loading && (
+    <div className="text-center py-12">
+      <Icon className="mx-auto h-12 w-12 text-gray-400" />
+      <h3 className="mt-2 text-sm font-medium text-gray-900">No {resource}</h3>
+      <p className="mt-1 text-sm text-gray-500">Get started by creating one.</p>
+      <Button onClick={handleCreate}>Create {Resource}</Button>
+    </div>
+  );
+}
 ```
 
 **Found In:** BlogList, PageList, FormList, DownloadList, CTABannerList, etc. (15+ places)
 
 **Proposed:**
+
 ```jsx
 <EmptyStateWithAction
   icon={<FiFileText />}
   title="No blog posts yet"
   description="Get started by creating your first blog post"
   actionLabel="Create Post"
-  onAction={() => navigate('/admin/blog/create')}
+  onAction={() => navigate("/admin/blog/create")}
   secondaryAction={{
-    label: 'Import Posts',
-    onClick: handleImport
+    label: "Import Posts",
+    onClick: handleImport,
   }}
 />
 ```
@@ -243,11 +285,13 @@ await confirm({
 ---
 
 ### 5. **`<StatsCard>` & `<StatsGrid>` Components** ⭐⭐⭐⭐
+
 **Priority: HIGH**
 
 **Problem:** Stats cards duplicated with variations
 
 **Pattern:**
+
 ```jsx
 // Every admin page shows stats cards:
 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -274,11 +318,13 @@ await confirm({
 ---
 
 ### 6. **`<ActionMenu>` / `<DropdownMenu>` Component** ⭐⭐⭐
+
 **Priority: MEDIUM**
 
 **Problem:** Action buttons in table rows duplicated
 
 **Pattern:**
+
 ```jsx
 // Every table has action buttons:
 <div className="flex items-center gap-2">
@@ -300,14 +346,20 @@ await confirm({
 **Found In:** Every DataTable usage (15+ places)
 
 **Proposed:**
+
 ```jsx
 <ActionMenu
   actions={[
-    { icon: FiEdit, label: 'Edit', onClick: () => handleEdit(item) },
-    { icon: FiEye, label: 'View', onClick: () => handleView(item) },
-    { type: 'divider' },
-    { icon: FiCopy, label: 'Duplicate', onClick: () => handleDuplicate(item) },
-    { icon: FiTrash2, label: 'Delete', onClick: () => handleDelete(item), variant: 'danger' }
+    { icon: FiEdit, label: "Edit", onClick: () => handleEdit(item) },
+    { icon: FiEye, label: "View", onClick: () => handleView(item) },
+    { type: "divider" },
+    { icon: FiCopy, label: "Duplicate", onClick: () => handleDuplicate(item) },
+    {
+      icon: FiTrash2,
+      label: "Delete",
+      onClick: () => handleDelete(item),
+      variant: "danger",
+    },
   ]}
 />
 ```
@@ -317,11 +369,13 @@ await confirm({
 ---
 
 ### 7. **`<FormFieldGroup>` Component** ⭐⭐⭐
+
 **Priority: MEDIUM**
 
 **Problem:** Form field patterns duplicated
 
 **Pattern:**
+
 ```jsx
 // Every form has this pattern:
 <div className="mb-4">
@@ -342,6 +396,7 @@ await confirm({
 **Found In:** BlogForm, PageForm, FormBuilder, ModalBuilder, PopupBuilder, CTABannerForm, DownloadForm, MenuForm (20+ places)
 
 **Proposed:**
+
 ```jsx
 <FormFieldGroup
   label="Title"
@@ -363,43 +418,56 @@ await confirm({
 ---
 
 ### 8. **`<TabPanel>` / `<Tabs>` Component** ⭐⭐⭐
+
 **Priority: MEDIUM**
 
 **Problem:** Tab implementations vary
 
 **Pattern:**
+
 ```jsx
 // FormList.jsx, DownloadList.jsx, and others:
-const [activeTab, setActiveTab] = useState('forms');
+const [activeTab, setActiveTab] = useState("forms");
 
 <div className="border-b border-gray-200 mb-6">
   <nav className="-mb-px flex space-x-8">
-    {tabs.map(tab => (
+    {tabs.map((tab) => (
       <button
         onClick={() => setActiveTab(tab.id)}
-        className={activeTab === tab.id ? 'active-class' : 'inactive-class'}
+        className={activeTab === tab.id ? "active-class" : "inactive-class"}
       >
         {tab.label}
       </button>
     ))}
   </nav>
-</div>
+</div>;
 
-{activeTab === 'forms' && <FormsContent />}
-{activeTab === 'modals' && <ModalsContent />}
+{
+  activeTab === "forms" && <FormsContent />;
+}
+{
+  activeTab === "modals" && <ModalsContent />;
+}
 ```
 
 **Found In:** FormList (forms/modals/popups tabs), DownloadList, Settings, Dashboard (5+ places)
 
 **Proposed:**
+
 ```jsx
 <Tabs defaultTab="forms">
   <TabList>
-    <Tab id="forms" icon={<FiFileText />}>Forms</Tab>
-    <Tab id="modals" icon={<FiGrid />}>Modals</Tab>
-    <Tab id="popups" icon={<FiZap />}>Popups</Tab>
+    <Tab id="forms" icon={<FiFileText />}>
+      Forms
+    </Tab>
+    <Tab id="modals" icon={<FiGrid />}>
+      Modals
+    </Tab>
+    <Tab id="popups" icon={<FiZap />}>
+      Popups
+    </Tab>
   </TabList>
-  
+
   <TabPanel id="forms">
     <FormsContent />
   </TabPanel>
@@ -417,20 +485,26 @@ const [activeTab, setActiveTab] = useState('forms');
 ---
 
 ### 9. **`<FormBuilder>` Base Component** ⭐⭐⭐
+
 **Priority: MEDIUM**
 
 **Problem:** Form rendering logic duplicated
 
 **Pattern:**
+
 ```jsx
 // Every form builder has:
 <form onSubmit={handleSubmit}>
-  {formFields.map(field => {
-    switch(field.type) {
-      case 'text': return <Input {...field} />;
-      case 'textarea': return <Textarea {...field} />;
-      case 'select': return <Select {...field} />;
-      case 'checkbox': return <Checkbox {...field} />;
+  {formFields.map((field) => {
+    switch (field.type) {
+      case "text":
+        return <Input {...field} />;
+      case "textarea":
+        return <Textarea {...field} />;
+      case "select":
+        return <Select {...field} />;
+      case "checkbox":
+        return <Checkbox {...field} />;
       // ... 15 more cases
     }
   })}
@@ -441,6 +515,7 @@ const [activeTab, setActiveTab] = useState('forms');
 **Found In:** FormBuilder, ModalBuilder, PopupBuilder, BlogForm, PageForm (10+ places)
 
 **Proposed:**
+
 ```jsx
 <DynamicForm
   schema={formSchema}
@@ -458,15 +533,17 @@ const [activeTab, setActiveTab] = useState('forms');
 ---
 
 ### 10. **`<SearchBar>` Component** ⭐⭐⭐
+
 **Priority: LOW**
 
 **Problem:** Search inputs duplicated with debouncing
 
 **Pattern:**
+
 ```jsx
 // Every list page has:
-const [searchQuery, setSearchQuery] = useState('');
-const [debouncedSearch, setDebouncedSearch] = useState('');
+const [searchQuery, setSearchQuery] = useState("");
+const [debouncedSearch, setDebouncedSearch] = useState("");
 
 useEffect(() => {
   const timer = setTimeout(() => {
@@ -481,19 +558,20 @@ useEffect(() => {
   value={searchQuery}
   onChange={(e) => setSearchQuery(e.target.value)}
   className="..."
-/>
+/>;
 ```
 
 **Found In:** All list pages (15+ places)
 
 **Proposed:**
+
 ```jsx
 <SearchBar
   placeholder="Search posts..."
   onSearch={handleSearch}
   debounce={500}
   icon={<FiSearch />}
-  shortcuts={['/', 'Ctrl+K']}
+  shortcuts={["/", "Ctrl+K"]}
 />
 ```
 
@@ -504,6 +582,7 @@ useEffect(() => {
 ## 🎨 Public Page Component Opportunities
 
 ### 11. **`<Hero>` Component** ⭐⭐⭐
+
 **Pattern:** Hero sections on Home, Services, About, Portfolio
 
 ```jsx
@@ -512,35 +591,43 @@ useEffect(() => {
   subtitle="Digital Marketing Expert"
   backgroundImage="/hero-bg.jpg"
   cta={{
-    primary: { text: 'Get Started', onClick: () => navigate('/contact') },
-    secondary: { text: 'Learn More', onClick: () => navigate('/about') }
+    primary: { text: "Get Started", onClick: () => navigate("/contact") },
+    secondary: { text: "Learn More", onClick: () => navigate("/about") },
   }}
   variant="centered" // or "left-aligned", "with-video"
 />
 ```
 
 ### 12. **`<FeatureGrid>` Component** ⭐⭐
+
 **Pattern:** Feature sections on Home, Services
 
 ```jsx
 <FeatureGrid
   title="Our Services"
   features={[
-    { icon: <FiTarget />, title: 'SEO', description: '...' },
-    { icon: <FiTrendingUp />, title: 'PPC', description: '...' },
-    { icon: <FiEdit />, title: 'Content', description: '...' }
+    { icon: <FiTarget />, title: "SEO", description: "..." },
+    { icon: <FiTrendingUp />, title: "PPC", description: "..." },
+    { icon: <FiEdit />, title: "Content", description: "..." },
   ]}
   columns={3}
 />
 ```
 
 ### 13. **`<TestimonialSlider>` Component** ⭐⭐
+
 **Pattern:** Testimonials on multiple pages
 
 ```jsx
 <TestimonialSlider
   testimonials={[
-    { author: 'John Doe', role: 'CEO', company: 'Acme', text: '...', avatar: '...' }
+    {
+      author: "John Doe",
+      role: "CEO",
+      company: "Acme",
+      text: "...",
+      avatar: "...",
+    },
   ]}
   autoplay={true}
   interval={5000}
@@ -548,6 +635,7 @@ useEffect(() => {
 ```
 
 ### 14. **`<CTASection>` Component** ⭐⭐
+
 **Pattern:** Call-to-action sections
 
 ```jsx
@@ -555,8 +643,8 @@ useEffect(() => {
   title="Ready to grow your business?"
   description="Get in touch today"
   button={{
-    text: 'Contact Us',
-    onClick: () => navigate('/contact')
+    text: "Contact Us",
+    onClick: () => navigate("/contact"),
   }}
   variant="gradient" // or "solid", "outlined"
 />
@@ -569,24 +657,18 @@ useEffect(() => {
 ### By Priority
 
 **CRITICAL (Immediate ROI):**
+
 1. AdminListPage - Saves ~3,000 lines
 2. useCRUDResource hook - Saves ~2,000 lines
 
-**HIGH (Quick Wins):**
-3. ConfirmationModal - Saves ~200 lines
-4. EmptyStateWithAction - Saves ~300 lines
-5. StatsCard (enhance existing) - Saves ~400 lines
+**HIGH (Quick Wins):** 3. ConfirmationModal - Saves ~200 lines 4. EmptyStateWithAction - Saves ~300 lines 5. StatsCard (enhance existing) - Saves ~400 lines
 
-**MEDIUM (Gradual Improvement):**
-6. ActionMenu - Saves ~400 lines
-7. FormFieldGroup (enhance existing) - Saves ~800 lines
-8. TabPanel - Saves ~300 lines
-9. DynamicForm - Saves ~1,000 lines
+**MEDIUM (Gradual Improvement):** 6. ActionMenu - Saves ~400 lines 7. FormFieldGroup (enhance existing) - Saves ~800 lines 8. TabPanel - Saves ~300 lines 9. DynamicForm - Saves ~1,000 lines
 
-**LOW (Nice to Have):**
-10. SearchBar - Saves ~200 lines
+**LOW (Nice to Have):** 10. SearchBar - Saves ~200 lines
 
 ### Total Potential Code Reduction
+
 **~8,600 lines** of duplicate code can be eliminated!
 
 ---
@@ -594,6 +676,7 @@ useEffect(() => {
 ## 🚀 Implementation Roadmap
 
 ### Phase 1: Foundation (Week 1)
+
 1. Create `useCRUDResource` hook
 2. Create `AdminListPage` component
 3. Refactor BlogList to use new components
@@ -601,6 +684,7 @@ useEffect(() => {
 **Deliverable:** Working pattern for all list pages
 
 ### Phase 2: Core Components (Week 2)
+
 4. Standardize ConfirmationModal (exists as ConfirmDialog)
 5. Create EmptyStateWithAction
 6. Enhance FormFieldGroup (FormField exists)
@@ -609,6 +693,7 @@ useEffect(() => {
 **Deliverable:** Complete admin UI toolkit
 
 ### Phase 3: Advanced Features (Week 3)
+
 8. Create TabPanel component
 9. Create DynamicForm builder
 10. Create SearchBar with debouncing
@@ -616,6 +701,7 @@ useEffect(() => {
 **Deliverable:** Advanced admin features
 
 ### Phase 4: Migration (Week 4)
+
 - Migrate all admin list pages to use new components
 - Migrate all forms to use new patterns
 - Update documentation
@@ -635,17 +721,18 @@ For each new component, create:
 5. **Examples:** Create usage examples in comments
 
 Example structure:
+
 ```jsx
 /**
  * AdminListPage - Reusable admin list page with CRUD operations
- * 
+ *
  * @param {string} resourceName - Name of the resource (singular)
  * @param {string} endpoint - API endpoint
  * @param {Array} columns - Table columns configuration
  * @param {Array} filters - Filter options
  * @param {Array} actions - Row actions
  * @param {Object} createButton - Create button config
- * 
+ *
  * @example
  * <AdminListPage
  *   resourceName="post"
@@ -654,12 +741,7 @@ Example structure:
  *   ...
  * />
  */
-const AdminListPage = ({ 
-  resourceName, 
-  endpoint, 
-  columns,
-  ...props 
-}) => {
+const AdminListPage = ({ resourceName, endpoint, columns, ...props }) => {
   // Implementation
 };
 
@@ -692,6 +774,7 @@ export default AdminListPage;
 ## 📚 Next Steps
 
 ### Immediate Actions:
+
 1. ✅ Review this analysis
 2. ⏳ Prioritize which components to build first
 3. ⏳ Create `useCRUDResource` hook
@@ -699,6 +782,7 @@ export default AdminListPage;
 5. ⏳ Refactor one list page as proof of concept
 
 ### Long-term:
+
 - Establish component library
 - Create Storybook for components
 - Add TypeScript for better type safety

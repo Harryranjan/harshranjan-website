@@ -45,3 +45,15 @@ export { default as FormActions } from "./FormActions";
 export { default as PageHeader } from "./PageHeader";
 export { default as BackButton } from "./BackButton";
 export { default as FormField } from "./FormField";
+
+// Demo System Reusable Components (Nov 26, 2025)
+export { default as RangeSlider } from "./RangeSlider";
+export { default as MessageBubble, TypingIndicator } from "./MessageBubble";
+export { default as QuickReplyButtons } from "./QuickReplyButtons";
+export { default as StepProgress } from "./StepProgress";
+export { default as MetricCard, MetricGrid } from "./MetricCard";
+export { default as ComparisonCard, SavingsDisplay } from "./ComparisonCard";
+export { default as SelectableGrid } from "./SelectableGrid";
+export { default as ConfirmationModal } from "./ConfirmationModal";
+export { default as EmptyStateWithAction } from "./EmptyStateWithAction";
+export { default as GradientButton } from "./GradientButton";

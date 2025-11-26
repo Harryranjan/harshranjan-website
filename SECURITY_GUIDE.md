@@ -7,6 +7,7 @@
 **Location:** `backend/middleware/rateLimiter.js`
 
 #### Rate Limits:
+
 - **General API**: 100 requests per 15 minutes (1000 in dev)
 - **Authentication** (`/api/auth/*`): 5 attempts per 15 minutes
 - **Form Submissions** (`/api/contact`, `/api/forms`): 10 per hour
@@ -15,6 +16,7 @@
 - **File Uploads** (`/api/upload`): 20 per hour
 
 #### Response When Limited:
+
 ```json
 {
   "success": false,
@@ -23,6 +25,7 @@
 ```
 
 #### Headers:
+
 - `RateLimit-Limit`: Maximum requests allowed
 - `RateLimit-Remaining`: Requests remaining
 - `RateLimit-Reset`: Time when limit resets
@@ -32,16 +35,20 @@
 **Location:** `backend/middleware/sanitize.js`
 
 #### What's Protected:
+
 ✅ **XSS Prevention**: Removes `<script>` tags, event handlers (`onclick`, `onerror`)
 ✅ **Protocol Filtering**: Blocks `javascript:`, `vbscript:`, malicious `data:` URIs
 ✅ **HTML Escaping**: Converts `<`, `>`, `&`, `"`, `'` to safe entities in non-content fields
 
 #### Field Types:
+
 1. **Plain Text** (titles, names, emails):
+
    - Full HTML escaping applied
    - Example: `<script>` → `&lt;script&gt;`
 
 2. **Rich Text** (blog content, page content):
+
    - Only dangerous patterns removed
    - Safe HTML preserved
    - Custom CSS/JS preserved for authorized users
@@ -56,6 +63,7 @@
 **Location:** `backend/server.js` (via Helmet.js)
 
 Applied headers:
+
 - `X-Frame-Options`: Prevent clickjacking
 - `X-Content-Type-Options`: Prevent MIME sniffing
 - `X-XSS-Protection`: Enable browser XSS filter
@@ -87,6 +95,7 @@ Applied headers:
 ## 🛡️ Attack Prevention
 
 ### Prevented Attacks:
+
 ✅ **Brute Force**: Rate limiting on auth endpoints
 ✅ **XSS (Cross-Site Scripting)**: Input sanitization
 ✅ **SQL Injection**: Sequelize ORM parameterized queries
@@ -97,7 +106,9 @@ Applied headers:
 ## 📊 Monitoring
 
 ### Check Rate Limit Status:
+
 Response headers show current limits:
+
 ```
 RateLimit-Limit: 100
 RateLimit-Remaining: 95
@@ -105,7 +116,9 @@ RateLimit-Reset: 1732558800
 ```
 
 ### Server Logs:
+
 Rate limit violations are logged:
+
 ```
 [2025-11-25T18:00:00.000Z] Rate limit exceeded: IP 192.168.1.1
 ```
@@ -113,21 +126,24 @@ Rate limit violations are logged:
 ## 🔧 Configuration
 
 ### Adjust Rate Limits:
+
 Edit `backend/middleware/rateLimiter.js`:
+
 ```javascript
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // Change time window
-  max: 5,                    // Change max attempts
+  max: 5, // Change max attempts
   // ...
 });
 ```
 
 ### Whitelist IPs (if needed):
+
 ```javascript
 const authLimiter = rateLimit({
   // ...
   skip: (req) => {
-    const whitelist = ['127.0.0.1', '::1'];
+    const whitelist = ["127.0.0.1", "::1"];
     return whitelist.includes(req.ip);
   },
 });

@@ -23,11 +23,15 @@ const SEODashboard = () => {
       if (response.data.success) {
         setSeOData(response.data.data);
       } else {
-        setError('Failed to load SEO data');
+        setError("Failed to load SEO data");
       }
     } catch (error) {
       console.error("Failed to fetch SEO data:", error);
-      setError(error.response?.data?.message || error.message || 'Failed to load SEO data');
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to load SEO data"
+      );
     } finally {
       setLoading(false);
     }

@@ -12,9 +12,7 @@ exports.generateArticleSchema = (post, baseUrl) => {
     "@type": "Article",
     headline: post.title,
     description: post.meta_description || post.excerpt,
-    image: post.featured_image
-      ? `${baseUrl}${post.featured_image}`
-      : undefined,
+    image: post.featured_image ? `${baseUrl}${post.featured_image}` : undefined,
     datePublished: post.published_at,
     dateModified: post.updated_at,
     author: {
@@ -166,8 +164,7 @@ exports.generateTwitterCardTags = (content, baseUrl) => {
  * Generate Complete SEO Meta Tags Object
  */
 exports.generateSEOMetaTags = (content, type = "website") => {
-  const baseUrl =
-    process.env.FRONTEND_URL || "https://www.harshranjan.com";
+  const baseUrl = process.env.FRONTEND_URL || "https://www.harshranjan.com";
 
   return {
     title: content.meta_title || content.title,

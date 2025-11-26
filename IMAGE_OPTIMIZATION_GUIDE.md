@@ -21,12 +21,13 @@ Comprehensive image optimization system using Sharp for automatic compression, W
 Images are automatically optimized when uploaded through the upload middleware:
 
 ```javascript
-const upload = require('./middleware/upload.middleware');
-const { optimizeUploadedImage } = require('./middleware/upload.middleware');
+const upload = require("./middleware/upload.middleware");
+const { optimizeUploadedImage } = require("./middleware/upload.middleware");
 
 // Apply to upload routes
-router.post('/upload', 
-  upload.single('image'), 
+router.post(
+  "/upload",
+  upload.single("image"),
   optimizeUploadedImage,
   controller.handleUpload
 );
@@ -61,10 +62,13 @@ For each uploaded image, the system creates:
 Optimize existing images programmatically:
 
 ```javascript
-const { optimizeImage, optimizeDirectory } = require('./services/imageOptimization');
+const {
+  optimizeImage,
+  optimizeDirectory,
+} = require("./services/imageOptimization");
 
 // Optimize single image
-const result = await optimizeImage('/path/to/image.jpg', {
+const result = await optimizeImage("/path/to/image.jpg", {
   quality: 80,
   createWebP: true,
   createThumbnail: true,
@@ -72,7 +76,7 @@ const result = await optimizeImage('/path/to/image.jpg', {
 });
 
 // Optimize entire directory
-await optimizeDirectory('/path/to/images', {
+await optimizeDirectory("/path/to/images", {
   quality: 85,
   createWebP: true,
 });
@@ -81,7 +85,7 @@ await optimizeDirectory('/path/to/images', {
 ### Image Service API
 
 ```javascript
-const imageService = require('./services/imageOptimization');
+const imageService = require("./services/imageOptimization");
 
 // Resize image to specific dimensions
 await imageService.resizeImage(inputPath, 800, 600, outputPath);
@@ -90,14 +94,14 @@ await imageService.resizeImage(inputPath, 800, 600, outputPath);
 await imageService.convertToWebP(inputPath, 85);
 
 // Generate srcset string
-const srcset = imageService.generateSrcSet('/images/photo', {
-  _sm: '/images/photo_sm.jpg',
-  _md: '/images/photo_md.jpg',
-  _lg: '/images/photo_lg.jpg',
+const srcset = imageService.generateSrcSet("/images/photo", {
+  _sm: "/images/photo_sm.jpg",
+  _md: "/images/photo_md.jpg",
+  _lg: "/images/photo_lg.jpg",
 });
 
 // Cleanup old temporary files
-await imageService.cleanupOldImages('/uploads/images', 30); // 30 days
+await imageService.cleanupOldImages("/uploads/images", 30); // 30 days
 ```
 
 ## Frontend Implementation
@@ -107,7 +111,7 @@ await imageService.cleanupOldImages('/uploads/images', 30); // 30 days
 Use the LazyImage component for automatic lazy loading and WebP support:
 
 ```jsx
-import LazyImage from '../components/LazyImage';
+import LazyImage from "../components/LazyImage";
 
 function BlogPost({ post }) {
   return (
@@ -155,7 +159,7 @@ For simple cases, use browser native lazy loading:
     "
     sizes="(max-width: 768px) 100vw, 50vw"
   />
-  
+
   {/* Fallback to JPEG/PNG */}
   <img
     src="/images/photo_md.jpg"
@@ -175,21 +179,21 @@ For simple cases, use browser native lazy loading:
 
 ### Before Optimization
 
-| Image | Format | Size | Load Time |
-|-------|--------|------|-----------|
-| Hero Banner | JPEG | 2.5MB | 3.2s |
-| Blog Featured | PNG | 1.8MB | 2.4s |
-| Thumbnail | JPEG | 450KB | 0.8s |
-| **Total** | | **4.75MB** | **6.4s** |
+| Image         | Format | Size       | Load Time |
+| ------------- | ------ | ---------- | --------- |
+| Hero Banner   | JPEG   | 2.5MB      | 3.2s      |
+| Blog Featured | PNG    | 1.8MB      | 2.4s      |
+| Thumbnail     | JPEG   | 450KB      | 0.8s      |
+| **Total**     |        | **4.75MB** | **6.4s**  |
 
 ### After Optimization
 
-| Image | Format | Size | Load Time | Savings |
-|-------|--------|------|-----------|---------|
-| Hero Banner | WebP | 380KB | 0.5s | 85% |
-| Blog Featured | WebP | 210KB | 0.3s | 88% |
-| Thumbnail | JPEG | 45KB | 0.1s | 90% |
-| **Total** | | **635KB** | **0.9s** | **87%** |
+| Image         | Format | Size      | Load Time | Savings |
+| ------------- | ------ | --------- | --------- | ------- |
+| Hero Banner   | WebP   | 380KB     | 0.5s      | 85%     |
+| Blog Featured | WebP   | 210KB     | 0.3s      | 88%     |
+| Thumbnail     | JPEG   | 45KB      | 0.1s      | 90%     |
+| **Total**     |        | **635KB** | **0.9s**  | **87%** |
 
 **Result: 7x faster page load, 87% bandwidth savings**
 
@@ -259,9 +263,9 @@ await optimizeImage(path, {
 
 ```jsx
 // Good
-<LazyImage 
-  src="/blog/seo-guide.jpg" 
-  alt="Complete SEO guide showing keyword research tools" 
+<LazyImage
+  src="/blog/seo-guide.jpg"
+  alt="Complete SEO guide showing keyword research tools"
 />
 
 // Bad
@@ -272,10 +276,10 @@ await optimizeImage(path, {
 
 ```jsx
 // Desktop-first layout (50% width on large screens)
-sizes="(max-width: 768px) 100vw, 50vw"
+sizes = "(max-width: 768px) 100vw, 50vw";
 
 // Blog post layout (fixed width sidebar)
-sizes="(max-width: 1024px) 100vw, calc(100vw - 300px)"
+sizes = "(max-width: 1024px) 100vw, calc(100vw - 300px)";
 ```
 
 ## Database Schema Update
@@ -300,24 +304,25 @@ Optimize all existing images:
 
 ```javascript
 // scripts/optimize-all-images.js
-const { optimizeDirectory } = require('../services/imageOptimization');
-const path = require('path');
+const { optimizeDirectory } = require("../services/imageOptimization");
+const path = require("path");
 
 (async () => {
-  const uploadsDir = path.join(__dirname, '../uploads/images');
-  
-  console.log('Starting batch optimization...');
+  const uploadsDir = path.join(__dirname, "../uploads/images");
+
+  console.log("Starting batch optimization...");
   await optimizeDirectory(uploadsDir, {
     quality: 80,
     createWebP: true,
     createThumbnail: true,
     createResponsive: true,
   });
-  console.log('✓ Batch optimization complete');
+  console.log("✓ Batch optimization complete");
 })();
 ```
 
 Run with:
+
 ```bash
 node scripts/optimize-all-images.js
 ```
@@ -327,6 +332,7 @@ node scripts/optimize-all-images.js
 ### Check Optimization Results
 
 Logs show size reduction:
+
 ```
 Processing image: hero-banner, size: 1920x1080
 ✓ Image optimized: hero-banner
@@ -337,23 +343,23 @@ Processing image: hero-banner, size: 1920x1080
 ### Monitor Storage Usage
 
 ```javascript
-const fs = require('fs').promises;
-const path = require('path');
+const fs = require("fs").promises;
+const path = require("path");
 
 async function getDirectorySize(dirPath) {
   const files = await fs.readdir(dirPath);
   let totalSize = 0;
-  
+
   for (const file of files) {
     const stats = await fs.stat(path.join(dirPath, file));
     totalSize += stats.size;
   }
-  
+
   return (totalSize / (1024 * 1024)).toFixed(2); // MB
 }
 
 // Usage
-const size = await getDirectorySize('./uploads/images');
+const size = await getDirectorySize("./uploads/images");
 console.log(`Total storage: ${size}MB`);
 ```
 
@@ -364,11 +370,13 @@ console.log(`Total storage: ${size}MB`);
 **Problem**: Sharp fails to install on Windows
 
 **Solution**:
+
 ```bash
 npm install --ignore-scripts=false --verbose sharp
 ```
 
 Or use pre-built binaries:
+
 ```bash
 npm install --platform=win32 --arch=x64 sharp
 ```
@@ -378,6 +386,7 @@ npm install --platform=win32 --arch=x64 sharp
 **Problem**: Uploaded images not being optimized
 
 **Solution**:
+
 1. Check middleware is applied: `upload.single('image'), optimizeUploadedImage`
 2. Verify Sharp is installed: `npm list sharp`
 3. Check upload directory permissions
@@ -388,6 +397,7 @@ npm install --platform=win32 --arch=x64 sharp
 **Problem**: WebP images not displaying in older browsers
 
 **Solution**: Always provide fallback in `<picture>` element:
+
 ```jsx
 <picture>
   <source type="image/webp" srcSet="image.webp" />
@@ -400,6 +410,7 @@ npm install --platform=win32 --arch=x64 sharp
 ### 1. Use CDN for Image Delivery
 
 Upload optimized images to:
+
 - **CloudFlare Images**: Automatic optimization + CDN
 - **AWS CloudFront + S3**: Custom optimization + CDN
 - **Cloudinary**: All-in-one solution
@@ -412,10 +423,13 @@ HTTP/2 allows parallel image downloads without concatenation.
 
 ```javascript
 // In Express
-app.use('/uploads', express.static('uploads', {
-  maxAge: '1y', // Cache for 1 year
-  immutable: true,
-}));
+app.use(
+  "/uploads",
+  express.static("uploads", {
+    maxAge: "1y", // Cache for 1 year
+    immutable: true,
+  })
+);
 ```
 
 ### 4. Monitor Core Web Vitals
@@ -431,7 +445,7 @@ app.use('/uploads', express.static('uploads', {
 IMAGE_CDN_URL=https://cdn.yourdomain.com
 
 // In code
-const imageUrl = process.env.IMAGE_CDN_URL 
+const imageUrl = process.env.IMAGE_CDN_URL
   ? `${process.env.IMAGE_CDN_URL}${image.path}`
   : image.path;
 ```
