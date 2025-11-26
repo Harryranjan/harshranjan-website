@@ -148,7 +148,15 @@ exports.getPostBySlug = async (req, res) => {
     // Increment views
     await post.increment("views");
 
-    res.json({ success: true, post });
+    // Generate SEO metadata
+    const seoHelpers = require("../utils/seoHelpers");
+    const seoMetadata = seoHelpers.generateSEOMetaTags(post, "article");
+
+    res.json({
+      success: true,
+      post,
+      seo: seoMetadata,
+    });
   } catch (error) {
     console.error("Get post error:", error);
     res.status(500).json({ message: "Server error" });

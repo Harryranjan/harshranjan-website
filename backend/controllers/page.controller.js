@@ -134,7 +134,14 @@ exports.getPageBySlug = async (req, res) => {
     // Increment views
     await page.increment("views");
 
-    res.json({ page });
+    // Generate SEO metadata
+    const seoHelpers = require("../utils/seoHelpers");
+    const seoMetadata = seoHelpers.generateSEOMetaTags(page, "website");
+
+    res.json({
+      page,
+      seo: seoMetadata,
+    });
   } catch (error) {
     console.error("Error fetching page:", error);
     res.status(500).json({ message: "Failed to fetch page" });

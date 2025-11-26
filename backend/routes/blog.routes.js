@@ -4,18 +4,24 @@ const { body } = require("express-validator");
 const blogController = require("../controllers/blog.controller");
 const categoryController = require("../controllers/category.controller");
 const { authMiddleware, adminOnly } = require("../middleware/auth.middleware");
+const {
+  cacheStrategies,
+  invalidateCache,
+  invalidationPatterns,
+} = require("../middleware/cache");
 
 // Tag controller
 const tagController = require("../controllers/tag.controller");
 
 // Public routes - specific routes MUST come before dynamic routes (/:id)
-router.get("/", blogController.getAllPosts);
-router.get("/categories", blogController.getCategories);
-router.get("/tags", tagController.getAllTags);
-router.get("/tags/popular", tagController.getPopularTags);
-router.get("/slug/:slug", blogController.getPostBySlug);
-router.get("/:id/related", blogController.getRelatedPosts);
-router.get("/:id", blogController.getPost);
+// Apply caching to public read-only routes
+router.get("/", cacheStrategies.blogList, blogController.getAllPosts);
+router.get("/categories", cacheStrategies.blogList, blogController.getCategories);
+router.get("/tags", cacheStrategies.blogList, tagController.getAllTags);
+router.get("/tags/popular", cacheStrategies.blogList, tagController.getPopularTags);
+router.get("/slug/:slug", cacheStrategies.blogPost, blogController.getPostBySlug);
+router.get("/:id/related", cacheStrategies.blogList, blogController.getRelatedPosts);
+router.get("/:id", cacheStrategies.blogPost, blogController.getPost);
 
 // Category management routes (Admin only)
 router.get(
@@ -76,10 +82,10 @@ router.post(
   tagController.syncTagCounts
 );
 
-// Protected routes (Admin only)
+// Protected routes (Admin only) - invalidate cache on modifications
 router.post(
   "/",
-  [authMiddleware, adminOnly],
+  [authMiddleware, adminOnly, invalidateCache(...invalidationPatterns.blog)],
   [
     body("title").notEmpty().withMessage("Title is required"),
     body("content").notEmpty().withMessage("Content is required"),
@@ -87,8 +93,16 @@ router.post(
   blogController.createPost
 );
 
-router.put("/:id", [authMiddleware, adminOnly], blogController.updatePost);
+router.put(
+  "/:id",
+  [authMiddleware, adminOnly, invalidateCache(...invalidationPatterns.blog)],
+  blogController.updatePost
+);
 
-router.delete("/:id", [authMiddleware, adminOnly], blogController.deletePost);
+router.delete(
+  "/:id",
+  [authMiddleware, adminOnly, invalidateCache(...invalidationPatterns.blog)],
+  blogController.deletePost
+);
 
 module.exports = router;

@@ -17,7 +17,15 @@ const AdminLayout = () => {
     {
       id: "overview",
       title: "Overview",
-      items: [{ name: "Dashboard", path: "/admin/dashboard", icon: "📊" }],
+      items: [
+        { name: "Dashboard", path: "/admin/dashboard", icon: "📊" },
+        { name: "SEO Analytics", path: "/admin/analytics/seo", icon: "🔍" },
+        {
+          name: "Conversions",
+          path: "/admin/analytics/conversions",
+          icon: "📈",
+        },
+      ],
     },
     {
       id: "content",

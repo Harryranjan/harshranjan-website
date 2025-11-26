@@ -11,6 +11,11 @@ const DownloadLead = require("./DownloadLead");
 const Menu = require("./Menu");
 const MenuItem = require("./MenuItem");
 const Page = require("./Page");
+const Form = require("./Form");
+const FormSubmission = require("./FormSubmission");
+const CTABanner = require("./CTABanner");
+const Modal = require("./Modal");
+const Popup = require("./Popup");
 
 // Define associations
 Download.hasMany(DownloadLead, {
@@ -56,6 +61,17 @@ Page.hasMany(MenuItem, {
   as: "menuItems",
 });
 
+// Form associations
+Form.hasMany(FormSubmission, {
+  foreignKey: "form_id",
+  as: "submissions",
+});
+
+FormSubmission.belongsTo(Form, {
+  foreignKey: "form_id",
+  as: "Form",
+});
+
 // Export all models
 module.exports = {
   sequelize,
@@ -68,4 +84,9 @@ module.exports = {
   Menu,
   MenuItem,
   Page,
+  Form,
+  FormSubmission,
+  CTABanner,
+  Modal,
+  Popup,
 };

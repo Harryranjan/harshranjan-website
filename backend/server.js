@@ -3,9 +3,11 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
+const compression = require("compression");
 require("dotenv").config();
 
 const { connectDB } = require("./config/database");
+const { connectRedis } = require("./config/redis");
 const { schedulePostPublisher } = require("./services/scheduler");
 const emailService = require("./services/emailService");
 
@@ -24,8 +26,8 @@ const CTABanner = require("./models/CTABanner");
 
 const app = express();
 
-// Connect to database (non-blocking)
-connectDB()
+// Connect to database and Redis (non-blocking)
+Promise.all([connectDB(), connectRedis()])
   .then(async () => {
     // Start the post scheduler after database connection
     schedulePostPublisher();
@@ -84,6 +86,23 @@ app.use(
   })
 );
 
+// Enable gzip compression for all responses
+app.use(
+  compression({
+    level: 6, // Compression level (0-9)
+    threshold: 1024, // Only compress responses larger than 1KB
+    filter: (req, res) => {
+      if (req.headers["x-no-compression"]) {
+        return false;
+      }
+      return compression.filter(req, res);
+    },
+  })
+);
+
+// Compression middleware - must be before routes
+app.use(compression());
+
 // Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -94,12 +113,25 @@ app.use("/uploads", express.static("uploads"));
 // Logging middleware
 app.use(morgan("dev"));
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === "production" ? 100 : 1000, // Higher limit for development
-});
-app.use("/api/", limiter);
+// Import rate limiters and sanitization
+const {
+  apiLimiter,
+  authLimiter,
+  formLimiter,
+  downloadLimiter,
+  emailLimiter,
+  uploadLimiter,
+} = require("./middleware/rateLimiter");
+const { sanitizeAll } = require("./middleware/sanitize");
+
+// Apply general API rate limiting
+app.use("/api/", apiLimiter);
+
+// Apply input sanitization to all routes
+app.use(sanitizeAll);
+
+// SEO routes (no rate limiting needed)
+app.use("/", require("./routes/sitemap.routes"));
 
 // Health check route
 app.get("/health", (req, res) => {
@@ -109,23 +141,27 @@ app.get("/health", (req, res) => {
 // Serve static files (uploads)
 app.use("/uploads", express.static("uploads"));
 
-// API routes (will be added)
-app.use("/api/auth", require("./routes/auth.routes"));
+// API routes with specific rate limiters
+app.use("/api/auth", authLimiter, require("./routes/auth.routes"));
 app.use("/api/users", require("./routes/user.routes"));
 app.use("/api/projects", require("./routes/project.routes"));
 app.use("/api/blog", require("./routes/blog.routes"));
 app.use("/api/pages", require("./routes/page.routes"));
 app.use("/api/testimonials", require("./routes/testimonial.routes"));
-app.use("/api/contact", require("./routes/contact.routes"));
-app.use("/api/upload", require("./routes/upload.routes"));
-app.use("/api/forms", require("./routes/form.routes"));
+app.use("/api/contact", formLimiter, require("./routes/contact.routes"));
+app.use("/api/upload", uploadLimiter, require("./routes/upload.routes"));
+app.use("/api/forms", formLimiter, require("./routes/form.routes"));
 app.use("/api/modals", require("./routes/modal.routes"));
 app.use("/api/popups", require("./routes/popup.routes"));
 app.use("/api/embed", require("./routes/embed.routes"));
-app.use("/api/email", require("./routes/email.routes"));
+app.use("/api/email", emailLimiter, require("./routes/email.routes"));
 app.use("/api/settings", require("./routes/settings.routes"));
-app.use("/api/downloads", require("./routes/download.routes"));
-app.use("/api/download-leads", require("./routes/downloadLead.routes"));
+app.use("/api/downloads", downloadLimiter, require("./routes/download.routes"));
+app.use(
+  "/api/download-leads",
+  downloadLimiter,
+  require("./routes/downloadLead.routes")
+);
 app.use("/api/menus", require("./routes/menu.routes"));
 app.use("/api/cta-banners", require("./routes/ctaBanner.routes"));
 app.use("/api/analytics", require("./routes/analytics.routes"));

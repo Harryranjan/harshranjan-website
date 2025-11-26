@@ -2,17 +2,26 @@ const express = require("express");
 const router = express.Router();
 const analyticsController = require("../controllers/analytics.controller");
 const { authMiddleware } = require("../middleware/auth.middleware");
+const { cacheStrategies } = require("../middleware/cache");
 
 // All analytics routes require authentication
 router.use(authMiddleware);
 
-// Get conversion statistics
-router.get("/conversions", analyticsController.getConversionStats);
+// Get conversion statistics - cached for 15 minutes
+router.get(
+  "/conversions",
+  cacheStrategies.analytics,
+  analyticsController.getConversionStats
+);
 
-// Get SEO statistics
-router.get("/seo", analyticsController.getSEOStats);
+// Get SEO statistics - cached for 15 minutes
+router.get("/seo", cacheStrategies.analytics, analyticsController.getSEOStats);
 
-// Get traffic trends
-router.get("/traffic-trends", analyticsController.getTrafficTrends);
+// Get traffic trends - cached for 15 minutes
+router.get(
+  "/traffic-trends",
+  cacheStrategies.analytics,
+  analyticsController.getTrafficTrends
+);
 
 module.exports = router;

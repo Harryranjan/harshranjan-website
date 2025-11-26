@@ -28,7 +28,7 @@ exports.getConversionStats = async (req, res) => {
     const formSubmissionsByForm = await FormSubmission.findAll({
       attributes: [
         "form_id",
-        [sequelize.fn("COUNT", sequelize.col("id")), "count"],
+        [sequelize.fn("COUNT", sequelize.col("FormSubmission.id")), "count"],
       ],
       where: {
         created_at: {
@@ -39,7 +39,8 @@ exports.getConversionStats = async (req, res) => {
       include: [
         {
           model: Form,
-          attributes: ["id", "name", "title"],
+          as: "Form",
+          attributes: ["id", "name"],
         },
       ],
     });
@@ -57,7 +58,7 @@ exports.getConversionStats = async (req, res) => {
         [
           sequelize.fn(
             "COUNT",
-            sequelize.literal('CASE WHEN downloaded = 1 THEN 1 END')
+            sequelize.literal("CASE WHEN downloaded = 1 THEN 1 END")
           ),
           "downloaded_count",
         ],
@@ -158,7 +159,14 @@ exports.getSEOStats = async (req, res) => {
       where: {
         is_published: true,
       },
-      attributes: ["id", "title", "slug", "views", "meta_keywords", "updated_at"],
+      attributes: [
+        "id",
+        "title",
+        "slug",
+        "views",
+        "tags",
+        "updated_at",
+      ],
       order: [["views", "DESC"]],
     });
 
@@ -166,7 +174,14 @@ exports.getSEOStats = async (req, res) => {
       where: {
         status: "published",
       },
-      attributes: ["id", "title", "slug", "views", "meta_keywords", "updated_at"],
+      attributes: [
+        "id",
+        "title",
+        "slug",
+        "views",
+        "meta_keywords",
+        "updated_at",
+      ],
       order: [["views", "DESC"]],
     });
 
@@ -180,20 +195,35 @@ exports.getSEOStats = async (req, res) => {
     const topContent = [...blogPosts, ...pages]
       .sort((a, b) => (b.views || 0) - (a.views || 0))
       .slice(0, 10)
-      .map((item) => ({
-        id: item.id,
-        title: item.title,
-        slug: item.slug,
-        views: item.views || 0,
-        type: item.is_published !== undefined ? "blog" : "page",
-        keywords: item.meta_keywords,
-      }));
+      .map((item) => {
+        const isBlog = item.is_published !== undefined;
+        // For blog posts, use tags; for pages, use meta_keywords
+        const keywords = isBlog 
+          ? (Array.isArray(item.tags) ? item.tags.join(", ") : item.tags || "")
+          : (item.meta_keywords || "");
+        
+        return {
+          id: item.id,
+          title: item.title,
+          slug: item.slug,
+          views: item.views || 0,
+          type: isBlog ? "blog" : "page",
+          keywords: keywords,
+        };
+      });
 
     // Extract keywords from top content
     const keywordMap = {};
     topContent.forEach((item) => {
       if (item.keywords) {
-        const keywords = item.keywords.split(",").map((k) => k.trim());
+        // Handle both comma-separated strings and arrays
+        let keywords = [];
+        if (typeof item.keywords === 'string') {
+          keywords = item.keywords.split(",").map((k) => k.trim());
+        } else if (Array.isArray(item.keywords)) {
+          keywords = item.keywords;
+        }
+        
         keywords.forEach((keyword) => {
           if (keyword) {
             keywordMap[keyword] = (keywordMap[keyword] || 0) + item.views;
@@ -205,16 +235,17 @@ exports.getSEOStats = async (req, res) => {
     const topKeywords = Object.entries(keywordMap)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 20)
-      .map(([keyword, views]) => ({
+      .map(([keyword, views], index) => ({
         keyword,
         views,
-        estimated_position: Math.floor(Math.random() * 10) + 1, // Placeholder
+        position: index + 1, // Position in your top keywords ranking
       }));
 
     // Calculate average CTR (simplified)
-    const avgCTR = topContent.length > 0 
-      ? ((totalViews / (topContent.length * 1000)) * 100).toFixed(2)
-      : 0;
+    const avgCTR =
+      topContent.length > 0
+        ? ((totalViews / (topContent.length * 1000)) * 100).toFixed(2)
+        : 0;
 
     res.json({
       success: true,
@@ -252,35 +283,80 @@ exports.getSEOStats = async (req, res) => {
 exports.getTrafficTrends = async (req, res) => {
   try {
     const { period = "30" } = req.query;
-    
-    // For now, return mock data structure
-    // In production, you'd track daily views in a separate analytics table
     const days = parseInt(period);
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    // Get actual daily aggregated data from blog posts and pages
+    // This queries view counts for content created/updated in the period
+    const blogPosts = await BlogPost.findAll({
+      where: {
+        is_published: true,
+      },
+      attributes: [
+        [sequelize.fn("DATE", sequelize.col("updated_at")), "date"],
+        [sequelize.fn("SUM", sequelize.col("views")), "total_views"],
+        [sequelize.fn("COUNT", sequelize.col("id")), "content_count"],
+      ],
+      group: [sequelize.fn("DATE", sequelize.col("updated_at"))],
+      order: [[sequelize.fn("DATE", sequelize.col("updated_at")), "ASC"]],
+      raw: true,
+    });
+
+    const pages = await Page.findAll({
+      where: {
+        status: "published",
+      },
+      attributes: [
+        [sequelize.fn("DATE", sequelize.col("updated_at")), "date"],
+        [sequelize.fn("SUM", sequelize.col("views")), "total_views"],
+        [sequelize.fn("COUNT", sequelize.col("id")), "content_count"],
+      ],
+      group: [sequelize.fn("DATE", sequelize.col("updated_at"))],
+      order: [[sequelize.fn("DATE", sequelize.col("updated_at")), "ASC"]],
+      raw: true,
+    });
+
+    // Combine and aggregate by date
+    const viewsByDate = {};
+    [...blogPosts, ...pages].forEach((item) => {
+      const date = item.date;
+      if (!viewsByDate[date]) {
+        viewsByDate[date] = {
+          views: 0,
+          content_count: 0,
+        };
+      }
+      viewsByDate[date].views += parseInt(item.total_views) || 0;
+      viewsByDate[date].content_count += parseInt(item.content_count) || 0;
+    });
+
+    // Create trends array with actual data
     const trends = [];
-    
     for (let i = days - 1; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split("T")[0];
+      
+      const dayData = viewsByDate[dateStr] || { views: 0, content_count: 0 };
       
       trends.push({
-        date: date.toISOString().split('T')[0],
-        views: Math.floor(Math.random() * 500) + 100, // Mock data
-        sessions: Math.floor(Math.random() * 300) + 50,
-        bounce_rate: (Math.random() * 30 + 40).toFixed(2),
+        date: dateStr,
+        views: dayData.views,
+        content_updates: dayData.content_count,
       });
     }
+
+    const totalViews = trends.reduce((sum, t) => sum + t.views, 0);
 
     res.json({
       success: true,
       data: {
         trends,
         summary: {
-          total_views: trends.reduce((sum, t) => sum + t.views, 0),
-          total_sessions: trends.reduce((sum, t) => sum + t.sessions, 0),
-          avg_bounce_rate: (
-            trends.reduce((sum, t) => sum + parseFloat(t.bounce_rate), 0) /
-            trends.length
-          ).toFixed(2),
+          total_views: totalViews,
+          avg_daily_views: trends.length > 0 ? Math.round(totalViews / trends.length) : 0,
+          period_days: days,
         },
       },
     });

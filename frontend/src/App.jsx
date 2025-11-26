@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./layouts/AdminLayout";
@@ -17,6 +17,8 @@ import ShortcodeDemo from "./pages/ShortcodeDemo";
 // Admin Pages
 import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
+import SEODashboard from "./pages/admin/SEODashboard";
+import ConversionDashboard from "./pages/admin/ConversionDashboard";
 import AdminBlogList from "./pages/admin/BlogList";
 import BlogForm from "./pages/admin/BlogForm";
 import PageList from "./pages/admin/PageList";
@@ -139,7 +141,13 @@ function App() {
             </ProtectedRoute>
           }
         >
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="analytics/seo" element={<SEODashboard />} />
+          <Route
+            path="analytics/conversions"
+            element={<ConversionDashboard />}
+          />
           <Route path="pages" element={<PageList />} />
           <Route path="pages/create" element={<PageForm />} />
           <Route path="pages/edit/:id" element={<PageForm />} />
