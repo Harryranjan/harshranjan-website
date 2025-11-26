@@ -8,7 +8,7 @@ import demoAPI from "../../api/demoAPI";
 const ROICalculator = ({ onLeadCapture = null }) => {
   const [inputs, setInputs] = useState({
     employeeCount: 10,
-    avgHourlyWage: 25,
+    avgHourlyWage: 2000,
     hoursPerWeekRepetitive: 10,
     currentProcesses: 5,
   });
@@ -57,8 +57,8 @@ const ROICalculator = ({ onLeadCapture = null }) => {
     const costSavings = hoursAutomated * avgHourlyWage;
 
     // Calculate implementation cost (rough estimate)
-    const setupCost = selectedProcesses.length * 2000; // $2k per process
-    const monthlyCost = selectedProcesses.length * 100; // $100/month per process
+    const setupCost = selectedProcesses.length * 160000; // ₹1.6L per process
+    const monthlyCost = selectedProcesses.length * 8000; // ₹8,000/month per process
     const annualSubscription = monthlyCost * 12;
     const totalFirstYearCost = setupCost + annualSubscription;
 
@@ -181,13 +181,13 @@ const ROICalculator = ({ onLeadCapture = null }) => {
 
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Average Hourly Wage ($)
+              Average Hourly Wage (₹)
             </label>
             <input
               type="range"
-              min="15"
-              max="100"
-              step="5"
+              min="1200"
+              max="8000"
+              step="400"
               value={inputs.avgHourlyWage}
               onChange={(e) =>
                 handleInputChange("avgHourlyWage", e.target.value)
@@ -195,11 +195,11 @@ const ROICalculator = ({ onLeadCapture = null }) => {
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600"
             />
             <div className="flex justify-between text-sm text-gray-600 mt-2">
-              <span>$15</span>
+              <span>₹1,200</span>
               <span className="font-bold text-2xl text-green-600">
-                ${inputs.avgHourlyWage}
+                ₹{inputs.avgHourlyWage.toLocaleString()}
               </span>
-              <span>$100</span>
+              <span>₹8,000</span>
             </div>
           </div>
 
@@ -275,7 +275,7 @@ const ROICalculator = ({ onLeadCapture = null }) => {
                   First Year Savings
                 </div>
                 <div className="text-4xl font-bold">
-                  ${results.netSavingsFirstYear.toLocaleString()}
+                  ₹{results.netSavingsFirstYear.toLocaleString()}
                 </div>
                 <div className="text-xs mt-2 opacity-90">
                   After implementation costs
@@ -321,13 +321,13 @@ const ROICalculator = ({ onLeadCapture = null }) => {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Labor Cost Savings:</span>
                       <span className="font-bold text-green-600">
-                        ${results.costSavings.toLocaleString()}
+                        ₹{results.costSavings.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Year 2+ Savings:</span>
                       <span className="font-bold text-green-600">
-                        ${results.netSavingsYearTwo.toLocaleString()}/year
+                        ₹{results.netSavingsYearTwo.toLocaleString()}/year
                       </span>
                     </div>
                     <div className="flex justify-between pt-2 border-t">
@@ -335,7 +335,7 @@ const ROICalculator = ({ onLeadCapture = null }) => {
                         5-Year Savings:
                       </span>
                       <span className="font-bold text-green-600 text-xl">
-                        ${results.fiveYearSavings.toLocaleString()}
+                        ₹{results.fiveYearSavings.toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -349,7 +349,7 @@ const ROICalculator = ({ onLeadCapture = null }) => {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Setup Cost:</span>
                       <span className="font-bold">
-                        ${results.setupCost.toLocaleString()}
+                        ₹{results.setupCost.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -357,7 +357,7 @@ const ROICalculator = ({ onLeadCapture = null }) => {
                         Annual Subscription:
                       </span>
                       <span className="font-bold">
-                        ${results.annualSubscription.toLocaleString()}
+                        ₹{results.annualSubscription.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex justify-between pt-2 border-t">
@@ -365,7 +365,7 @@ const ROICalculator = ({ onLeadCapture = null }) => {
                         Total First Year:
                       </span>
                       <span className="font-bold text-red-600">
-                        ${results.totalFirstYearCost.toLocaleString()}
+                        ₹{results.totalFirstYearCost.toLocaleString()}
                       </span>
                     </div>
                   </div>

@@ -17,16 +17,31 @@ const VoiceAgentDemo = () => {
       id: "professional",
       name: "Professional (Male)",
       description: "Clear, authoritative",
+      language: "en-US",
     },
     {
       id: "friendly",
       name: "Friendly (Female)",
       description: "Warm, approachable",
+      language: "en-US",
     },
     {
       id: "energetic",
       name: "Energetic (Male)",
       description: "Dynamic, engaging",
+      language: "en-US",
+    },
+    {
+      id: "hindi-female",
+      name: "Hindi (Female)",
+      description: "महिला आवाज़ - स्पष्ट और मधुर",
+      language: "hi-IN",
+    },
+    {
+      id: "hindi-male",
+      name: "Hindi (Male)",
+      description: "पुरुष आवाज़ - गहरी और पेशेवर",
+      language: "hi-IN",
     },
   ];
 
@@ -57,6 +72,8 @@ const VoiceAgentDemo = () => {
     "Hello! Thank you for calling. How can I assist you today?",
     "I've scheduled your appointment for tomorrow at 2 PM. You'll receive a confirmation email shortly.",
     "Based on your answers, I think our premium package would be perfect for your needs.",
+    "नमस्ते! कॉल करने के लिए धन्यवाद। मैं आज आपकी कैसे सहायता कर सकती हूं?",
+    "मैंने आपकी अपॉइंटमेंट कल दोपहर 2 बजे के लिए शेड्यूल कर दी है। आपको जल्द ही एक कन्फर्मेशन ईमेल मिलेगा।",
   ];
 
   const handleGenerate = async () => {
@@ -79,24 +96,49 @@ const VoiceAgentDemo = () => {
     // For demo purposes, use browser's Speech Synthesis API
     if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(inputText);
-      const voices = window.speechSynthesis.getVoices();
+      const availableVoices = window.speechSynthesis.getVoices();
 
       // Select voice based on selection
       if (selectedVoice === "professional") {
         utterance.voice =
-          voices.find((v) => v.name.includes("Male")) || voices[0];
+          availableVoices.find((v) => v.lang.includes("en") && v.name.includes("Male")) || 
+          availableVoices.find((v) => v.lang.includes("en")) || 
+          availableVoices[0];
         utterance.pitch = 0.9;
         utterance.rate = 0.95;
+        utterance.lang = "en-US";
       } else if (selectedVoice === "friendly") {
         utterance.voice =
-          voices.find((v) => v.name.includes("Female")) || voices[1];
+          availableVoices.find((v) => v.lang.includes("en") && v.name.includes("Female")) || 
+          availableVoices.find((v) => v.lang.includes("en")) || 
+          availableVoices[1];
         utterance.pitch = 1.1;
         utterance.rate = 1.0;
-      } else {
+        utterance.lang = "en-US";
+      } else if (selectedVoice === "energetic") {
         utterance.voice =
-          voices.find((v) => v.name.includes("Male")) || voices[0];
+          availableVoices.find((v) => v.lang.includes("en") && v.name.includes("Male")) || 
+          availableVoices.find((v) => v.lang.includes("en")) || 
+          availableVoices[0];
         utterance.pitch = 1.2;
         utterance.rate = 1.1;
+        utterance.lang = "en-US";
+      } else if (selectedVoice === "hindi-female") {
+        utterance.voice =
+          availableVoices.find((v) => v.lang.includes("hi") && (v.name.includes("Female") || v.name.includes("female"))) || 
+          availableVoices.find((v) => v.lang.includes("hi")) || 
+          availableVoices[1];
+        utterance.pitch = 1.05;
+        utterance.rate = 0.85;
+        utterance.lang = "hi-IN";
+      } else if (selectedVoice === "hindi-male") {
+        utterance.voice =
+          availableVoices.find((v) => v.lang.includes("hi") && v.name.includes("Male")) || 
+          availableVoices.find((v) => v.lang.includes("hi")) || 
+          availableVoices[0];
+        utterance.pitch = 0.85;
+        utterance.rate = 0.9;
+        utterance.lang = "hi-IN";
       }
 
       window.speechSynthesis.speak(utterance);
@@ -131,19 +173,31 @@ const VoiceAgentDemo = () => {
           <label className="block text-sm font-semibold text-gray-700 mb-3">
             Choose Voice Style
           </label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {voices.map((voice) => (
               <button
                 key={voice.id}
                 onClick={() => setSelectedVoice(voice.id)}
-                className={`p-4 rounded-lg border-2 transition-all ${
+                className={`p-4 rounded-lg border-2 transition-all text-left ${
                   selectedVoice === voice.id
                     ? "border-blue-600 bg-blue-50 shadow-md"
                     : "border-gray-200 bg-white hover:border-blue-300"
                 }`}
               >
-                <div className="font-semibold text-gray-900 mb-1">
-                  {voice.name}
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-semibold text-gray-900">
+                    {voice.name}
+                  </span>
+                  {voice.language === "hi-IN" && (
+                    <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-medium">
+                      हिंदी
+                    </span>
+                  )}
+                  {voice.language === "en-US" && (
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">
+                      EN
+                    </span>
+                  )}
                 </div>
                 <div className="text-sm text-gray-600">{voice.description}</div>
               </button>
@@ -209,15 +263,25 @@ const VoiceAgentDemo = () => {
             Or Try Sample Texts
           </label>
           <div className="space-y-2">
-            {sampleTexts.map((text, index) => (
-              <button
-                key={index}
-                onClick={() => handleSampleClick(text)}
-                className="w-full text-left p-3 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
-              >
-                <span className="text-gray-700">{text}</span>
-              </button>
-            ))}
+            {sampleTexts.map((text, index) => {
+              const isHindi = /[\u0900-\u097F]/.test(text);
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleSampleClick(text)}
+                  className="w-full text-left p-3 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors group"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="text-gray-700 flex-1">{text}</span>
+                    {isHindi && (
+                      <span className="flex-shrink-0 text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-medium">
+                        हिंदी
+                      </span>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -239,6 +303,25 @@ const VoiceAgentDemo = () => {
             </div>
           </div>
         )}
+
+        {/* Language Support Info */}
+        <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">🌐</span>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-1">
+                Multi-Language Support
+              </h4>
+              <p className="text-sm text-gray-600">
+                Our AI voice agents support English and Hindi voices. For production deployment, 
+                we can add 100+ languages including regional dialects.
+                <span className="block mt-1 text-orange-600 font-medium">
+                  💡 Tip: Hindi voices work best on Chrome browser with Hindi language support installed.
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Use Cases */}
         <div className="mt-8 pt-8 border-t border-gray-200">

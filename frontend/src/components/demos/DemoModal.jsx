@@ -51,15 +51,16 @@ const DemoModal = ({
   const sizeClasses = {
     small: "max-w-md",
     medium: "max-w-2xl",
-    large: "max-w-4xl",
+    large: "max-w-5xl",
     full: "max-w-7xl",
+    xlarge: "max-w-6xl",
   };
 
   if (!isOpen) return null;
 
   const modalContent = (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 ${
         isAnimating ? "animate-fade-in" : ""
       }`}
       onClick={handleOverlayClick}
@@ -67,11 +68,11 @@ const DemoModal = ({
       {/* Overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />
 
-      {/* Modal Container */}
+      {/* Modal Container - Increased height and better scrolling */}
       <div
-        className={`relative bg-white rounded-2xl shadow-2xl ${
+        className={`relative bg-white rounded-xl sm:rounded-2xl shadow-2xl ${
           sizeClasses[size]
-        } w-full max-h-[90vh] overflow-hidden ${
+        } w-full max-h-[95vh] flex flex-col ${
           isAnimating ? "animate-scale-in" : ""
         }`}
       >
@@ -112,9 +113,11 @@ const DemoModal = ({
           </div>
         )}
 
-        {/* Content */}
-        <div className="overflow-y-auto max-h-[calc(90vh-100px)] p-6">
-          {children}
+        {/* Content - Better scrolling for content-heavy demos */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4 sm:py-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div className="max-w-full">
+            {children}
+          </div>
         </div>
       </div>
     </div>
@@ -196,6 +199,7 @@ export const DemoCard = ({
   image,
   demoComponent,
   gradient = "from-blue-500 to-purple-500",
+  modalSize = "large", // Allow customization of modal size
 }) => {
   const { isOpen, open, close } = useDemoModal();
 
@@ -236,7 +240,7 @@ export const DemoCard = ({
         onClose={close}
         title={title}
         description={description}
-        size="large"
+        size={modalSize}
       >
         {demoComponent}
       </DemoModal>

@@ -82,7 +82,7 @@ const ChatbotDemo = ({ onLeadCapture = null }) => {
 
       simulateTyping(() => {
         const hours = parseInt(userMessage) || 10;
-        const savings = hours * 40; // Assuming $40/hour average
+        const savings = hours * 3200; // Assuming ₹3,200/hour average
         const monthlySavings = savings * 4;
 
         addMessage(

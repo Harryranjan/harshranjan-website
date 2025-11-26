@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 /**
  * Automation Workflow Visualizer
@@ -8,6 +8,7 @@ const AutomationWorkflow = ({ workflow = "lead-qualification" }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedWorkflow, setSelectedWorkflow] = useState(workflow);
+  const stepsContainerRef = useRef(null);
 
   const workflows = {
     "lead-qualification": {
@@ -58,8 +59,8 @@ const AutomationWorkflow = ({ workflow = "lead-qualification" }) => {
           time: "Instant",
         },
       ],
-      manual: { time: "30-45 minutes", cost: "$25-40" },
-      automated: { time: "1-2 minutes", cost: "$0.10" },
+      manual: { time: "30-45 minutes", cost: "₹2,000-3,200" },
+      automated: { time: "1-2 minutes", cost: "₹8" },
     },
     "customer-support": {
       name: "Customer Support Automation",
@@ -103,8 +104,8 @@ const AutomationWorkflow = ({ workflow = "lead-qualification" }) => {
           time: "Instant",
         },
       ],
-      manual: { time: "5-10 minutes", cost: "$8-15" },
-      automated: { time: "10-30 seconds", cost: "$0.05" },
+      manual: { time: "5-10 minutes", cost: "₹650-1,200" },
+      automated: { time: "10-30 seconds", cost: "₹4" },
     },
     "appointment-booking": {
       name: "Appointment Booking Automation",
@@ -154,8 +155,8 @@ const AutomationWorkflow = ({ workflow = "lead-qualification" }) => {
           time: "Instant",
         },
       ],
-      manual: { time: "5-8 minutes", cost: "$6-12" },
-      automated: { time: "15-30 seconds", cost: "$0.03" },
+      manual: { time: "5-8 minutes", cost: "₹500-1,000" },
+      automated: { time: "15-30 seconds", cost: "₹2.50" },
     },
     "data-entry": {
       name: "Data Entry Automation",
@@ -199,16 +200,39 @@ const AutomationWorkflow = ({ workflow = "lead-qualification" }) => {
           time: "Instant",
         },
       ],
-      manual: { time: "10-15 minutes", cost: "$15-25" },
-      automated: { time: "15-20 seconds", cost: "$0.08" },
+      manual: { time: "10-15 minutes", cost: "₹1,200-2,000" },
+      automated: { time: "15-20 seconds", cost: "₹6.50" },
     },
   };
 
   const currentWorkflow = workflows[selectedWorkflow];
 
+  // Auto-scroll to follow the animation
+  useEffect(() => {
+    if (isPlaying && currentStep > 0 && stepsContainerRef.current) {
+      const stepElements = stepsContainerRef.current.querySelectorAll('.workflow-step');
+      const currentStepElement = stepElements[currentStep - 1];
+      
+      if (currentStepElement) {
+        currentStepElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    }
+  }, [currentStep, isPlaying]);
+
   const playAnimation = () => {
     setIsPlaying(true);
     setCurrentStep(0);
+
+    // Scroll to top of steps when starting
+    if (stepsContainerRef.current) {
+      stepsContainerRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
 
     const stepDuration = 1500; // 1.5 seconds per step
     currentWorkflow.steps.forEach((_, index) => {
@@ -323,13 +347,13 @@ const AutomationWorkflow = ({ workflow = "lead-qualification" }) => {
         </div>
 
         {/* Workflow Steps */}
-        <div className="space-y-4 mb-8">
+        <div ref={stepsContainerRef} className="space-y-4 mb-8">
           {currentWorkflow.steps.map((step, index) => {
             const isActive = isPlaying && currentStep === index + 1;
             const isCompleted = currentStep > index;
 
             return (
-              <div key={index}>
+              <div key={index} className="workflow-step">
                 <div
                   className={`p-6 rounded-lg border-2 transition-all duration-500 ${
                     isActive
@@ -424,11 +448,11 @@ const AutomationWorkflow = ({ workflow = "lead-qualification" }) => {
             If you process this task 100 times per month:
           </p>
           <div className="text-4xl font-bold text-green-600 mb-2">
-            Save $
+            Save ₹
             {(
-              (parseFloat(currentWorkflow.manual.cost.replace(/[$,]/g, "")) -
+              (parseFloat(currentWorkflow.manual.cost.replace(/[₹,]/g, "")) -
                 parseFloat(
-                  currentWorkflow.automated.cost.replace(/[$,]/g, "")
+                  currentWorkflow.automated.cost.replace(/[₹,]/g, "")
                 )) *
               100
             ).toLocaleString()}

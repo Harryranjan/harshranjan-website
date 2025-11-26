@@ -32,6 +32,7 @@ const DemoShowcase = () => {
       gradient: "from-blue-600 to-blue-700",
       component: <ChatbotDemo onLeadCapture={handleLeadCapture} />,
       tags: ["Lead Generation", "Customer Service", "Automation"],
+      modalSize: "large", // Chatbot works fine with large
     },
     {
       id: "voice-agent",
@@ -42,6 +43,7 @@ const DemoShowcase = () => {
       gradient: "from-purple-600 to-purple-700",
       component: <VoiceAgentDemo />,
       tags: ["Voice AI", "Phone Automation", "Customer Support"],
+      modalSize: "xlarge", // Voice agent has more content
     },
     {
       id: "automation-workflow",
@@ -52,6 +54,7 @@ const DemoShowcase = () => {
       gradient: "from-green-600 to-green-700",
       component: <AutomationWorkflow />,
       tags: ["Process Automation", "Workflow", "Efficiency"],
+      modalSize: "full", // Workflow needs lots of space
     },
     {
       id: "roi-calculator",
@@ -62,6 +65,7 @@ const DemoShowcase = () => {
       gradient: "from-orange-600 to-orange-700",
       component: <ROICalculator onLeadCapture={handleLeadCapture} />,
       tags: ["ROI", "Cost Savings", "Business Planning"],
+      modalSize: "xlarge", // ROI calculator has many inputs
     },
   ];
 
@@ -103,7 +107,7 @@ const DemoShowcase = () => {
             </div>
             <div>
               <div className="text-4xl font-bold text-green-600 mb-2">
-                $50K+
+                ₹40L+
               </div>
               <div className="text-gray-600">Avg Annual Savings</div>
             </div>
@@ -145,6 +149,7 @@ const DemoShowcase = () => {
                 icon={demo.icon}
                 gradient={demo.gradient}
                 demoComponent={demo.component}
+                modalSize={demo.modalSize}
               />
             ))}
           </div>
