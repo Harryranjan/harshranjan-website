@@ -6,6 +6,8 @@ import PublicLayout from "./layouts/PublicLayout";
 
 // Public Pages
 import Home from "./pages/Home";
+import Homepage from "./pages/Homepage";
+import ServicesPage from "./pages/ServicesPage";
 import About from "./pages/About";
 import Services from "./pages/Services";
 import Portfolio from "./pages/Portfolio";
@@ -51,6 +53,7 @@ import LandingPageBuilderAdvanced from "./pages/admin/LandingPageBuilderAdvanced
 import LandingPage from "./pages/LandingPage";
 import DemoShowcase from "./pages/DemoShowcase";
 import Profile from "./pages/admin/Profile";
+import DynamicPage from "./pages/DynamicPage";
 
 function App() {
   return (
@@ -64,6 +67,14 @@ function App() {
               <Home />
             </PublicLayout>
           }
+        />
+        <Route
+          path="/homepage"
+          element={<Homepage />}
+        />
+        <Route
+          path="/services-new"
+          element={<ServicesPage />}
         />
         <Route
           path="/about"
@@ -136,6 +147,16 @@ function App() {
           element={
             <PublicLayout>
               <DemoShowcase />
+            </PublicLayout>
+          }
+        />
+
+        {/* Dynamic Pages Route - Must be near the end to avoid conflicts */}
+        <Route
+          path="/pages/:slug"
+          element={
+            <PublicLayout>
+              <DynamicPage />
             </PublicLayout>
           }
         />

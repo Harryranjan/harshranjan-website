@@ -210,13 +210,14 @@ const AutomationWorkflow = ({ workflow = "lead-qualification" }) => {
   // Auto-scroll to follow the animation
   useEffect(() => {
     if (isPlaying && currentStep > 0 && stepsContainerRef.current) {
-      const stepElements = stepsContainerRef.current.querySelectorAll('.workflow-step');
+      const stepElements =
+        stepsContainerRef.current.querySelectorAll(".workflow-step");
       const currentStepElement = stepElements[currentStep - 1];
-      
+
       if (currentStepElement) {
         currentStepElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
+          behavior: "smooth",
+          block: "center",
         });
       }
     }
@@ -229,8 +230,8 @@ const AutomationWorkflow = ({ workflow = "lead-qualification" }) => {
     // Scroll to top of steps when starting
     if (stepsContainerRef.current) {
       stepsContainerRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+        behavior: "smooth",
+        block: "start",
       });
     }
 

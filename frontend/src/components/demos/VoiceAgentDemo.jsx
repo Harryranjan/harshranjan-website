@@ -101,40 +101,52 @@ const VoiceAgentDemo = () => {
       // Select voice based on selection
       if (selectedVoice === "professional") {
         utterance.voice =
-          availableVoices.find((v) => v.lang.includes("en") && v.name.includes("Male")) || 
-          availableVoices.find((v) => v.lang.includes("en")) || 
+          availableVoices.find(
+            (v) => v.lang.includes("en") && v.name.includes("Male")
+          ) ||
+          availableVoices.find((v) => v.lang.includes("en")) ||
           availableVoices[0];
         utterance.pitch = 0.9;
         utterance.rate = 0.95;
         utterance.lang = "en-US";
       } else if (selectedVoice === "friendly") {
         utterance.voice =
-          availableVoices.find((v) => v.lang.includes("en") && v.name.includes("Female")) || 
-          availableVoices.find((v) => v.lang.includes("en")) || 
+          availableVoices.find(
+            (v) => v.lang.includes("en") && v.name.includes("Female")
+          ) ||
+          availableVoices.find((v) => v.lang.includes("en")) ||
           availableVoices[1];
         utterance.pitch = 1.1;
         utterance.rate = 1.0;
         utterance.lang = "en-US";
       } else if (selectedVoice === "energetic") {
         utterance.voice =
-          availableVoices.find((v) => v.lang.includes("en") && v.name.includes("Male")) || 
-          availableVoices.find((v) => v.lang.includes("en")) || 
+          availableVoices.find(
+            (v) => v.lang.includes("en") && v.name.includes("Male")
+          ) ||
+          availableVoices.find((v) => v.lang.includes("en")) ||
           availableVoices[0];
         utterance.pitch = 1.2;
         utterance.rate = 1.1;
         utterance.lang = "en-US";
       } else if (selectedVoice === "hindi-female") {
         utterance.voice =
-          availableVoices.find((v) => v.lang.includes("hi") && (v.name.includes("Female") || v.name.includes("female"))) || 
-          availableVoices.find((v) => v.lang.includes("hi")) || 
+          availableVoices.find(
+            (v) =>
+              v.lang.includes("hi") &&
+              (v.name.includes("Female") || v.name.includes("female"))
+          ) ||
+          availableVoices.find((v) => v.lang.includes("hi")) ||
           availableVoices[1];
         utterance.pitch = 1.05;
         utterance.rate = 0.85;
         utterance.lang = "hi-IN";
       } else if (selectedVoice === "hindi-male") {
         utterance.voice =
-          availableVoices.find((v) => v.lang.includes("hi") && v.name.includes("Male")) || 
-          availableVoices.find((v) => v.lang.includes("hi")) || 
+          availableVoices.find(
+            (v) => v.lang.includes("hi") && v.name.includes("Male")
+          ) ||
+          availableVoices.find((v) => v.lang.includes("hi")) ||
           availableVoices[0];
         utterance.pitch = 0.85;
         utterance.rate = 0.9;
@@ -313,10 +325,12 @@ const VoiceAgentDemo = () => {
                 Multi-Language Support
               </h4>
               <p className="text-sm text-gray-600">
-                Our AI voice agents support English and Hindi voices. For production deployment, 
-                we can add 100+ languages including regional dialects.
+                Our AI voice agents support English and Hindi voices. For
+                production deployment, we can add 100+ languages including
+                regional dialects.
                 <span className="block mt-1 text-orange-600 font-medium">
-                  💡 Tip: Hindi voices work best on Chrome browser with Hindi language support installed.
+                  💡 Tip: Hindi voices work best on Chrome browser with Hindi
+                  language support installed.
                 </span>
               </p>
             </div>

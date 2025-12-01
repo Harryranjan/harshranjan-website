@@ -115,9 +115,7 @@ const DemoModal = ({
 
         {/* Content - Better scrolling for content-heavy demos */}
         <div className="flex-1 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4 sm:py-6 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-          <div className="max-w-full">
-            {children}
-          </div>
+          <div className="max-w-full">{children}</div>
         </div>
       </div>
     </div>

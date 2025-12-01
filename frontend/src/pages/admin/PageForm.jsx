@@ -37,6 +37,7 @@ export default function PageForm() {
     status: "draft",
     is_homepage: false,
     show_in_menu: true,
+    hide_title: false,
     menu_order: 0,
     parent_id: null,
     meta_title: "",
@@ -111,7 +112,13 @@ export default function PageForm() {
         }
       }
 
+      // Ensure hide_title has a default value if not present
+      if (pageData.hide_title === undefined || pageData.hide_title === null) {
+        pageData.hide_title = false;
+      }
+
       setFormData(pageData);
+      console.log("Loaded page data:", pageData); // Debug log
     } catch (error) {
       console.error("Failed to fetch page:", error);
       alert("Failed to load page");
@@ -192,6 +199,7 @@ export default function PageForm() {
     setSaving(true);
 
     try {
+      console.log("Submitting formData:", formData); // Debug log
       if (isEditing) {
         await api.put(`/pages/${id}`, formData);
         setModalMessage("Page updated successfully!");
@@ -593,7 +601,11 @@ export default function PageForm() {
               </div>
             </div>
 
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 space-y-3 border-t border-gray-200 pt-4">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                Display Options
+              </p>
+
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -602,7 +614,18 @@ export default function PageForm() {
                   onChange={handleInputChange}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-700">Show in menu</span>
+                <span className="text-sm text-gray-700">Show in navigation menu</span>
+              </label>
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  name="hide_title"
+                  checked={formData.hide_title}
+                  onChange={handleInputChange}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">Hide page title on frontend</span>
               </label>
 
               <label className="flex items-center gap-2">

@@ -46,6 +46,10 @@ const Page = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
+    hide_title: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     menu_order: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
