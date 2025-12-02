@@ -1,18 +1,18 @@
-const mysql = require('mysql2/promise');
-require('dotenv').config();
+const mysql = require("mysql2/promise");
+require("dotenv").config();
 
 const dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306
+  port: process.env.DB_PORT || 3306,
 };
 
 const aiDeveloperPage = {
-  title: 'Harsh Ranjan - AI-Powered Developer',
-  slug: 'ai-developer-portfolio',
-  template: 'custom',
+  title: "Harsh Ranjan - AI-Powered Developer",
+  slug: "ai-developer-portfolio",
+  template: "custom",
   content: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -738,18 +738,21 @@ const aiDeveloperPage = {
     </script>
 </body>
 </html>`,
-  meta_title: 'Harsh Ranjan - AI-Powered Developer | Building Tomorrow\'s Digital Experiences with AI Precision',
-  meta_description: 'Full-Stack Developer specializing in AI integration, modern web development, and cloud solutions. Transform your ideas into intelligent applications with cutting-edge technology.',
-  meta_keywords: 'AI developer, full-stack developer, AI integration, machine learning, React developer, Node.js, Python, cloud solutions, web development, artificial intelligence'
+  meta_title:
+    "Harsh Ranjan - AI-Powered Developer | Building Tomorrow's Digital Experiences with AI Precision",
+  meta_description:
+    "Full-Stack Developer specializing in AI integration, modern web development, and cloud solutions. Transform your ideas into intelligent applications with cutting-edge technology.",
+  meta_keywords:
+    "AI developer, full-stack developer, AI integration, machine learning, React developer, Node.js, Python, cloud solutions, web development, artificial intelligence",
 };
 
 async function createAIDeveloperPortfolio() {
   let connection;
   try {
-    console.log('🚀 Creating AI-Powered Developer Portfolio...');
+    console.log("🚀 Creating AI-Powered Developer Portfolio...");
     connection = await mysql.createConnection(dbConfig);
-    console.log('✅ Database connected!');
-    
+    console.log("✅ Database connected!");
+
     const query = `
       INSERT INTO pages (title, slug, content, template, meta_title, meta_description, meta_keywords, status, hide_title, author_id, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, 'published', 0, 1, NOW(), NOW())
@@ -761,7 +764,7 @@ async function createAIDeveloperPortfolio() {
       meta_keywords = VALUES(meta_keywords),
       updated_at = NOW()
     `;
-    
+
     const [result] = await connection.execute(query, [
       aiDeveloperPage.title,
       aiDeveloperPage.slug,
@@ -769,33 +772,34 @@ async function createAIDeveloperPortfolio() {
       aiDeveloperPage.template,
       aiDeveloperPage.meta_title,
       aiDeveloperPage.meta_description,
-      aiDeveloperPage.meta_keywords
+      aiDeveloperPage.meta_keywords,
     ]);
-    
-    console.log('🎉 AI-Powered Developer Portfolio Created Successfully!');
-    console.log('\n🌟 STARVY-INSPIRED FEATURES:');
-    console.log('✨ Dark theme with green accents (like Starvy)');
-    console.log('🤖 AI-focused messaging and branding');
-    console.log('💎 Clean, minimalist layout');
-    console.log('🎯 Professional service offerings');
-    console.log('📱 Fully responsive design');
-    console.log('⚡ Smooth animations and interactions');
-    console.log('🎨 Glassmorphism effects');
-    console.log('📊 Portfolio showcase section');
-    console.log('💬 Client testimonials');
-    console.log('📝 Contact form integration');
-    
-    console.log('\n🎯 PERSONAL BRANDING THEME:');
+
+    console.log("🎉 AI-Powered Developer Portfolio Created Successfully!");
+    console.log("\n🌟 STARVY-INSPIRED FEATURES:");
+    console.log("✨ Dark theme with green accents (like Starvy)");
+    console.log("🤖 AI-focused messaging and branding");
+    console.log("💎 Clean, minimalist layout");
+    console.log("🎯 Professional service offerings");
+    console.log("📱 Fully responsive design");
+    console.log("⚡ Smooth animations and interactions");
+    console.log("🎨 Glassmorphism effects");
+    console.log("📊 Portfolio showcase section");
+    console.log("💬 Client testimonials");
+    console.log("📝 Contact form integration");
+
+    console.log("\n🎯 PERSONAL BRANDING THEME:");
     console.log('Brand: "AI-Powered Developer"');
-    console.log('Colors: Dark (#0F0F0F) + Green (#10B981) + Purple (#8B5CF6)');
-    console.log('Message: "Building Tomorrow\'s Digital Experiences with AI Precision"');
-    
-    console.log('\n🔗 ACCESS YOUR NEW PORTFOLIO AT:');
-    console.log('Frontend: http://localhost:5173/pages/ai-developer-portfolio');
-    console.log('Backend:  http://localhost:3000/pages/ai-developer-portfolio');
-    
+    console.log("Colors: Dark (#0F0F0F) + Green (#10B981) + Purple (#8B5CF6)");
+    console.log(
+      'Message: "Building Tomorrow\'s Digital Experiences with AI Precision"'
+    );
+
+    console.log("\n🔗 ACCESS YOUR NEW PORTFOLIO AT:");
+    console.log("Frontend: http://localhost:5173/pages/ai-developer-portfolio");
+    console.log("Backend:  http://localhost:3000/pages/ai-developer-portfolio");
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error("❌ Error:", error);
   } finally {
     if (connection) {
       await connection.end();

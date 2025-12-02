@@ -68,14 +68,8 @@ function App() {
             </PublicLayout>
           }
         />
-        <Route
-          path="/homepage"
-          element={<Homepage />}
-        />
-        <Route
-          path="/services-new"
-          element={<ServicesPage />}
-        />
+        <Route path="/homepage" element={<Homepage />} />
+        <Route path="/services-new" element={<ServicesPage />} />
         <Route
           path="/about"
           element={
@@ -147,16 +141,6 @@ function App() {
           element={
             <PublicLayout>
               <DemoShowcase />
-            </PublicLayout>
-          }
-        />
-
-        {/* Dynamic Pages Route - Must be near the end to avoid conflicts */}
-        <Route
-          path="/pages/:slug"
-          element={
-            <PublicLayout>
-              <DynamicPage />
             </PublicLayout>
           }
         />
@@ -306,6 +290,24 @@ function App() {
             }
           />
         </Route>
+
+        {/* Dynamic Pages Routes - Catch-all at the end */}
+        <Route
+          path="/pages/:slug"
+          element={
+            <PublicLayout>
+              <DynamicPage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/:slug"
+          element={
+            <PublicLayout>
+              <DynamicPage />
+            </PublicLayout>
+          }
+        />
       </Routes>
     </AuthProvider>
   );

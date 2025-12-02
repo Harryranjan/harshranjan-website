@@ -1,18 +1,18 @@
-const mysql = require('mysql2/promise');
-require('dotenv').config();
+const mysql = require("mysql2/promise");
+require("dotenv").config();
 
 const dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306
+  port: process.env.DB_PORT || 3306,
 };
 
 const ultraModernPage = {
-  title: 'Ultra Modern Homepage 2025',
-  slug: 'homepage-2025',
-  template: 'custom_html',
+  title: "Ultra Modern Homepage 2025",
+  slug: "homepage-2025",
+  template: "custom_html",
   content: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -661,18 +661,21 @@ const ultraModernPage = {
     </script>
 </body>
 </html>`,
-  meta_title: 'NEXUS - Digital Experiences Beyond Reality | Ultra Modern Agency 2025',
-  meta_description: 'Experience the future of digital design with AI-powered applications, 3D immersive experiences, and cutting-edge web technologies. Award-winning digital agency.',
-  meta_keywords: 'ultra modern web design, AI digital agency, 3D web experiences, WebGL development, 2025 design trends, immersive digital experiences'
+  meta_title:
+    "NEXUS - Digital Experiences Beyond Reality | Ultra Modern Agency 2025",
+  meta_description:
+    "Experience the future of digital design with AI-powered applications, 3D immersive experiences, and cutting-edge web technologies. Award-winning digital agency.",
+  meta_keywords:
+    "ultra modern web design, AI digital agency, 3D web experiences, WebGL development, 2025 design trends, immersive digital experiences",
 };
 
 async function createUltraModernPage() {
   let connection;
   try {
-    console.log('🚀 Creating ultra-modern 2025 homepage...');
+    console.log("🚀 Creating ultra-modern 2025 homepage...");
     connection = await mysql.createConnection(dbConfig);
-    console.log('✅ Database connected!');
-    
+    console.log("✅ Database connected!");
+
     const query = `
       INSERT INTO pages (title, slug, content, template, meta_title, meta_description, meta_keywords, status, hide_title, author_id, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, 'published', 0, 1, NOW(), NOW())
@@ -684,7 +687,7 @@ async function createUltraModernPage() {
       meta_keywords = VALUES(meta_keywords),
       updated_at = NOW()
     `;
-    
+
     const [result] = await connection.execute(query, [
       ultraModernPage.title,
       ultraModernPage.slug,
@@ -692,24 +695,23 @@ async function createUltraModernPage() {
       ultraModernPage.template,
       ultraModernPage.meta_title,
       ultraModernPage.meta_description,
-      ultraModernPage.meta_keywords
+      ultraModernPage.meta_keywords,
     ]);
-    
-    console.log('🎉 Ultra-modern homepage created!');
-    console.log('\n🌟 FEATURES INCLUDED:');
-    console.log('✨ Custom cursor with magnetic effects');
-    console.log('🎨 Three.js 3D background animations');
-    console.log('🌈 Gradient mesh animations');
-    console.log('💎 Glassmorphism & Neumorphism 2.0');
-    console.log('⚡ GSAP scroll animations');
-    console.log('📱 Fluid responsive typography');
-    console.log('🎯 Interactive hover states');
-    console.log('🌊 Smooth scrolling with Lenis');
-    console.log('✨ Particle system animations');
-    console.log('\n🔗 Access at: /pages/homepage-2025');
-    
+
+    console.log("🎉 Ultra-modern homepage created!");
+    console.log("\n🌟 FEATURES INCLUDED:");
+    console.log("✨ Custom cursor with magnetic effects");
+    console.log("🎨 Three.js 3D background animations");
+    console.log("🌈 Gradient mesh animations");
+    console.log("💎 Glassmorphism & Neumorphism 2.0");
+    console.log("⚡ GSAP scroll animations");
+    console.log("📱 Fluid responsive typography");
+    console.log("🎯 Interactive hover states");
+    console.log("🌊 Smooth scrolling with Lenis");
+    console.log("✨ Particle system animations");
+    console.log("\n🔗 Access at: /pages/homepage-2025");
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error("❌ Error:", error);
   } finally {
     if (connection) {
       await connection.end();

@@ -1,5 +1,5 @@
-const mysql = require('mysql2/promise');
-require('dotenv').config();
+const mysql = require("mysql2/promise");
+require("dotenv").config();
 
 // Create database connection
 const dbConfig = {
@@ -7,14 +7,14 @@ const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306
+  port: process.env.DB_PORT || 3306,
 };
 
 const additionalPages = [
   {
-    title: 'Contact Us',
-    slug: 'contact',
-    template: 'custom_html',
+    title: "Contact Us",
+    slug: "contact",
+    template: "custom_html",
     content: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -218,14 +218,16 @@ const additionalPages = [
     </section>
 </body>
 </html>`,
-    meta_title: 'Contact Us - NEXUS Digital Agency',
-    meta_description: 'Get in touch with NEXUS for your next digital project. Free consultation, expert guidance, and award-winning results.',
-    meta_keywords: 'contact nexus, digital agency contact, web development inquiry, project consultation'
+    meta_title: "Contact Us - NEXUS Digital Agency",
+    meta_description:
+      "Get in touch with NEXUS for your next digital project. Free consultation, expert guidance, and award-winning results.",
+    meta_keywords:
+      "contact nexus, digital agency contact, web development inquiry, project consultation",
   },
   {
-    title: 'Privacy Policy',
-    slug: 'privacy-policy',
-    template: 'custom_html',
+    title: "Privacy Policy",
+    slug: "privacy-policy",
+    template: "custom_html",
     content: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -298,14 +300,16 @@ const additionalPages = [
     </div>
 </body>
 </html>`,
-    meta_title: 'Privacy Policy - NEXUS',
-    meta_description: 'Learn how NEXUS protects your privacy and handles your personal information.',
-    meta_keywords: 'privacy policy, data protection, personal information, NEXUS'
+    meta_title: "Privacy Policy - NEXUS",
+    meta_description:
+      "Learn how NEXUS protects your privacy and handles your personal information.",
+    meta_keywords:
+      "privacy policy, data protection, personal information, NEXUS",
   },
   {
-    title: 'Terms and Conditions',
-    slug: 'terms-conditions',
-    template: 'custom_html',
+    title: "Terms and Conditions",
+    slug: "terms-conditions",
+    template: "custom_html",
     content: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -383,19 +387,20 @@ const additionalPages = [
     </div>
 </body>
 </html>`,
-    meta_title: 'Terms and Conditions - NEXUS',
-    meta_description: 'Read our terms and conditions for working with NEXUS Digital Agency.',
-    meta_keywords: 'terms conditions, service agreement, legal terms, NEXUS'
-  }
+    meta_title: "Terms and Conditions - NEXUS",
+    meta_description:
+      "Read our terms and conditions for working with NEXUS Digital Agency.",
+    meta_keywords: "terms conditions, service agreement, legal terms, NEXUS",
+  },
 ];
 
 async function createAdditionalPages() {
   let connection;
   try {
-    console.log('🔌 Connecting to database...');
+    console.log("🔌 Connecting to database...");
     connection = await mysql.createConnection(dbConfig);
-    console.log('✅ Database connected successfully!');
-    
+    console.log("✅ Database connected successfully!");
+
     for (const page of additionalPages) {
       const query = `
         INSERT INTO pages (title, slug, content, template, meta_title, meta_description, meta_keywords, status, hide_title, author_id, created_at, updated_at)
@@ -408,7 +413,7 @@ async function createAdditionalPages() {
         meta_keywords = VALUES(meta_keywords),
         updated_at = NOW()
       `;
-      
+
       const [result] = await connection.execute(query, [
         page.title,
         page.slug,
@@ -416,24 +421,23 @@ async function createAdditionalPages() {
         page.template,
         page.meta_title,
         page.meta_description,
-        page.meta_keywords
+        page.meta_keywords,
       ]);
-      
+
       console.log(`✅ Created/Updated page: ${page.title}`);
     }
-    
-    console.log('\n🎉 Additional pages created successfully!');
-    console.log('\nNew pages added to your admin panel:');
-    console.log('- Contact Us (/pages/contact)');
-    console.log('- Privacy Policy (/pages/privacy-policy)');
-    console.log('- Terms and Conditions (/pages/terms-conditions)');
-    
+
+    console.log("\n🎉 Additional pages created successfully!");
+    console.log("\nNew pages added to your admin panel:");
+    console.log("- Contact Us (/pages/contact)");
+    console.log("- Privacy Policy (/pages/privacy-policy)");
+    console.log("- Terms and Conditions (/pages/terms-conditions)");
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error("❌ Error:", error);
   } finally {
     if (connection) {
       await connection.end();
-      console.log('🔌 Database connection closed');
+      console.log("🔌 Database connection closed");
     }
     process.exit(0);
   }

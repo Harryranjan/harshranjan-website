@@ -22,13 +22,23 @@ class EmailService {
       const config = getEmailConfig(this.provider);
       this.transporter = nodemailer.createTransport(config);
 
-      // Verify connection
-      await this.transporter.verify();
-      this.initialized = true;
-      console.log(
-        `✅ Email service initialized with provider: ${this.provider}`
-      );
-      return true;
+      // Verify connection (non-blocking)
+      try {
+        await this.transporter.verify();
+        this.initialized = true;
+        console.log(
+          `✅ Email service initialized with provider: ${this.provider}`
+        );
+        return true;
+      } catch (verifyError) {
+        console.warn(
+          "⚠️  Email verification failed but continuing:",
+          verifyError.message
+        );
+        this.initialized = false;
+        this.transporter = null;
+        return false;
+      }
     } catch (error) {
       console.error("❌ Email service initialization failed:", error.message);
       this.initialized = false;

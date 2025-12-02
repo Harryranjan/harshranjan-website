@@ -67,7 +67,7 @@ export const blocksToHTML = (blocks) => {
  * Check if content is a full HTML document
  */
 export const isFullHTMLDocument = (content) => {
-  if (typeof content !== 'string') return false;
+  if (typeof content !== "string") return false;
   const trimmed = content.trim();
-  return trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html');
+  return trimmed.startsWith("<!DOCTYPE") || trimmed.startsWith("<html");
 };

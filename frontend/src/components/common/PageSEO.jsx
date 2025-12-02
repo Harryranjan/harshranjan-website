@@ -1,14 +1,14 @@
 import { Helmet } from "react-helmet-async";
 
-const PageSEO = ({ 
-  title, 
+const PageSEO = ({
+  title,
   metaTitle,
-  description, 
+  description,
   metaDescription,
-  keywords, 
+  keywords,
   canonicalUrl,
   customCSS,
-  includePreviewStyles = false
+  includePreviewStyles = false,
 }) => {
   const previewStyles = `
     .preview-content h1 {
@@ -97,10 +97,7 @@ const PageSEO = ({
   return (
     <Helmet>
       <title>{metaTitle || title}</title>
-      <meta
-        name="description"
-        content={metaDescription || description || ''}
-      />
+      <meta name="description" content={metaDescription || description || ""} />
       {keywords && <meta name="keywords" content={keywords} />}
       {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
       {includePreviewStyles && <style>{previewStyles}</style>}

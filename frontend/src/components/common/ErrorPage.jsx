@@ -1,18 +1,18 @@
 import { useNavigate } from "react-router-dom";
 
-const ErrorPage = ({ 
-  code = "404", 
+const ErrorPage = ({
+  code = "404",
   message = "Page not found",
   buttonText = "Go to Home",
-  buttonAction
+  buttonAction,
 }) => {
   const navigate = useNavigate();
-  
+
   const handleClick = () => {
     if (buttonAction) {
       buttonAction();
     } else {
-      navigate('/');
+      navigate("/");
     }
   };
 

@@ -614,7 +614,9 @@ export default function PageForm() {
                   onChange={handleInputChange}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-700">Show in navigation menu</span>
+                <span className="text-sm text-gray-700">
+                  Show in navigation menu
+                </span>
               </label>
 
               <label className="flex items-center gap-2">
@@ -625,7 +627,9 @@ export default function PageForm() {
                   onChange={handleInputChange}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-700">Hide page title on frontend</span>
+                <span className="text-sm text-gray-700">
+                  Hide page title on frontend
+                </span>
               </label>
 
               <label className="flex items-center gap-2">

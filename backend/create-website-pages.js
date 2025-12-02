@@ -1,5 +1,5 @@
-const mysql = require('mysql2/promise');
-require('dotenv').config();
+const mysql = require("mysql2/promise");
+require("dotenv").config();
 
 // Create database connection
 const dbConfig = {
@@ -7,14 +7,14 @@ const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306
+  port: process.env.DB_PORT || 3306,
 };
 
 const pages = [
   {
-    title: 'Homepage',
-    slug: 'homepage',
-    template: 'custom_html',
+    title: "Homepage",
+    slug: "homepage",
+    template: "custom_html",
     content: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -192,14 +192,16 @@ const pages = [
     </footer>
 </body>
 </html>`,
-    meta_title: 'NEXUS - Digital Agency | Premium Web Design & Development',
-    meta_description: 'Award-winning digital agency specializing in web development, mobile apps, and UI/UX design. Transform your digital presence with cutting-edge solutions.',
-    meta_keywords: 'digital agency, web development, mobile apps, UI/UX design, branding'
+    meta_title: "NEXUS - Digital Agency | Premium Web Design & Development",
+    meta_description:
+      "Award-winning digital agency specializing in web development, mobile apps, and UI/UX design. Transform your digital presence with cutting-edge solutions.",
+    meta_keywords:
+      "digital agency, web development, mobile apps, UI/UX design, branding",
   },
   {
-    title: 'Services',
-    slug: 'services',
-    template: 'custom_html',
+    title: "Services",
+    slug: "services",
+    template: "custom_html",
     content: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -350,14 +352,16 @@ const pages = [
     </section>
 </body>
 </html>`,
-    meta_title: 'Our Services - NEXUS Digital Agency',
-    meta_description: 'Explore our comprehensive digital services including web development, mobile apps, UI/UX design, branding, e-commerce, and consulting.',
-    meta_keywords: 'web development, mobile apps, UI/UX design, branding, e-commerce, digital consulting'
+    meta_title: "Our Services - NEXUS Digital Agency",
+    meta_description:
+      "Explore our comprehensive digital services including web development, mobile apps, UI/UX design, branding, e-commerce, and consulting.",
+    meta_keywords:
+      "web development, mobile apps, UI/UX design, branding, e-commerce, digital consulting",
   },
   {
-    title: 'About Us',
-    slug: 'about',
-    template: 'custom_html',
+    title: "About Us",
+    slug: "about",
+    template: "custom_html",
     content: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -549,19 +553,21 @@ const pages = [
     </section>
 </body>
 </html>`,
-    meta_title: 'About Us - NEXUS Digital Agency',
-    meta_description: 'Learn about NEXUS, a passionate team of designers and developers creating digital experiences that drive real business results.',
-    meta_keywords: 'about nexus, digital agency team, creative directors, web developers, design team'
-  }
+    meta_title: "About Us - NEXUS Digital Agency",
+    meta_description:
+      "Learn about NEXUS, a passionate team of designers and developers creating digital experiences that drive real business results.",
+    meta_keywords:
+      "about nexus, digital agency team, creative directors, web developers, design team",
+  },
 ];
 
 async function createPages() {
   let connection;
   try {
-    console.log('🔌 Connecting to database...');
+    console.log("🔌 Connecting to database...");
     connection = await mysql.createConnection(dbConfig);
-    console.log('✅ Database connected successfully!');
-    
+    console.log("✅ Database connected successfully!");
+
     for (const page of pages) {
       const query = `
         INSERT INTO pages (title, slug, content, template, meta_title, meta_description, meta_keywords, status, hide_title, author_id, created_at, updated_at)
@@ -574,7 +580,7 @@ async function createPages() {
         meta_keywords = VALUES(meta_keywords),
         updated_at = NOW()
       `;
-      
+
       const [result] = await connection.execute(query, [
         page.title,
         page.slug,
@@ -582,24 +588,23 @@ async function createPages() {
         page.template,
         page.meta_title,
         page.meta_description,
-        page.meta_keywords
+        page.meta_keywords,
       ]);
-      
+
       console.log(`✅ Created/Updated page: ${page.title}`);
     }
-    
-    console.log('\n🎉 All pages created successfully!');
-    console.log('\nYou can now see these pages in your admin panel:');
-    console.log('- Homepage (/pages/homepage)');
-    console.log('- Services (/pages/services)');
-    console.log('- About Us (/pages/about)');
-    
+
+    console.log("\n🎉 All pages created successfully!");
+    console.log("\nYou can now see these pages in your admin panel:");
+    console.log("- Homepage (/pages/homepage)");
+    console.log("- Services (/pages/services)");
+    console.log("- About Us (/pages/about)");
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error("❌ Error:", error);
   } finally {
     if (connection) {
       await connection.end();
-      console.log('🔌 Database connection closed');
+      console.log("🔌 Database connection closed");
     }
     process.exit(0);
   }

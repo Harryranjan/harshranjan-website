@@ -3,12 +3,14 @@
  * This script adds the hide_title column to the pages table
  */
 
-const { sequelize } = require('./config/database');
+const { sequelize } = require("./config/database");
 
 async function runMigration() {
   try {
-    console.log('🔄 Starting migration: Add hide_title column to pages table...');
-    
+    console.log(
+      "🔄 Starting migration: Add hide_title column to pages table..."
+    );
+
     // Check if column already exists
     const [results] = await sequelize.query(`
       SELECT COLUMN_NAME 
@@ -17,7 +19,7 @@ async function runMigration() {
     `);
 
     if (results.length > 0) {
-      console.log('ℹ️  Column hide_title already exists. Skipping migration.');
+      console.log("ℹ️  Column hide_title already exists. Skipping migration.");
       process.exit(0);
     }
 
@@ -28,8 +30,8 @@ async function runMigration() {
       AFTER show_in_menu
     `);
 
-    console.log('✅ Successfully added hide_title column to pages table');
-    
+    console.log("✅ Successfully added hide_title column to pages table");
+
     // Verify the column was added
     const [verify] = await sequelize.query(`
       SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT 
@@ -37,12 +39,12 @@ async function runMigration() {
       WHERE TABLE_NAME = 'pages' AND COLUMN_NAME = 'hide_title'
     `);
 
-    console.log('📋 Column details:', verify[0]);
-    console.log('✨ Migration completed successfully!');
-    
+    console.log("📋 Column details:", verify[0]);
+    console.log("✨ Migration completed successfully!");
+
     process.exit(0);
   } catch (error) {
-    console.error('❌ Migration failed:', error.message);
+    console.error("❌ Migration failed:", error.message);
     process.exit(1);
   }
 }

@@ -14,8 +14,8 @@ export default function DynamicPage() {
 
   // Load Tailwind CDN dynamically
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://cdn.tailwindcss.com';
+    const script = document.createElement("script");
+    script.src = "https://cdn.tailwindcss.com";
     script.async = true;
     document.head.appendChild(script);
 
@@ -36,23 +36,46 @@ export default function DynamicPage() {
       setLoading(true);
       setError(null);
       const response = await api.get(`/pages/slug/${slug}`);
-      
+
+      console.log("🔍 API Response:", response.data);
+
       // Backend returns { page, seo } structure
       const pageData = response.data.page || response.data;
-      
+
+      console.log("📄 Page Data:", {
+        title: pageData.title,
+        slug: pageData.slug,
+        status: pageData.status,
+        template: pageData.template,
+        contentLength: pageData.content?.length,
+        contentType: typeof pageData.content,
+        hasContent: !!pageData.content,
+        first100Chars: pageData.content?.substring(0, 100),
+      });
+
       // Check if page is published
-      if (pageData.status !== 'published') {
+      if (pageData.status !== "published") {
         setError("This page is not available");
         return;
       }
 
       // Check if content is a complete HTML document
-      if (isFullHTMLDocument(pageData.content)) {
+      const isFullHTML = isFullHTMLDocument(pageData.content);
+      console.log("🔍 Is Full HTML:", isFullHTML);
+
+      if (isFullHTML) {
         // It's a full HTML document - override template to blank
-        pageData.template = 'custom-html';
+        pageData.template = "custom-html";
         pageData.isFullHTML = true;
+        console.log("✅ Set as full HTML page");
       }
-      
+
+      console.log("📦 Final Page Data:", {
+        isFullHTML: pageData.isFullHTML,
+        template: pageData.template,
+        contentLength: pageData.content?.length,
+      });
+
       setPage(pageData);
     } catch (err) {
       console.error("Failed to fetch page:", err);
@@ -95,69 +118,84 @@ export default function DynamicPage() {
         <iframe
           srcDoc={page.content}
           style={{
-            width: '100%',
-            minHeight: '100vh',
-            border: 'none',
-            display: 'block'
+            width: "100%",
+            minHeight: "100vh",
+            border: "none",
+            display: "block",
           }}
           title={page.title}
         />
       ) : (
-      <div className="dynamic-page min-h-screen" style={{ background: '#f9fafb', padding: '2rem' }}>
-        {/* Render based on template */}
-        {page.template === 'blank' ? (
-          // Blank template - just render the content
-          <div 
-            className="page-content-wrapper"
-            style={{ 
-              maxWidth: '1200px', 
-              margin: '0 auto', 
-              background: 'white', 
-              padding: '3rem', 
-              borderRadius: '0.5rem',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}
-            dangerouslySetInnerHTML={{ __html: Array.isArray(page.content) ? blocksToHTML(page.content) : page.content }}
-          />
-        ) : (
-          // Default template with container
-          <div 
-            style={{ 
-              maxWidth: '1200px', 
-              margin: '0 auto', 
-              background: 'white', 
-              padding: '3rem', 
-              borderRadius: '0.5rem',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}
-          >
-            {/* Page Header - Only show if hide_title is false */}
-            {page.title && !page.hide_title && (
-              <header style={{ marginBottom: '2rem' }}>
-                <h1 style={{ 
-                  fontSize: '2.5rem', 
-                  fontWeight: 'bold', 
-                  marginBottom: '1rem', 
-                  color: '#111827',
-                  lineHeight: '1.2'
-                }}>
-                  {page.title}
-                </h1>
-                {page.excerpt && (
-                  <p style={{ fontSize: '1.125rem', color: '#6b7280' }}>{page.excerpt}</p>
-                )}
-              </header>
-            )}
-
-            {/* Page Content - Render with all Tailwind classes preserved */}
-            <div 
-              className="preview-content"
-              style={{ fontSize: '1.125rem', color: '#374151' }}
-              dangerouslySetInnerHTML={{ __html: Array.isArray(page.content) ? blocksToHTML(page.content) : page.content }}
+        <div
+          className="dynamic-page min-h-screen"
+          style={{ background: "#f9fafb", padding: "2rem" }}
+        >
+          {/* Render based on template */}
+          {page.template === "blank" ? (
+            // Blank template - just render the content
+            <div
+              className="page-content-wrapper"
+              style={{
+                maxWidth: "1200px",
+                margin: "0 auto",
+                background: "white",
+                padding: "3rem",
+                borderRadius: "0.5rem",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+              }}
+              dangerouslySetInnerHTML={{
+                __html: Array.isArray(page.content)
+                  ? blocksToHTML(page.content)
+                  : page.content,
+              }}
             />
-          </div>
-        )}
-      </div>
+          ) : (
+            // Default template with container
+            <div
+              style={{
+                maxWidth: "1200px",
+                margin: "0 auto",
+                background: "white",
+                padding: "3rem",
+                borderRadius: "0.5rem",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+              }}
+            >
+              {/* Page Header - Only show if hide_title is false */}
+              {page.title && !page.hide_title && (
+                <header style={{ marginBottom: "2rem" }}>
+                  <h1
+                    style={{
+                      fontSize: "2.5rem",
+                      fontWeight: "bold",
+                      marginBottom: "1rem",
+                      color: "#111827",
+                      lineHeight: "1.2",
+                    }}
+                  >
+                    {page.title}
+                  </h1>
+                  {page.excerpt && (
+                    <p style={{ fontSize: "1.125rem", color: "#6b7280" }}>
+                      {page.excerpt}
+                    </p>
+                  )}
+                </header>
+              )}
+
+              {/* Page Content - Render with all Tailwind classes preserved */}
+              <div
+                className="preview-content"
+                style={{ fontSize: "1.125rem", color: "#374151" }}
+                dangerouslySetInnerHTML={{
+                  __html: Array.isArray(page.content)
+                    ? blocksToHTML(page.content)
+                    : page.content,
+                }}
+              />
+            </div>
+          )}
+        </div>
       )}
 
       {/* Custom JavaScript */}

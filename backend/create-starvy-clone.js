@@ -1,18 +1,18 @@
-const mysql = require('mysql2/promise');
-require('dotenv').config();
+const mysql = require("mysql2/promise");
+require("dotenv").config();
 
 const dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306
+  port: process.env.DB_PORT || 3306,
 };
 
 const starvyClonePage = {
-  title: 'Harsh Ranjan - AI Developer Services',
-  slug: 'ai-developer-services',
-  template: 'custom',
+  title: "Harsh Ranjan - AI Developer Services",
+  slug: "ai-developer-services",
+  template: "custom",
   content: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -917,18 +917,21 @@ const starvyClonePage = {
     </script>
 </body>
 </html>`,
-  meta_title: 'Harsh Ranjan - Simplify Your Development with AI-Powered Precision | AI Development Services',
-  meta_description: 'Effortlessly build modern applications, integrate AI solutions, and scale your digital presence with our intelligent development services. Get started free today.',
-  meta_keywords: 'AI development, machine learning integration, web development, React developer, Node.js, Python, cloud solutions, AI assistant, intelligent applications'
+  meta_title:
+    "Harsh Ranjan - Simplify Your Development with AI-Powered Precision | AI Development Services",
+  meta_description:
+    "Effortlessly build modern applications, integrate AI solutions, and scale your digital presence with our intelligent development services. Get started free today.",
+  meta_keywords:
+    "AI development, machine learning integration, web development, React developer, Node.js, Python, cloud solutions, AI assistant, intelligent applications",
 };
 
 async function createStarvyClone() {
   let connection;
   try {
-    console.log('🚀 Creating Starvy-style AI Development Services page...');
+    console.log("🚀 Creating Starvy-style AI Development Services page...");
     connection = await mysql.createConnection(dbConfig);
-    console.log('✅ Database connected!');
-    
+    console.log("✅ Database connected!");
+
     const query = `
       INSERT INTO pages (title, slug, content, template, meta_title, meta_description, meta_keywords, status, hide_title, author_id, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, 'published', 0, 1, NOW(), NOW())
@@ -940,7 +943,7 @@ async function createStarvyClone() {
       meta_keywords = VALUES(meta_keywords),
       updated_at = NOW()
     `;
-    
+
     const [result] = await connection.execute(query, [
       starvyClonePage.title,
       starvyClonePage.slug,
@@ -948,36 +951,35 @@ async function createStarvyClone() {
       starvyClonePage.template,
       starvyClonePage.meta_title,
       starvyClonePage.meta_description,
-      starvyClonePage.meta_keywords
+      starvyClonePage.meta_keywords,
     ]);
-    
-    console.log('🎉 EXACT Starvy-style page created successfully!');
-    console.log('\n🔥 STARVY CLONE FEATURES:');
-    console.log('✅ EXACT same layout structure as Starvy');
-    console.log('✅ Same navigation style and positioning');
-    console.log('✅ Identical hero section with breadcrumb');
-    console.log('✅ Same features grid layout (3 columns)');
+
+    console.log("🎉 EXACT Starvy-style page created successfully!");
+    console.log("\n🔥 STARVY CLONE FEATURES:");
+    console.log("✅ EXACT same layout structure as Starvy");
+    console.log("✅ Same navigation style and positioning");
+    console.log("✅ Identical hero section with breadcrumb");
+    console.log("✅ Same features grid layout (3 columns)");
     console.log('✅ Identical "How It Works" 3-step process');
-    console.log('✅ Same testimonials grid with avatar initials');
-    console.log('✅ Identical pricing cards with toggle');
-    console.log('✅ Same FAQ accordion functionality');
-    console.log('✅ Same CTA section design');
-    console.log('✅ Identical footer structure');
-    console.log('✅ Same color scheme and typography');
-    console.log('✅ Same button styles and hover effects');
-    
-    console.log('\n🎯 CUSTOMIZED FOR YOU:');
-    console.log('📝 Content: AI Development Services');
+    console.log("✅ Same testimonials grid with avatar initials");
+    console.log("✅ Identical pricing cards with toggle");
+    console.log("✅ Same FAQ accordion functionality");
+    console.log("✅ Same CTA section design");
+    console.log("✅ Identical footer structure");
+    console.log("✅ Same color scheme and typography");
+    console.log("✅ Same button styles and hover effects");
+
+    console.log("\n🎯 CUSTOMIZED FOR YOU:");
+    console.log("📝 Content: AI Development Services");
     console.log('🎨 Branding: "Harsh" with your personal touch');
-    console.log('🔧 Services: Development, AI Integration, Cloud');
-    console.log('💰 Pricing: Free/Pro/Enterprise tiers');
-    
-    console.log('\n🔗 ACCESS YOUR STARVY CLONE AT:');
-    console.log('Frontend: http://localhost:5173/pages/ai-developer-services');
-    console.log('Backend:  http://localhost:3000/pages/ai-developer-services');
-    
+    console.log("🔧 Services: Development, AI Integration, Cloud");
+    console.log("💰 Pricing: Free/Pro/Enterprise tiers");
+
+    console.log("\n🔗 ACCESS YOUR STARVY CLONE AT:");
+    console.log("Frontend: http://localhost:5173/pages/ai-developer-services");
+    console.log("Backend:  http://localhost:3000/pages/ai-developer-services");
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error("❌ Error:", error);
   } finally {
     if (connection) {
       await connection.end();
