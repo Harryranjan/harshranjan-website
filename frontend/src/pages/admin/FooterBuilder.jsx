@@ -4,6 +4,14 @@ import { Helmet } from "react-helmet-async";
 import api from "../../utils/api";
 import { Spinner, Modal, LivePreview } from "../../components/ui";
 
+// Utility to decode HTML entities
+const decodeHTMLEntities = (text) => {
+  if (!text) return text;
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
+};
+
 export default function FooterBuilder() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -11,6 +19,7 @@ export default function FooterBuilder() {
 
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [showLivePreview, setShowLivePreview] = useState(false);
@@ -97,10 +106,67 @@ export default function FooterBuilder() {
   const fetchFooter = async () => {
     try {
       const response = await api.get(`/menus/${id}`);
-      setFormData(response.data.menu);
+      const menuData = response.data.menu;
+      
+      // Decode HTML entities in customCode if present
+      if (menuData.settings && menuData.settings.customCode) {
+        menuData.settings.customCode = decodeHTMLEntities(menuData.settings.customCode);
+      }
+      
+      // Ensure all required settings exist
+      if (!menuData.settings) {
+        menuData.settings = {};
+      }
+      
+      // Merge with default settings
+      menuData.settings = {
+        type: menuData.settings.type || "footer-builder",
+        layout: menuData.settings.layout || "4-column",
+        columns: menuData.settings.columns || [
+          {
+            title: "Company",
+            items: [
+              { label: "About", url: "/about" },
+              { label: "Services", url: "/services" },
+              { label: "Contact", url: "/contact" },
+            ],
+          },
+          {
+            title: "Resources",
+            items: [
+              { label: "Blog", url: "/blog" },
+              { label: "FAQ", url: "/faq" },
+            ],
+          },
+        ],
+        copyright: menuData.settings.copyright || {
+          enabled: true,
+          text: "© 2025 Your Company. All rights reserved.",
+        },
+        socialIcons: menuData.settings.socialIcons || {
+          enabled: false,
+          icons: [],
+        },
+        newsletter: menuData.settings.newsletter || {
+          enabled: false,
+          title: "Subscribe to our newsletter",
+          placeholder: "Enter your email",
+        },
+        styles: menuData.settings.styles || {
+          backgroundColor: "#1F2937",
+          textColor: "#FFFFFF",
+          linkColor: "#9CA3AF",
+          linkHoverColor: "#FFFFFF",
+          borderColor: "#374151",
+        },
+        customCode: menuData.settings.customCode || "",
+      };
+      
+      setFormData(menuData);
+      setError(null);
     } catch (error) {
       console.error("Failed to fetch footer:", error);
-      alert("Failed to load footer");
+      setError(error.response?.data?.message || error.message || "Failed to load footer");
     } finally {
       setLoading(false);
     }
@@ -297,6 +363,23 @@ export default function FooterBuilder() {
     return (
       <div className="flex justify-center items-center py-12">
         <Spinner size="lg" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+          <h3 className="text-red-800 font-bold text-lg mb-2">Error Loading Footer</h3>
+          <p className="text-red-600">{error}</p>
+          <button
+            onClick={() => navigate("/admin/menus")}
+            className="mt-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+          >
+            Back to Menus
+          </button>
+        </div>
       </div>
     );
   }

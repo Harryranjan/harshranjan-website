@@ -26,7 +26,17 @@ const VideoCard = ({
     >
       {/* Video/Thumbnail Container - 16:9 aspect ratio */}
       <div className="aspect-video bg-navy/20 relative">
-        {thumbnailUrl ? (
+        {videoUrl ? (
+          <video 
+            src={videoUrl}
+            className="w-full h-full object-cover"
+            muted
+            loop
+            playsInline
+            onMouseEnter={(e) => e.target.play()}
+            onMouseLeave={(e) => e.target.pause()}
+          />
+        ) : thumbnailUrl ? (
           <img 
             src={thumbnailUrl} 
             alt={title}

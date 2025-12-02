@@ -135,6 +135,10 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files (uploads)
 app.use("/uploads", express.static("uploads"));
 
+// Serve videos from root Videos folder
+const path = require("path");
+app.use("/Videos", express.static(path.join(__dirname, "..", "Videos")));
+
 // Logging middleware
 app.use(morgan("dev"));
 

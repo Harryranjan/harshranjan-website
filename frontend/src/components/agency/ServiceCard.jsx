@@ -22,43 +22,37 @@ const ServiceCard = ({
   };
 
   return (
-    <div className={`${variantClasses[variant]} p-8 rounded-xl shadow-lg transition-all duration-300 h-full flex flex-col ${className}`}>
+    <div className={`${variantClasses[variant]} p-8 rounded-2xl shadow-lg transition-all duration-300 h-full flex flex-col group ${className}`}>
       {/* Icon */}
-      <div className="w-16 h-16 bg-gradient-cta rounded-lg flex items-center justify-center mb-6">
+      <div className="w-20 h-20 bg-gradient-to-br from-purple to-cyan rounded-2xl flex items-center justify-center mx-auto mb-6">
         <i className={`${icon} text-3xl text-white`}></i>
       </div>
 
       {/* Title & Subtitle */}
-      <h3 className="text-2xl font-bold mb-2">
-        <span className="gradient-text">{title}</span>
-      </h3>
+      <h3 className="text-2xl font-bold mb-4 text-center text-navy">{title}</h3>
       {subtitle && (
-        <p className="text-gray-500 text-sm mb-4">{subtitle}</p>
+        <p className="text-gray-500 text-sm mb-4 text-center">{subtitle}</p>
       )}
 
       {/* Description */}
-      <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
+      <p className="text-gray-600 text-center mb-6 leading-relaxed">{description}</p>
 
       {/* Features List */}
       {features.length > 0 && (
-        <ul className="space-y-2 mb-6 flex-grow">
+        <ul className="space-y-3 mb-8 flex-grow">
           {features.map((feature, index) => (
-            <li key={index} className="flex items-start">
-              <i className="fas fa-check text-cyan mr-2 mt-1"></i>
-              <span className="text-gray-600">{feature}</span>
+            <li key={index} className="flex items-start space-x-3">
+              <i className="fas fa-check text-purple mt-1"></i>
+              <span className="text-sm text-gray-700">{feature}</span>
             </li>
           ))}
         </ul>
       )}
 
       {/* CTA */}
-      <a 
-        href={ctaLink} 
-        className="inline-flex items-center text-purple hover:text-cyan transition-colors duration-300 font-semibold mt-auto"
-      >
+      <button className="w-full py-3 rounded-full border-2 border-purple text-purple hover:bg-purple hover:text-white transition font-semibold">
         {ctaText}
-        <i className="fas fa-arrow-right ml-2"></i>
-      </a>
+      </button>
     </div>
   );
 };

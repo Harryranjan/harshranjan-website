@@ -16,10 +16,23 @@ export default {
           800: "#075985",
           900: "#0c4a6e",
         },
+        // Agency Brand Colors
+        navy: '#0F172A',
+        purple: '#8B5CF6',
+        cyan: '#06B6D4',
+        coral: '#F97316',
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         heading: ["Poppins", "sans-serif"],
+        display: ["Space Grotesk", "sans-serif"],
+        body: ["Inter", "sans-serif"],
+      },
+      backgroundImage: {
+        'gradient-hero': 'linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #312E81 100%)',
+        'gradient-cta': 'linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%)',
+        'gradient-card': 'linear-gradient(180deg, #FFFFFF 0%, #FAF5FF 100%)',
+        'gradient-button': 'linear-gradient(135deg, #06B6D4 0%, #0891B2 100%)',
       },
     },
   },

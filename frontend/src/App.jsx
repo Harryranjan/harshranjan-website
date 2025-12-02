@@ -3,10 +3,12 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import PublicLayout from "./layouts/PublicLayout";
+import AgencyLayout from "./layouts/AgencyLayout";
 
 // Public Pages
 import Home from "./pages/Home";
 import Homepage from "./pages/Homepage";
+import AgencyHomePage from "./pages/AgencyHomePage";
 import ServicesPage from "./pages/ServicesPage";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -62,6 +64,14 @@ function App() {
         {/* Public Routes */}
         <Route
           path="/"
+          element={
+            <AgencyLayout>
+              <AgencyHomePage />
+            </AgencyLayout>
+          }
+        />
+        <Route
+          path="/home-old"
           element={
             <PublicLayout>
               <Home />

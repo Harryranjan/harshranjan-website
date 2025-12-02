@@ -19,6 +19,7 @@ const DynamicHeader = () => {
 
         // Use custom code if available
         if (settings && settings.customCode) {
+          console.log('DynamicHeader - Received HTML:', settings.customCode.substring(0, 100));
           setHeaderHTML(settings.customCode);
         }
       }
@@ -50,6 +51,8 @@ const DynamicHeader = () => {
   };
 
   const cleanHeaderHTML = extractHeaderContent(headerHTML);
+
+  console.log('DynamicHeader - Rendering HTML:', cleanHeaderHTML.substring(0, 100));
 
   return (
     <div

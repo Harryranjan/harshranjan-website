@@ -43,8 +43,8 @@ export default function MenuList() {
 
   const toggleActive = async (menu) => {
     try {
+      // Only send is_active field to avoid re-encoding settings
       await api.put(`/menus/${menu.id}`, {
-        ...menu,
         is_active: !menu.is_active,
       });
       setMenus(

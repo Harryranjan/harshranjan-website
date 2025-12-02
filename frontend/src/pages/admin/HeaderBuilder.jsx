@@ -4,6 +4,14 @@ import { Helmet } from "react-helmet-async";
 import api from "../../utils/api";
 import { Spinner, Modal, LivePreview, ImageUpload } from "../../components/ui";
 
+// Utility to decode HTML entities
+const decodeHTMLEntities = (text) => {
+  if (!text) return text;
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
+};
+
 export default function HeaderBuilder() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -11,6 +19,7 @@ export default function HeaderBuilder() {
 
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [showLivePreview, setShowLivePreview] = useState(false);
@@ -78,10 +87,71 @@ export default function HeaderBuilder() {
   const fetchHeader = async () => {
     try {
       const response = await api.get(`/menus/${id}`);
-      setFormData(response.data.menu);
+      const menuData = response.data.menu;
+      
+      // Decode HTML entities in customCode if present
+      if (menuData.settings && menuData.settings.customCode) {
+        menuData.settings.customCode = decodeHTMLEntities(menuData.settings.customCode);
+      }
+      
+      // Ensure all required settings exist
+      if (!menuData.settings) {
+        menuData.settings = {};
+      }
+      
+      // Merge with default settings to ensure all properties exist
+      menuData.settings = {
+        type: menuData.settings.type || "header-builder",
+        layout: menuData.settings.layout || "centered",
+        sticky: menuData.settings.sticky !== undefined ? menuData.settings.sticky : true,
+        transparent: menuData.settings.transparent || false,
+        logo: menuData.settings.logo || {
+          type: "text",
+          text: "Logo",
+          image: "",
+          position: "left",
+          width: "150px",
+        },
+        navigation: menuData.settings.navigation || {
+          enabled: true,
+          position: "center",
+          items: [],
+        },
+        cta: menuData.settings.cta || {
+          enabled: true,
+          text: "Get Started",
+          url: "/contact",
+          style: "primary",
+        },
+        topBar: menuData.settings.topBar || {
+          enabled: false,
+          text: "",
+          backgroundColor: "#3B82F6",
+          textColor: "#FFFFFF",
+        },
+        search: menuData.settings.search || {
+          enabled: false,
+          placeholder: "Search...",
+        },
+        socialIcons: menuData.settings.socialIcons || {
+          enabled: false,
+          icons: [],
+        },
+        styles: menuData.settings.styles || {
+          backgroundColor: "#FFFFFF",
+          textColor: "#1F2937",
+          hoverColor: "#3B82F6",
+          height: "80px",
+          shadow: true,
+        },
+        customCode: menuData.settings.customCode || "",
+      };
+      
+      setFormData(menuData);
+      setError(null);
     } catch (error) {
       console.error("Failed to fetch header:", error);
-      alert("Failed to load header");
+      setError(error.response?.data?.message || error.message || "Failed to load header");
     } finally {
       setLoading(false);
     }
@@ -235,6 +305,23 @@ export default function HeaderBuilder() {
     return (
       <div className="flex justify-center items-center py-12">
         <Spinner size="lg" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+          <h3 className="text-red-800 font-bold text-lg mb-2">Error Loading Header</h3>
+          <p className="text-red-600">{error}</p>
+          <button
+            onClick={() => navigate("/admin/menus")}
+            className="mt-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+          >
+            Back to Menus
+          </button>
+        </div>
       </div>
     );
   }

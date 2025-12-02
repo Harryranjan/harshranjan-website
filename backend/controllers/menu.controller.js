@@ -140,13 +140,15 @@ exports.updateMenu = async (req, res) => {
       return res.status(404).json({ message: "Menu not found" });
     }
 
-    await menu.update({
-      name,
-      location,
-      description,
-      is_active,
-      settings: settings || menu.settings,
-    });
+    // Only update fields that are provided in request body
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (location !== undefined) updateData.location = location;
+    if (description !== undefined) updateData.description = description;
+    if (is_active !== undefined) updateData.is_active = is_active;
+    if (settings !== undefined) updateData.settings = settings;
+
+    await menu.update(updateData);
 
     res.json({ message: "Menu updated successfully", menu });
   } catch (error) {
