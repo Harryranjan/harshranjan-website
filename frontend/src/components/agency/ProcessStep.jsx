@@ -1,23 +1,23 @@
-import React from 'react';
+import React from "react";
 
 /**
  * ProcessStep Component
  * Reusable component for displaying process/workflow steps
  * Used in: Process section, How it Works
  */
-const ProcessStep = ({ 
+const ProcessStep = ({
   number,
   title,
   description,
   icon,
   isLast = false,
-  variant = 'default',
-  className = ''
+  variant = "default",
+  className = "",
 }) => {
   const variantClasses = {
-    default: 'bg-white shadow-lg',
-    glass: 'glass-card',
-    minimal: 'bg-transparent'
+    default: "bg-white shadow-lg",
+    glass: "glass-card",
+    minimal: "bg-transparent",
   };
 
   return (
@@ -28,7 +28,9 @@ const ProcessStep = ({
       )}
 
       {/* Step Card */}
-      <div className={`${variantClasses[variant]} p-6 rounded-xl hover:shadow-xl transition-all duration-300 relative z-10`}>
+      <div
+        className={`${variantClasses[variant]} p-6 rounded-xl hover:shadow-xl transition-all duration-300 relative z-10`}
+      >
         {/* Step Number */}
         <div className="w-12 h-12 bg-gradient-cta rounded-full flex items-center justify-center mb-4">
           <span className="text-white font-bold text-xl">{number}</span>

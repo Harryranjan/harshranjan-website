@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 /**
  * VideoCard Component
  * Reusable card for displaying video portfolio items with thumbnail and overlay
  * Used in: Work/Portfolio section
  */
-const VideoCard = ({ 
+const VideoCard = ({
   videoUrl,
   thumbnailUrl,
   title,
@@ -13,12 +13,12 @@ const VideoCard = ({
   category,
   stats,
   onClick,
-  className = ''
+  className = "",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div 
+    <div
       className={`relative group cursor-pointer rounded-xl overflow-hidden shadow-lg ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -27,7 +27,7 @@ const VideoCard = ({
       {/* Video/Thumbnail Container - 16:9 aspect ratio */}
       <div className="aspect-video bg-navy/20 relative">
         {videoUrl ? (
-          <video 
+          <video
             src={videoUrl}
             className="w-full h-full object-cover"
             muted
@@ -37,8 +37,8 @@ const VideoCard = ({
             onMouseLeave={(e) => e.target.pause()}
           />
         ) : thumbnailUrl ? (
-          <img 
-            src={thumbnailUrl} 
+          <img
+            src={thumbnailUrl}
             alt={title}
             className="w-full h-full object-cover"
           />
@@ -47,17 +47,25 @@ const VideoCard = ({
             <i className="fas fa-play text-6xl text-white opacity-50"></i>
           </div>
         )}
-        
+
         {/* Play Button Overlay */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className={`w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg transition-transform duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}>
+          <div
+            className={`w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg transition-transform duration-300 ${
+              isHovered ? "scale-110" : "scale-100"
+            }`}
+          >
             <i className="fas fa-play text-purple text-xl ml-1"></i>
           </div>
         </div>
       </div>
 
       {/* Info Overlay - Always visible, enhanced on hover */}
-      <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy/95 to-transparent p-6 transition-all duration-300 ${isHovered ? 'translate-y-0' : 'translate-y-0'}`}>
+      <div
+        className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy/95 to-transparent p-6 transition-all duration-300 ${
+          isHovered ? "translate-y-0" : "translate-y-0"
+        }`}
+      >
         {category && (
           <span className="inline-block px-3 py-1 bg-cyan/20 text-cyan text-xs rounded-full mb-2">
             {category}
@@ -65,7 +73,7 @@ const VideoCard = ({
         )}
         <h4 className="text-lg font-bold text-white mb-2">{title}</h4>
         <p className="text-gray-300 text-sm mb-3">{description}</p>
-        
+
         {/* Stats */}
         {stats && (
           <div className="flex items-center space-x-4 text-sm">

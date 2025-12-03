@@ -1,28 +1,30 @@
-import React from 'react';
+import React from "react";
 
 /**
  * ServiceCard Component
  * Reusable card for displaying services with icon, title, description, and CTA
  * Used in: Services section
  */
-const ServiceCard = ({ 
+const ServiceCard = ({
   icon,
   title,
   subtitle,
   description,
   features = [],
-  ctaText = 'Learn More',
-  ctaLink = '#',
-  variant = 'default',
-  className = ''
+  ctaText = "Learn More",
+  ctaLink = "#",
+  variant = "default",
+  className = "",
 }) => {
   const variantClasses = {
-    default: 'bg-white hover:shadow-2xl',
-    glass: 'glass-card'
+    default: "bg-white hover:shadow-2xl",
+    glass: "glass-card",
   };
 
   return (
-    <div className={`${variantClasses[variant]} p-8 rounded-2xl shadow-lg transition-all duration-300 h-full flex flex-col group ${className}`}>
+    <div
+      className={`${variantClasses[variant]} p-8 rounded-2xl shadow-lg transition-all duration-300 h-full flex flex-col group ${className}`}
+    >
       {/* Icon */}
       <div className="w-20 h-20 bg-gradient-to-br from-purple to-cyan rounded-2xl flex items-center justify-center mx-auto mb-6">
         <i className={`${icon} text-3xl text-white`}></i>
@@ -35,7 +37,9 @@ const ServiceCard = ({
       )}
 
       {/* Description */}
-      <p className="text-gray-600 text-center mb-6 leading-relaxed">{description}</p>
+      <p className="text-gray-600 text-center mb-6 leading-relaxed">
+        {description}
+      </p>
 
       {/* Features List */}
       {features.length > 0 && (

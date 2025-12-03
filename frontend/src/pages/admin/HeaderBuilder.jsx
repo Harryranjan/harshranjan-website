@@ -7,7 +7,7 @@ import { Spinner, Modal, LivePreview, ImageUpload } from "../../components/ui";
 // Utility to decode HTML entities
 const decodeHTMLEntities = (text) => {
   if (!text) return text;
-  const textarea = document.createElement('textarea');
+  const textarea = document.createElement("textarea");
   textarea.innerHTML = text;
   return textarea.value;
 };
@@ -88,22 +88,27 @@ export default function HeaderBuilder() {
     try {
       const response = await api.get(`/menus/${id}`);
       const menuData = response.data.menu;
-      
+
       // Decode HTML entities in customCode if present
       if (menuData.settings && menuData.settings.customCode) {
-        menuData.settings.customCode = decodeHTMLEntities(menuData.settings.customCode);
+        menuData.settings.customCode = decodeHTMLEntities(
+          menuData.settings.customCode
+        );
       }
-      
+
       // Ensure all required settings exist
       if (!menuData.settings) {
         menuData.settings = {};
       }
-      
+
       // Merge with default settings to ensure all properties exist
       menuData.settings = {
         type: menuData.settings.type || "header-builder",
         layout: menuData.settings.layout || "centered",
-        sticky: menuData.settings.sticky !== undefined ? menuData.settings.sticky : true,
+        sticky:
+          menuData.settings.sticky !== undefined
+            ? menuData.settings.sticky
+            : true,
         transparent: menuData.settings.transparent || false,
         logo: menuData.settings.logo || {
           type: "text",
@@ -146,12 +151,16 @@ export default function HeaderBuilder() {
         },
         customCode: menuData.settings.customCode || "",
       };
-      
+
       setFormData(menuData);
       setError(null);
     } catch (error) {
       console.error("Failed to fetch header:", error);
-      setError(error.response?.data?.message || error.message || "Failed to load header");
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to load header"
+      );
     } finally {
       setLoading(false);
     }
@@ -313,7 +322,9 @@ export default function HeaderBuilder() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h3 className="text-red-800 font-bold text-lg mb-2">Error Loading Header</h3>
+          <h3 className="text-red-800 font-bold text-lg mb-2">
+            Error Loading Header
+          </h3>
           <p className="text-red-600">{error}</p>
           <button
             onClick={() => navigate("/admin/menus")}

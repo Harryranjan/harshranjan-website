@@ -7,7 +7,7 @@ import { Spinner, Modal, LivePreview } from "../../components/ui";
 // Utility to decode HTML entities
 const decodeHTMLEntities = (text) => {
   if (!text) return text;
-  const textarea = document.createElement('textarea');
+  const textarea = document.createElement("textarea");
   textarea.innerHTML = text;
   return textarea.value;
 };
@@ -92,7 +92,30 @@ export default function FooterBuilder() {
         linkColor: "#9CA3AF",
         linkHoverColor: "#FFFFFF",
         borderColor: "#374151",
+        accentColor: "#8B5CF6",
       },
+      spacing: {
+        paddingTop: "64",
+        paddingBottom: "32",
+        paddingX: "16",
+        columnGap: "48",
+        rowGap: "32",
+        sectionGap: "64",
+      },
+      layout: {
+        columnWidths: "equal", // equal, custom
+        customWidths: ["25%", "25%", "25%", "25%"],
+        alignment: "left", // left, center, right
+        mobileStack: true,
+      },
+      typography: {
+        headingSize: "20",
+        linkSize: "16",
+        headingWeight: "700",
+        linkWeight: "400",
+        lineHeight: "1.6",
+      },
+      theme: "modern", // modern, minimal, corporate, creative
       customCode: "",
     },
   });
@@ -107,17 +130,19 @@ export default function FooterBuilder() {
     try {
       const response = await api.get(`/menus/${id}`);
       const menuData = response.data.menu;
-      
+
       // Decode HTML entities in customCode if present
       if (menuData.settings && menuData.settings.customCode) {
-        menuData.settings.customCode = decodeHTMLEntities(menuData.settings.customCode);
+        menuData.settings.customCode = decodeHTMLEntities(
+          menuData.settings.customCode
+        );
       }
-      
+
       // Ensure all required settings exist
       if (!menuData.settings) {
         menuData.settings = {};
       }
-      
+
       // Merge with default settings
       menuData.settings = {
         type: menuData.settings.type || "footer-builder",
@@ -158,15 +183,42 @@ export default function FooterBuilder() {
           linkColor: "#9CA3AF",
           linkHoverColor: "#FFFFFF",
           borderColor: "#374151",
+          accentColor: "#8B5CF6",
         },
+        spacing: menuData.settings.spacing || {
+          paddingTop: "64",
+          paddingBottom: "32",
+          paddingX: "16",
+          columnGap: "48",
+          rowGap: "32",
+          sectionGap: "64",
+        },
+        layout: menuData.settings.layout || {
+          columnWidths: "equal",
+          customWidths: ["25%", "25%", "25%", "25%"],
+          alignment: "left",
+          mobileStack: true,
+        },
+        typography: menuData.settings.typography || {
+          headingSize: "20",
+          linkSize: "16",
+          headingWeight: "700",
+          linkWeight: "400",
+          lineHeight: "1.6",
+        },
+        theme: menuData.settings.theme || "modern",
         customCode: menuData.settings.customCode || "",
       };
-      
+
       setFormData(menuData);
       setError(null);
     } catch (error) {
       console.error("Failed to fetch footer:", error);
-      setError(error.response?.data?.message || error.message || "Failed to load footer");
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to load footer"
+      );
     } finally {
       setLoading(false);
     }
@@ -371,7 +423,9 @@ export default function FooterBuilder() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h3 className="text-red-800 font-bold text-lg mb-2">Error Loading Footer</h3>
+          <h3 className="text-red-800 font-bold text-lg mb-2">
+            Error Loading Footer
+          </h3>
           <p className="text-red-600">{error}</p>
           <button
             onClick={() => navigate("/admin/menus")}
@@ -457,8 +511,8 @@ ${code}
 
       {/* Top Action Bar */}
       <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 gap-4">
+          <div className="flex items-center gap-3 flex-wrap">
             <button
               type="button"
               onClick={() => setEditorMode("visual")}
@@ -509,17 +563,34 @@ ${code}
             </button>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap" style={{ minHeight: '44px' }}>
             <button
               type="button"
-              onClick={() => setShowLivePreview(true)}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+              onClick={() => {
+                console.log('Live Preview button clicked!');
+                setShowLivePreview(true);
+              }}
+              className="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-lg transition shadow-md font-medium"
+              style={{ 
+                display: 'flex',
+                visibility: 'visible',
+                opacity: 1,
+                zIndex: 10,
+                minWidth: '140px',
+                backgroundColor: '#8B5CF6',
+                color: '#FFFFFF',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7C3AED'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#8B5CF6'}
             >
               <svg
                 className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                style={{ color: '#FFFFFF' }}
               >
                 <path
                   strokeLinecap="round"
@@ -534,7 +605,7 @@ ${code}
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                 />
               </svg>
-              Live Preview
+              <span style={{ color: '#FFFFFF' }}>Live Preview</span>
             </button>
             <button
               type="button"
@@ -950,6 +1021,263 @@ ${code}
                           placeholder="#9CA3AF"
                         />
                       </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Accent Color
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={formData.settings.styles.accentColor || "#8B5CF6"}
+                          onChange={(e) =>
+                            handleSettingChange(
+                              "styles.accentColor",
+                              e.target.value
+                            )
+                          }
+                          className="w-12 h-12 border border-gray-300 rounded-lg cursor-pointer"
+                        />
+                        <input
+                          type="text"
+                          value={formData.settings.styles.accentColor || "#8B5CF6"}
+                          onChange={(e) =>
+                            handleSettingChange(
+                              "styles.accentColor",
+                              e.target.value
+                            )
+                          }
+                          className="flex-1 border border-gray-300 rounded px-2 py-1 text-xs font-mono uppercase"
+                          placeholder="#8B5CF6"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Theme Selection */}
+                <div className="pb-6 border-b border-gray-200">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-4">
+                    Style Theme
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {[
+                      { value: "modern", label: "Modern", desc: "Gradients & animations" },
+                      { value: "minimal", label: "Minimal", desc: "Clean & simple" },
+                      { value: "corporate", label: "Corporate", desc: "Professional look" },
+                      { value: "creative", label: "Creative", desc: "Bold & colorful" }
+                    ].map((theme) => (
+                      <button
+                        key={theme.value}
+                        type="button"
+                        onClick={() => handleSettingChange("theme", theme.value)}
+                        className={`p-4 border-2 rounded-lg text-left transition ${
+                          formData.settings.theme === theme.value
+                            ? "border-blue-600 bg-blue-50"
+                            : "border-gray-200 hover:border-blue-300"
+                        }`}
+                      >
+                        <div className="font-semibold text-sm mb-1">{theme.label}</div>
+                        <div className="text-xs text-gray-500">{theme.desc}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Spacing Controls */}
+                <div className="pb-6 border-b border-gray-200">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-4">
+                    Spacing & Padding
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Padding Top (px)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.settings.spacing?.paddingTop || "64"}
+                        onChange={(e) =>
+                          handleSettingChange("spacing.paddingTop", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Padding Bottom (px)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.settings.spacing?.paddingBottom || "32"}
+                        onChange={(e) =>
+                          handleSettingChange("spacing.paddingBottom", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Horizontal Padding (px)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.settings.spacing?.paddingX || "16"}
+                        onChange={(e) =>
+                          handleSettingChange("spacing.paddingX", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Column Gap (px)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.settings.spacing?.columnGap || "48"}
+                        onChange={(e) =>
+                          handleSettingChange("spacing.columnGap", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Row Gap (px)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.settings.spacing?.rowGap || "32"}
+                        onChange={(e) =>
+                          handleSettingChange("spacing.rowGap", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Section Gap (px)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.settings.spacing?.sectionGap || "64"}
+                        onChange={(e) =>
+                          handleSettingChange("spacing.sectionGap", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Typography Controls */}
+                <div className="pb-6 border-b border-gray-200">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-4">
+                    Typography
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Heading Size (px)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.settings.typography?.headingSize || "20"}
+                        onChange={(e) =>
+                          handleSettingChange("typography.headingSize", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Link Size (px)
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.settings.typography?.linkSize || "16"}
+                        onChange={(e) =>
+                          handleSettingChange("typography.linkSize", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Heading Weight
+                      </label>
+                      <select
+                        value={formData.settings.typography?.headingWeight || "700"}
+                        onChange={(e) =>
+                          handleSettingChange("typography.headingWeight", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      >
+                        <option value="400">Normal</option>
+                        <option value="500">Medium</option>
+                        <option value="600">Semibold</option>
+                        <option value="700">Bold</option>
+                        <option value="800">Extrabold</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Layout Controls */}
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-4">
+                    Layout Options
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Column Width Distribution
+                      </label>
+                      <select
+                        value={formData.settings.layout?.columnWidths || "equal"}
+                        onChange={(e) =>
+                          handleSettingChange("layout.columnWidths", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      >
+                        <option value="equal">Equal Width</option>
+                        <option value="custom">Custom Width</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Text Alignment
+                      </label>
+                      <div className="flex gap-2">
+                        {["left", "center", "right"].map((align) => (
+                          <button
+                            key={align}
+                            type="button"
+                            onClick={() => handleSettingChange("layout.alignment", align)}
+                            className={`flex-1 px-4 py-2 border rounded-lg text-sm capitalize transition ${
+                              formData.settings.layout?.alignment === align
+                                ? "border-blue-600 bg-blue-50 text-blue-700"
+                                : "border-gray-300 hover:border-blue-300"
+                            }`}
+                          >
+                            {align}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={formData.settings.layout?.mobileStack !== false}
+                          onChange={(e) =>
+                            handleSettingChange("layout.mobileStack", e.target.checked)
+                          }
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                        />
+                        <span className="text-sm text-gray-700">Stack columns on mobile</span>
+                      </label>
                     </div>
                   </div>
                 </div>

@@ -5,18 +5,18 @@ Reusable React components for the AI Marketing Agency website. All components fo
 ## Installation
 
 ```javascript
-import { 
-  SectionHeader, 
-  StatDisplay, 
-  CTAButton, 
+import {
+  SectionHeader,
+  StatDisplay,
+  CTAButton,
   FeatureCard,
   ServiceCard,
   PricingCard,
   VideoCard,
   TestimonialCard,
   ProcessStep,
-  CaseStudyCard
-} from '@/components/agency';
+  CaseStudyCard,
+} from "@/components/agency";
 ```
 
 ## Components
@@ -26,6 +26,7 @@ import {
 Flexible section header with badge, gradient text, and alignment control.
 
 **Props:**
+
 - `badge` (string) - Badge text above heading
 - `badgeIcon` (string) - FontAwesome icon class
 - `badgeColor` (string) - Color variant: 'purple', 'cyan', 'coral'
@@ -38,6 +39,7 @@ Flexible section header with badge, gradient text, and alignment control.
 - `maxWidth` (string) - Max width class
 
 **Usage:**
+
 ```jsx
 <SectionHeader
   badge="Our Services"
@@ -55,6 +57,7 @@ Flexible section header with badge, gradient text, and alignment control.
 Display statistics and metrics with flexible orientation and styling.
 
 **Props:**
+
 - `value` (string/number) - Metric value
 - `label` (string) - Metric label
 - `icon` (string) - FontAwesome icon class
@@ -65,6 +68,7 @@ Display statistics and metrics with flexible orientation and styling.
 - `className` (string) - Additional CSS classes
 
 **Usage:**
+
 ```jsx
 <StatDisplay
   value="500K+"
@@ -87,6 +91,7 @@ Display statistics and metrics with flexible orientation and styling.
 Multi-variant CTA button with icon support.
 
 **Props:**
+
 - `children` (node) - Button text
 - `variant` (string) - Style: 'primary' (gradient), 'coral', 'outline'
 - `size` (string) - Size: 'small', 'medium', 'large'
@@ -98,6 +103,7 @@ Multi-variant CTA button with icon support.
 - `className` (string) - Additional CSS classes
 
 **Usage:**
+
 ```jsx
 <CTAButton variant="primary" icon="fas fa-arrow-right" href="/contact">
   Get Started
@@ -117,6 +123,7 @@ Multi-variant CTA button with icon support.
 Card for displaying features, problems, or benefits.
 
 **Props:**
+
 - `icon` (string) - FontAwesome icon class
 - `iconColor` (string) - Color: 'gradient', 'purple', 'cyan', 'coral'
 - `title` (string) - Card title
@@ -126,6 +133,7 @@ Card for displaying features, problems, or benefits.
 - `className` (string) - Additional CSS classes
 
 **Usage:**
+
 ```jsx
 <FeatureCard
   icon="fas fa-clock"
@@ -141,6 +149,7 @@ Card for displaying features, problems, or benefits.
 Comprehensive service card with features list and CTA.
 
 **Props:**
+
 - `icon` (string) - FontAwesome icon class
 - `title` (string) - Service title
 - `subtitle` (string) - Service subtitle
@@ -152,6 +161,7 @@ Comprehensive service card with features list and CTA.
 - `className` (string) - Additional CSS classes
 
 **Usage:**
+
 ```jsx
 <ServiceCard
   icon="fas fa-video"
@@ -159,10 +169,10 @@ Comprehensive service card with features list and CTA.
   subtitle="Authentic Video Content at Scale"
   description="Generate unlimited authentic UGC-style videos that build trust and drive sales"
   features={[
-    '10-50 AI-generated UGC videos per month',
-    'Scripts written by AI trained on viral UGC',
-    '48-hour turnaround time',
-    'Unlimited revisions'
+    "10-50 AI-generated UGC videos per month",
+    "Scripts written by AI trained on viral UGC",
+    "48-hour turnaround time",
+    "Unlimited revisions",
   ]}
   ctaText="Explore UGC Services"
   ctaLink="/services/ugc"
@@ -174,6 +184,7 @@ Comprehensive service card with features list and CTA.
 Pricing tier card with features and CTA.
 
 **Props:**
+
 - `name` (string) - Pricing tier name
 - `price` (string) - Price display (e.g., '$1,500', 'Custom')
 - `priceUnit` (string) - Price unit (default: 'project')
@@ -186,6 +197,7 @@ Pricing tier card with features and CTA.
 - `className` (string) - Additional CSS classes
 
 **Usage:**
+
 ```jsx
 <PricingCard
   name="Growth"
@@ -193,10 +205,10 @@ Pricing tier card with features and CTA.
   priceUnit="month"
   description="Perfect for growing brands"
   features={[
-    '20 UGC videos per month',
-    'Premium AI voices',
-    '72-hour turnaround',
-    'Dedicated support'
+    "20 UGC videos per month",
+    "Premium AI voices",
+    "72-hour turnaround",
+    "Dedicated support",
   ]}
   isPopular={true}
   ctaVariant="gradient"
@@ -209,6 +221,7 @@ Pricing tier card with features and CTA.
 Portfolio video card with thumbnail and overlay info.
 
 **Props:**
+
 - `videoUrl` (string) - Video URL
 - `thumbnailUrl` (string) - Thumbnail image URL
 - `title` (string) - Video title
@@ -219,13 +232,14 @@ Portfolio video card with thumbnail and overlay info.
 - `className` (string) - Additional CSS classes
 
 **Usage:**
+
 ```jsx
 <VideoCard
   thumbnailUrl="/images/video-thumb.jpg"
   title="Product Launch Campaign"
   description="Generated 500K+ views in 7 days"
   category="E-commerce"
-  stats={{ views: '500K+', engagement: '12%' }}
+  stats={{ views: "500K+", engagement: "12%" }}
   onClick={() => openVideoModal()}
 />
 ```
@@ -235,6 +249,7 @@ Portfolio video card with thumbnail and overlay info.
 Client testimonial card with rating and stats.
 
 **Props:**
+
 - `quote` (string) - Testimonial quote
 - `author` (string) - Author name
 - `role` (string) - Author role/title
@@ -246,6 +261,7 @@ Client testimonial card with rating and stats.
 - `className` (string) - Additional CSS classes
 
 **Usage:**
+
 ```jsx
 <TestimonialCard
   quote="Harsh's AI UGC videos transformed our brand. We saw 3x more engagement and 40% higher conversions within the first month."
@@ -255,9 +271,9 @@ Client testimonial card with rating and stats.
   avatar="/images/sarah.jpg"
   rating={5}
   stats={[
-    { value: '3x', label: 'Engagement' },
-    { value: '40%', label: 'Conversions' },
-    { value: '30K', label: 'New Followers' }
+    { value: "3x", label: "Engagement" },
+    { value: "40%", label: "Conversions" },
+    { value: "30K", label: "New Followers" },
   ]}
 />
 ```
@@ -267,6 +283,7 @@ Client testimonial card with rating and stats.
 Workflow/process step component with connector lines.
 
 **Props:**
+
 - `number` (number) - Step number
 - `title` (string) - Step title
 - `description` (string) - Step description
@@ -276,6 +293,7 @@ Workflow/process step component with connector lines.
 - `className` (string) - Additional CSS classes
 
 **Usage:**
+
 ```jsx
 <ProcessStep
   number={1}
@@ -305,6 +323,7 @@ Workflow/process step component with connector lines.
 Case study card with results, metrics, and tags.
 
 **Props:**
+
 - `icon` (string) - FontAwesome icon class
 - `title` (string) - Case study title
 - `subtitle` (string) - Subtitle
@@ -317,6 +336,7 @@ Case study card with results, metrics, and tags.
 - `className` (string) - Additional CSS classes
 
 **Usage:**
+
 ```jsx
 <CaseStudyCard
   icon="fas fa-cogs"
@@ -357,6 +377,7 @@ All components use the professional color palette:
 ### Gradient Classes
 
 Components automatically use these Tailwind classes:
+
 - `gradient-text` - Purple to Cyan text gradient
 - `gradient-button` - Purple to Pink button gradient
 - `gradient-cta` - Purple to Cyan background gradient
@@ -365,6 +386,7 @@ Components automatically use these Tailwind classes:
 ## Styling
 
 All components support:
+
 - Responsive design (mobile-first)
 - Dark/light variants where applicable
 - Hover states and animations
@@ -387,16 +409,21 @@ All components support:
       align="center"
       className="mb-12"
     />
-    
+
     <div className="flex justify-center gap-6">
       <CTAButton variant="primary" size="large" icon="fas fa-rocket">
         Get Started
       </CTAButton>
-      <CTAButton variant="outline" size="large" icon="fas fa-play" iconPosition="left">
+      <CTAButton
+        variant="outline"
+        size="large"
+        icon="fas fa-play"
+        iconPosition="left"
+      >
         Watch Demo
       </CTAButton>
     </div>
-    
+
     <div className="grid grid-cols-3 gap-8 mt-16">
       <StatDisplay value="500K+" label="Views Generated" size="large" />
       <StatDisplay value="10x" label="ROI Increase" size="large" />
@@ -417,27 +444,31 @@ All components support:
       align="center"
       className="mb-16"
     />
-    
+
     <div className="grid md:grid-cols-3 gap-8">
       <ServiceCard
         icon="fas fa-video"
         title="AI UGC Content"
         description="Authentic video content at scale"
-        features={['10-50 videos/month', 'AI-generated scripts', '48hr turnaround']}
+        features={[
+          "10-50 videos/month",
+          "AI-generated scripts",
+          "48hr turnaround",
+        ]}
         ctaLink="/services/ugc"
       />
       <ServiceCard
         icon="fas fa-cogs"
         title="Marketing Automation"
         description="Smart systems that work 24/7"
-        features={['Email automation', 'Lead nurturing', 'CRM integration']}
+        features={["Email automation", "Lead nurturing", "CRM integration"]}
         ctaLink="/services/automation"
       />
       <ServiceCard
         icon="fas fa-bullhorn"
         title="Campaign Management"
         description="Multi-channel performance marketing"
-        features={['Paid ads', 'Social media', 'Analytics tracking']}
+        features={["Paid ads", "Social media", "Analytics tracking"]}
         ctaLink="/services/campaigns"
       />
     </div>
@@ -456,14 +487,14 @@ All components support:
       align="center"
       className="mb-16"
     />
-    
+
     <div className="grid md:grid-cols-3 gap-8">
       <PricingCard
         name="Starter"
         price="$1,500"
         priceUnit="project"
         description="Perfect for testing"
-        features={['10 UGC videos', 'Basic AI voices', '5-day turnaround']}
+        features={["10 UGC videos", "Basic AI voices", "5-day turnaround"]}
         ctaVariant="outline"
       />
       <PricingCard
@@ -471,7 +502,12 @@ All components support:
         price="$3,000"
         priceUnit="month"
         description="For growing brands"
-        features={['20 videos/month', 'Premium AI', '72hr turnaround', 'Support']}
+        features={[
+          "20 videos/month",
+          "Premium AI",
+          "72hr turnaround",
+          "Support",
+        ]}
         isPopular={true}
         ctaVariant="gradient"
       />
@@ -479,7 +515,12 @@ All components support:
         name="Enterprise"
         price="Custom"
         description="For established brands"
-        features={['50+ videos/month', 'Custom AI training', '24hr turnaround', 'Dedicated team']}
+        features={[
+          "50+ videos/month",
+          "Custom AI training",
+          "24hr turnaround",
+          "Dedicated team",
+        ]}
         ctaVariant="outline"
       />
     </div>
@@ -490,18 +531,21 @@ All components support:
 ## Component Reusability
 
 **High Reuse Components:**
+
 - `SectionHeader` - Used 6+ times across homepage
 - `StatDisplay` - Very high reuse (hero, floating cards, testimonials)
 - `CTAButton` - 3+ variants throughout site
 - `PricingCard` - 3 tiers per pricing section
 
 **Moderate Reuse:**
+
 - `FeatureCard` - 4 instances (problems, benefits)
 - `ServiceCard` - 3 services per section
 - `VideoCard` - Portfolio/work sections
 - `ProcessStep` - 3-5 steps per process
 
 **Specialized:**
+
 - `TestimonialCard` - Results sections
 - `CaseStudyCard` - Case study showcases
 

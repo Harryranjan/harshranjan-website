@@ -17,8 +17,11 @@ export default function BlogPost() {
 
   const getImageUrl = (url) => {
     if (!url) return "";
+    // If it's already a full URL (http/https or unsplash), use it directly
     if (url.startsWith("http")) return url;
-    return `http://localhost:5000${url}`;
+    // For relative paths (/uploads/...), they'll be proxied by Vite automatically
+    // Just return the path as-is and Vite proxy will handle it
+    return url;
   };
 
   useEffect(() => {

@@ -240,6 +240,19 @@ exports.createPost = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
+    // Helper function to decode HTML entities
+    const decodeHtmlEntities = (text) => {
+      if (!text || typeof text !== "string") return text;
+      return text
+        .replace(/&#x2F;/g, "/")
+        .replace(/&#x5C;/g, "\\")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+    };
+
     const {
       title,
       excerpt,
@@ -251,6 +264,7 @@ exports.createPost = async (req, res) => {
       is_published,
       publish_status,
       scheduled_at,
+      featured_image,
     } = req.body;
 
     // Generate slug from title
@@ -290,6 +304,9 @@ exports.createPost = async (req, res) => {
       slug,
       excerpt,
       content,
+      featured_image: featured_image
+        ? decodeHtmlEntities(featured_image)
+        : null,
       category,
       tags: tags || [],
       reading_time,
@@ -325,6 +342,19 @@ exports.updatePost = async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
+
+    // Helper function to decode HTML entities
+    const decodeHtmlEntities = (text) => {
+      if (!text || typeof text !== "string") return text;
+      return text
+        .replace(/&#x2F;/g, "/")
+        .replace(/&#x5C;/g, "\\")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+    };
 
     const {
       title,
@@ -380,8 +410,11 @@ exports.updatePost = async (req, res) => {
     post.title = title || post.title;
     post.excerpt = excerpt || post.excerpt;
     post.content = content || post.content;
+    // Decode HTML entities in featured_image before saving
     post.featured_image =
-      featured_image !== undefined ? featured_image : post.featured_image;
+      featured_image !== undefined
+        ? decodeHtmlEntities(featured_image)
+        : post.featured_image;
     post.category = category || post.category;
     post.tags = tags || post.tags;
     post.meta_title = meta_title || post.meta_title;

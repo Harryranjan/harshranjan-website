@@ -1,5 +1,5 @@
-const { Sequelize } = require('sequelize');
-require('dotenv').config();
+const { Sequelize } = require("sequelize");
+require("dotenv").config();
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -8,8 +8,8 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 3306,
-    dialect: 'mysql',
-    logging: false
+    dialect: "mysql",
+    logging: false,
   }
 );
 
@@ -40,25 +40,22 @@ const cleanHeaderHTML = `<header class="fixed top-0 left-0 right-0 z-50 bg-white
 async function restoreHeader() {
   try {
     const settings = {
-      type: 'header-builder',
+      type: "header-builder",
       sticky: true,
-      customCode: cleanHeaderHTML
+      customCode: cleanHeaderHTML,
     };
-    
-    await sequelize.query(
-      'UPDATE menus SET settings = ? WHERE id = 23',
-      {
-        replacements: [JSON.stringify(settings)],
-        type: Sequelize.QueryTypes.UPDATE
-      }
-    );
-    
-    console.log('✅ Header HTML restored successfully!');
-    console.log('The header is clean and not encoded.');
-    
+
+    await sequelize.query("UPDATE menus SET settings = ? WHERE id = 23", {
+      replacements: [JSON.stringify(settings)],
+      type: Sequelize.QueryTypes.UPDATE,
+    });
+
+    console.log("✅ Header HTML restored successfully!");
+    console.log("The header is clean and not encoded.");
+
     process.exit(0);
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     process.exit(1);
   }
 }

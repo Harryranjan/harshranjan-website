@@ -7,17 +7,20 @@
 ## Technology Stack
 
 ### Frontend
+
 - **React 18.2.0** - Component-based UI
 - **Tailwind CSS 3.x** - Utility-first styling
 - **Vite 5.x** - Build tool and dev server
 - **React Router** - Client-side routing
 
 ### Backend
+
 - **Node.js + Express** - API server
 - **MySQL** - Data storage (JSON/text data ONLY, never HTML)
 - **Redis** - Caching layer
 
 ### Optional
+
 - **Python** - For AI/ML features or data processing scripts
 
 ---
@@ -25,23 +28,26 @@
 ## 🚫 WHAT NOT TO DO
 
 ### ❌ NEVER Store HTML in Database
+
 ```javascript
 // ❌ WRONG - Do not do this
 const page = {
-  content: '<div class="hero"><h1>Welcome</h1></div>' // NO!
-}
+  content: '<div class="hero"><h1>Welcome</h1></div>', // NO!
+};
 ```
 
 ### ❌ NEVER Use Database-Driven Templates
+
 ```javascript
 // ❌ WRONG - Do not fetch HTML from database
-const htmlContent = await db.query('SELECT html_content FROM pages');
-return <div dangerouslySetInnerHTML={{__html: htmlContent}} />; // NO!
+const htmlContent = await db.query("SELECT html_content FROM pages");
+return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />; // NO!
 ```
 
 ### ❌ NEVER Mix CMS-Style HTML with React
+
 - No HTML stored in `pages` table
-- No HTML stored in `blogs` table  
+- No HTML stored in `blogs` table
 - No HTML templates in database
 - No `dangerouslySetInnerHTML` for page content
 
@@ -50,6 +56,7 @@ return <div dangerouslySetInnerHTML={{__html: htmlContent}} />; // NO!
 ## ✅ CORRECT APPROACH
 
 ### ✅ Build React Components
+
 ```javascript
 // ✅ CORRECT - Pure React components
 const HeroSection = ({ title, subtitle, ctaText }) => {
@@ -68,6 +75,7 @@ const HeroSection = ({ title, subtitle, ctaText }) => {
 ```
 
 ### ✅ Store Data Only (JSON/Text)
+
 ```javascript
 // ✅ CORRECT - Store structured data
 const pageData = {
@@ -83,12 +91,13 @@ const pageData = {
 ```
 
 ### ✅ Use Component Mapping
+
 ```javascript
 // ✅ CORRECT - Map data to React components
 const componentMap = {
   hero: HeroSection,
   features: FeaturesSection,
-  pricing: PricingSection
+  pricing: PricingSection,
 };
 
 const DynamicPage = ({ pageData }) => {
@@ -130,6 +139,7 @@ backend/
 ## 🎨 Styling Guidelines
 
 ### Always Use Tailwind CSS Classes
+
 ```javascript
 // ✅ CORRECT
 <button className="bg-purple hover:bg-purple-700 px-6 py-3 rounded-full text-white font-bold transition">
@@ -143,10 +153,11 @@ backend/
 ```
 
 ### Custom Styles in CSS Files
+
 ```css
 /* ✅ CORRECT - For complex animations or custom effects */
 .gradient-button {
-  background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
   transition: transform 0.3s ease;
 }
 
@@ -160,6 +171,7 @@ backend/
 ## 🔄 Data Flow
 
 ### Page Content Flow
+
 1. **Component Definition** → React component files
 2. **Data Storage** → MySQL (JSON/text data only)
 3. **API Endpoint** → Express routes return JSON
@@ -167,6 +179,7 @@ backend/
 5. **Render** → React components render with data props
 
 ### Example Flow
+
 ```
 User visits /services
     ↓
@@ -184,6 +197,7 @@ React renders: <ServiceCard title={...} description={...} />
 ## 🛠️ Development Workflow
 
 ### Creating New Pages
+
 1. Create React component in `frontend/src/pages/`
 2. Add route in `frontend/src/App.jsx`
 3. Build reusable components in `frontend/src/components/`
@@ -192,6 +206,7 @@ React renders: <ServiceCard title={...} description={...} />
 6. Store data as JSON in MySQL
 
 ### Creating New Features
+
 1. Design React components first
 2. Identify data requirements (JSON schema)
 3. Create database table for data (NOT HTML)
@@ -204,6 +219,7 @@ React renders: <ServiceCard title={...} description={...} />
 ## 📝 Database Schema Guidelines
 
 ### ✅ GOOD Schema Design
+
 ```sql
 CREATE TABLE pages (
   id INT PRIMARY KEY,
@@ -217,6 +233,7 @@ CREATE TABLE pages (
 ```
 
 ### ❌ BAD Schema Design
+
 ```sql
 CREATE TABLE pages (
   id INT PRIMARY KEY,
@@ -238,6 +255,7 @@ Build a comprehensive component library for reusability:
 - **Layout Components**: Header, Footer, Sidebar
 
 All components should:
+
 - Accept data as props
 - Be styled with Tailwind CSS
 - Be fully reusable
@@ -248,6 +266,7 @@ All components should:
 ## 🚀 Deployment Checklist
 
 Before deploying, ensure:
+
 - [ ] No HTML content in database
 - [ ] All pages use React components
 - [ ] No `dangerouslySetInnerHTML` for page content
@@ -271,6 +290,7 @@ Before deploying, ensure:
 ## 🔒 Code Review Requirements
 
 All code must pass these checks:
+
 1. ✅ No HTML strings in database
 2. ✅ Pure React components
 3. ✅ Tailwind CSS for styling
