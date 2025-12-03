@@ -237,14 +237,14 @@ export default function FormBuilderNew() {
         setToast({ message: "Form updated successfully!", type: "success" });
         // Redirect after showing toast
         setTimeout(() => {
-          navigate("/admin/forms");
+          navigate("/admin/forms?tab=forms");
         }, 1500);
       } else {
         await api.post("/forms", formData);
         setToast({ message: "Form created successfully!", type: "success" });
         // Redirect after showing toast
         setTimeout(() => {
-          navigate("/admin/forms");
+          navigate("/admin/forms?tab=forms");
         }, 1500);
       }
     } catch (error) {

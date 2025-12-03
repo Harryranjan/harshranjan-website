@@ -3,6 +3,7 @@ const router = express.Router();
 const formController = require("../controllers/form.controller");
 const formSubmissionController = require("../controllers/formSubmission.controller");
 const { authMiddleware } = require("../middleware/auth.middleware");
+const { formLimiter } = require("../middleware/rateLimiter");
 
 // Form routes (protected)
 router.get("/", authMiddleware, formController.getAllForms);
@@ -37,8 +38,8 @@ router.put("/:id", authMiddleware, formController.updateForm);
 router.delete("/:id", authMiddleware, formController.deleteForm);
 router.post("/:id/duplicate", authMiddleware, formController.duplicateForm);
 
-// Form submission routes
-router.post("/:formId/submit", formSubmissionController.submitForm); // Public endpoint
+// Form submission routes (PUBLIC - apply rate limiting)
+router.post("/:formId/submit", formLimiter, formSubmissionController.submitForm); // Public endpoint with rate limit
 router.get(
   "/:formId/submissions",
   authMiddleware,

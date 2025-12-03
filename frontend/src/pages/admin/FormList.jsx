@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import {
   FiEdit,
   FiEye,
@@ -14,6 +14,8 @@ import FormCreationModal from "../../components/FormCreationModal";
 import EmbedCodeModal from "../../components/EmbedCodeModal";
 
 export default function FormList() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [forms, setForms] = useState([]);
   const [modals, setModals] = useState([]);
   const [popups, setPopups] = useState([]);
@@ -56,7 +58,15 @@ export default function FormList() {
     limit: 20,
     total: 0,
   });
-  const [activeTab, setActiveTab] = useState("forms");
+  
+  // Read tab from URL parameter, default to "forms"
+  const tabFromUrl = searchParams.get("tab") || "forms";
+  const [activeTab, setActiveTab] = useState(tabFromUrl);
+
+  // Update URL when tab changes
+  useEffect(() => {
+    setSearchParams({ tab: activeTab }, { replace: true });
+  }, [activeTab]);
 
   useEffect(() => {
     if (activeTab === "forms") {
@@ -478,25 +488,28 @@ export default function FormList() {
         <div className="flex gap-3">
           <button
             onClick={() => setShowCreationModal(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition inline-flex items-center gap-2"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition inline-flex items-center gap-2 font-medium shadow-sm"
           >
             <span>📋</span>
-            New Form
+            <span>New Form</span>
           </button>
-          <Link
-            to="/admin/forms/modals/new"
-            className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition inline-flex items-center gap-2"
+          <button
+            onClick={() => navigate('/admin/forms/modals/new')}
+            className="text-white px-4 py-2 rounded-lg transition inline-flex items-center gap-2 font-medium shadow-sm"
+            style={{ backgroundColor: '#8B5CF6' }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#7C3AED'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#8B5CF6'}
           >
             <span>🪟</span>
-            New Modal
-          </Link>
-          <Link
-            to="/admin/forms/popups/new"
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition inline-flex items-center gap-2"
+            <span>New Modal</span>
+          </button>
+          <button
+            onClick={() => navigate('/admin/forms/popups/new')}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition inline-flex items-center gap-2 font-medium shadow-sm"
           >
             <span>💬</span>
-            New Popup
-          </Link>
+            <span>New Popup</span>
+          </button>
         </div>
       </div>
 

@@ -110,9 +110,10 @@ const Portfolio = () => {
     },
   ];
 
-  const filteredProjects = selectedCategory === "all" 
-    ? projects 
-    : projects.filter(p => p.category === selectedCategory);
+  const filteredProjects =
+    selectedCategory === "all"
+      ? projects
+      : projects.filter((p) => p.category === selectedCategory);
 
   return (
     <>
@@ -128,15 +129,20 @@ const Portfolio = () => {
       <section className="pt-24 pb-12 animated-gradient text-white relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-purple/30 rounded-full blur-3xl float-animation"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan/20 rounded-full blur-3xl float-animation" style={{ animationDelay: '-3s' }}></div>
+          <div
+            className="absolute bottom-20 right-10 w-96 h-96 bg-cyan/20 rounded-full blur-3xl float-animation"
+            style={{ animationDelay: "-3s" }}
+          ></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold font-display mb-6">
-              Success Stories & <span className="gradient-text">Case Studies</span>
+              Success Stories &{" "}
+              <span className="gradient-text">Case Studies</span>
             </h1>
             <p className="text-xl text-gray-300">
-              Real results from real campaigns. See how we've helped brands achieve their goals.
+              Real results from real campaigns. See how we've helped brands
+              achieve their goals.
             </p>
           </div>
         </div>
@@ -189,7 +195,9 @@ const Portfolio = () => {
                     <div className="text-8xl">{project.thumbnail}</div>
                   )}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">View Case Study</span>
+                    <span className="text-white font-bold text-lg">
+                      View Case Study
+                    </span>
                   </div>
                 </div>
 
@@ -199,13 +207,17 @@ const Portfolio = () => {
                     {project.title}
                   </h3>
                   <p className="text-sm text-gray-500 mb-4">{project.client}</p>
-                  
+
                   {/* Results */}
                   <div className="grid grid-cols-3 gap-4 mb-4">
                     {project.results.map((result, idx) => (
                       <div key={idx} className="text-center">
-                        <div className="text-xl font-bold text-purple-600">{result.metric}</div>
-                        <div className="text-xs text-gray-600">{result.label}</div>
+                        <div className="text-xl font-bold text-purple-600">
+                          {result.metric}
+                        </div>
+                        <div className="text-xs text-gray-600">
+                          {result.label}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -236,19 +248,27 @@ const Portfolio = () => {
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-5xl font-bold text-purple-600 mb-2">200+</div>
+              <div className="text-5xl font-bold text-purple-600 mb-2">
+                200+
+              </div>
               <div className="text-gray-600">Projects Completed</div>
             </div>
             <div className="text-center">
-              <div className="text-5xl font-bold text-purple-600 mb-2">₹2Cr+</div>
+              <div className="text-5xl font-bold text-purple-600 mb-2">
+                ₹2Cr+
+              </div>
               <div className="text-gray-600">Ad Spend Managed</div>
             </div>
             <div className="text-center">
-              <div className="text-5xl font-bold text-purple-600 mb-2">+245%</div>
+              <div className="text-5xl font-bold text-purple-600 mb-2">
+                +245%
+              </div>
               <div className="text-gray-600">Average ROI</div>
             </div>
             <div className="text-center">
-              <div className="text-5xl font-bold text-purple-600 mb-2">500+</div>
+              <div className="text-5xl font-bold text-purple-600 mb-2">
+                500+
+              </div>
               <div className="text-gray-600">Videos Created</div>
             </div>
           </div>
@@ -285,20 +305,34 @@ const Portfolio = () => {
           >
             {/* Modal Header */}
             <div className="sticky top-0 bg-white border-b px-8 py-6 flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-gray-900">{selectedProject.title}</h2>
+              <h2 className="text-3xl font-bold text-gray-900">
+                {selectedProject.title}
+              </h2>
               <button
                 onClick={() => setSelectedProject(null)}
                 className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
 
             {/* Modal Content */}
             <div className="p-8">
-              <p className="text-lg text-gray-500 mb-8">{selectedProject.client}</p>
+              <p className="text-lg text-gray-500 mb-8">
+                {selectedProject.client}
+              </p>
 
               {/* Video */}
               {selectedProject.videoUrl && (
@@ -311,23 +345,38 @@ const Portfolio = () => {
 
               {/* Challenge */}
               <div className="mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Challenge</h3>
-                <p className="text-lg text-gray-600">{selectedProject.challenge}</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Challenge
+                </h3>
+                <p className="text-lg text-gray-600">
+                  {selectedProject.challenge}
+                </p>
               </div>
 
               {/* Solution */}
               <div className="mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Solution</h3>
-                <p className="text-lg text-gray-600">{selectedProject.solution}</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Solution
+                </h3>
+                <p className="text-lg text-gray-600">
+                  {selectedProject.solution}
+                </p>
               </div>
 
               {/* Results */}
               <div className="mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Results</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  Results
+                </h3>
                 <div className="grid md:grid-cols-3 gap-6">
                   {selectedProject.results.map((result, idx) => (
-                    <div key={idx} className="bg-gradient-to-br from-purple-50 to-cyan-50 rounded-xl p-6 text-center">
-                      <div className="text-4xl font-bold text-purple-600 mb-2">{result.metric}</div>
+                    <div
+                      key={idx}
+                      className="bg-gradient-to-br from-purple-50 to-cyan-50 rounded-xl p-6 text-center"
+                    >
+                      <div className="text-4xl font-bold text-purple-600 mb-2">
+                        {result.metric}
+                      </div>
                       <div className="text-gray-600">{result.label}</div>
                     </div>
                   ))}

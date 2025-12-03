@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { closeModal } from "../store/modalSlice";
 import ModalEmbed from "./ModalEmbed";
 import api from "../utils/api";
 
@@ -9,11 +11,8 @@ import api from "../utils/api";
 export default function ModalManager() {
   const [activeModals, setActiveModals] = useState([]);
   const [visibleModals, setVisibleModals] = useState({});
-  const [closedModals, setClosedModals] = useState(() => {
-    // Load closed modals from localStorage
-    const stored = localStorage.getItem("closedModals");
-    return stored ? JSON.parse(stored) : {};
-  });
+  const closedModals = useSelector((state) => state.modals.closedModals);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     loadActiveModals();
@@ -166,10 +165,8 @@ export default function ModalManager() {
   const handleClose = (modalId) => {
     setVisibleModals((prev) => ({ ...prev, [modalId]: false }));
 
-    // Save to localStorage to prevent showing again
-    const newClosedModals = { ...closedModals, [modalId]: Date.now() };
-    setClosedModals(newClosedModals);
-    localStorage.setItem("closedModals", JSON.stringify(newClosedModals));
+    // Save to Redux store (persisted automatically)
+    dispatch(closeModal(modalId));
   };
 
   const handleScroll = () => {

@@ -563,34 +563,41 @@ ${code}
             </button>
           </div>
 
-          <div className="flex items-center gap-3 flex-wrap" style={{ minHeight: '44px' }}>
+          <div
+            className="flex items-center gap-3 flex-wrap"
+            style={{ minHeight: "44px" }}
+          >
             <button
               type="button"
               onClick={() => {
-                console.log('Live Preview button clicked!');
+                console.log("Live Preview button clicked!");
                 setShowLivePreview(true);
               }}
               className="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-lg transition shadow-md font-medium"
-              style={{ 
-                display: 'flex',
-                visibility: 'visible',
+              style={{
+                display: "flex",
+                visibility: "visible",
                 opacity: 1,
                 zIndex: 10,
-                minWidth: '140px',
-                backgroundColor: '#8B5CF6',
-                color: '#FFFFFF',
-                border: 'none',
-                cursor: 'pointer'
+                minWidth: "140px",
+                backgroundColor: "#8B5CF6",
+                color: "#FFFFFF",
+                border: "none",
+                cursor: "pointer",
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7C3AED'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#8B5CF6'}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.backgroundColor = "#7C3AED")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.backgroundColor = "#8B5CF6")
+              }
             >
               <svg
                 className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                style={{ color: '#FFFFFF' }}
+                style={{ color: "#FFFFFF" }}
               >
                 <path
                   strokeLinecap="round"
@@ -605,7 +612,7 @@ ${code}
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                 />
               </svg>
-              <span style={{ color: '#FFFFFF' }}>Live Preview</span>
+              <span style={{ color: "#FFFFFF" }}>Live Preview</span>
             </button>
             <button
               type="button"
@@ -1029,7 +1036,9 @@ ${code}
                       <div className="flex items-center gap-2">
                         <input
                           type="color"
-                          value={formData.settings.styles.accentColor || "#8B5CF6"}
+                          value={
+                            formData.settings.styles.accentColor || "#8B5CF6"
+                          }
                           onChange={(e) =>
                             handleSettingChange(
                               "styles.accentColor",
@@ -1040,7 +1049,9 @@ ${code}
                         />
                         <input
                           type="text"
-                          value={formData.settings.styles.accentColor || "#8B5CF6"}
+                          value={
+                            formData.settings.styles.accentColor || "#8B5CF6"
+                          }
                           onChange={(e) =>
                             handleSettingChange(
                               "styles.accentColor",
@@ -1062,23 +1073,45 @@ ${code}
                   </h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {[
-                      { value: "modern", label: "Modern", desc: "Gradients & animations" },
-                      { value: "minimal", label: "Minimal", desc: "Clean & simple" },
-                      { value: "corporate", label: "Corporate", desc: "Professional look" },
-                      { value: "creative", label: "Creative", desc: "Bold & colorful" }
+                      {
+                        value: "modern",
+                        label: "Modern",
+                        desc: "Gradients & animations",
+                      },
+                      {
+                        value: "minimal",
+                        label: "Minimal",
+                        desc: "Clean & simple",
+                      },
+                      {
+                        value: "corporate",
+                        label: "Corporate",
+                        desc: "Professional look",
+                      },
+                      {
+                        value: "creative",
+                        label: "Creative",
+                        desc: "Bold & colorful",
+                      },
                     ].map((theme) => (
                       <button
                         key={theme.value}
                         type="button"
-                        onClick={() => handleSettingChange("theme", theme.value)}
+                        onClick={() =>
+                          handleSettingChange("theme", theme.value)
+                        }
                         className={`p-4 border-2 rounded-lg text-left transition ${
                           formData.settings.theme === theme.value
                             ? "border-blue-600 bg-blue-50"
                             : "border-gray-200 hover:border-blue-300"
                         }`}
                       >
-                        <div className="font-semibold text-sm mb-1">{theme.label}</div>
-                        <div className="text-xs text-gray-500">{theme.desc}</div>
+                        <div className="font-semibold text-sm mb-1">
+                          {theme.label}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {theme.desc}
+                        </div>
                       </button>
                     ))}
                   </div>
@@ -1098,7 +1131,10 @@ ${code}
                         type="number"
                         value={formData.settings.spacing?.paddingTop || "64"}
                         onChange={(e) =>
-                          handleSettingChange("spacing.paddingTop", e.target.value)
+                          handleSettingChange(
+                            "spacing.paddingTop",
+                            e.target.value
+                          )
                         }
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       />
@@ -1111,7 +1147,10 @@ ${code}
                         type="number"
                         value={formData.settings.spacing?.paddingBottom || "32"}
                         onChange={(e) =>
-                          handleSettingChange("spacing.paddingBottom", e.target.value)
+                          handleSettingChange(
+                            "spacing.paddingBottom",
+                            e.target.value
+                          )
                         }
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       />
@@ -1124,7 +1163,10 @@ ${code}
                         type="number"
                         value={formData.settings.spacing?.paddingX || "16"}
                         onChange={(e) =>
-                          handleSettingChange("spacing.paddingX", e.target.value)
+                          handleSettingChange(
+                            "spacing.paddingX",
+                            e.target.value
+                          )
                         }
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       />
@@ -1137,7 +1179,10 @@ ${code}
                         type="number"
                         value={formData.settings.spacing?.columnGap || "48"}
                         onChange={(e) =>
-                          handleSettingChange("spacing.columnGap", e.target.value)
+                          handleSettingChange(
+                            "spacing.columnGap",
+                            e.target.value
+                          )
                         }
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       />
@@ -1163,7 +1208,10 @@ ${code}
                         type="number"
                         value={formData.settings.spacing?.sectionGap || "64"}
                         onChange={(e) =>
-                          handleSettingChange("spacing.sectionGap", e.target.value)
+                          handleSettingChange(
+                            "spacing.sectionGap",
+                            e.target.value
+                          )
                         }
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       />
@@ -1183,9 +1231,14 @@ ${code}
                       </label>
                       <input
                         type="number"
-                        value={formData.settings.typography?.headingSize || "20"}
+                        value={
+                          formData.settings.typography?.headingSize || "20"
+                        }
                         onChange={(e) =>
-                          handleSettingChange("typography.headingSize", e.target.value)
+                          handleSettingChange(
+                            "typography.headingSize",
+                            e.target.value
+                          )
                         }
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       />
@@ -1198,7 +1251,10 @@ ${code}
                         type="number"
                         value={formData.settings.typography?.linkSize || "16"}
                         onChange={(e) =>
-                          handleSettingChange("typography.linkSize", e.target.value)
+                          handleSettingChange(
+                            "typography.linkSize",
+                            e.target.value
+                          )
                         }
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       />
@@ -1208,9 +1264,14 @@ ${code}
                         Heading Weight
                       </label>
                       <select
-                        value={formData.settings.typography?.headingWeight || "700"}
+                        value={
+                          formData.settings.typography?.headingWeight || "700"
+                        }
                         onChange={(e) =>
-                          handleSettingChange("typography.headingWeight", e.target.value)
+                          handleSettingChange(
+                            "typography.headingWeight",
+                            e.target.value
+                          )
                         }
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       >
@@ -1235,9 +1296,14 @@ ${code}
                         Column Width Distribution
                       </label>
                       <select
-                        value={formData.settings.layout?.columnWidths || "equal"}
+                        value={
+                          formData.settings.layout?.columnWidths || "equal"
+                        }
                         onChange={(e) =>
-                          handleSettingChange("layout.columnWidths", e.target.value)
+                          handleSettingChange(
+                            "layout.columnWidths",
+                            e.target.value
+                          )
                         }
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       >
@@ -1254,7 +1320,9 @@ ${code}
                           <button
                             key={align}
                             type="button"
-                            onClick={() => handleSettingChange("layout.alignment", align)}
+                            onClick={() =>
+                              handleSettingChange("layout.alignment", align)
+                            }
                             className={`flex-1 px-4 py-2 border rounded-lg text-sm capitalize transition ${
                               formData.settings.layout?.alignment === align
                                 ? "border-blue-600 bg-blue-50 text-blue-700"
@@ -1270,13 +1338,20 @@ ${code}
                       <label className="flex items-center gap-2">
                         <input
                           type="checkbox"
-                          checked={formData.settings.layout?.mobileStack !== false}
+                          checked={
+                            formData.settings.layout?.mobileStack !== false
+                          }
                           onChange={(e) =>
-                            handleSettingChange("layout.mobileStack", e.target.checked)
+                            handleSettingChange(
+                              "layout.mobileStack",
+                              e.target.checked
+                            )
                           }
                           className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
                         />
-                        <span className="text-sm text-gray-700">Stack columns on mobile</span>
+                        <span className="text-sm text-gray-700">
+                          Stack columns on mobile
+                        </span>
                       </label>
                     </div>
                   </div>

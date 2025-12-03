@@ -10,7 +10,8 @@ const Services = () => {
       icon: "🎥",
       title: "UGC Content Creation",
       tagline: "Authentic Content That Converts",
-      description: "Transform your brand with authentic user-generated content that builds trust and drives engagement. Our AI-powered content creation system produces high-quality videos at scale.",
+      description:
+        "Transform your brand with authentic user-generated content that builds trust and drives engagement. Our AI-powered content creation system produces high-quality videos at scale.",
       features: [
         "Professional UGC video production",
         "AI-enhanced editing and optimization",
@@ -23,14 +24,15 @@ const Services = () => {
         { metric: "+340%", label: "Avg. Engagement" },
         { metric: "500+", label: "Videos Created" },
         { metric: "48hr", label: "Delivery Time" },
-      ]
+      ],
     },
     {
       id: 1,
       icon: "🤖",
       title: "Marketing Automation",
       tagline: "Scale Your Marketing Effortlessly",
-      description: "Build powerful automation systems that handle repetitive tasks, nurture leads, and optimize campaigns 24/7. Free up your time to focus on strategy and growth.",
+      description:
+        "Build powerful automation systems that handle repetitive tasks, nurture leads, and optimize campaigns 24/7. Free up your time to focus on strategy and growth.",
       features: [
         "Email marketing automation",
         "Social media scheduling & posting",
@@ -43,14 +45,15 @@ const Services = () => {
         { metric: "₹8,000", label: "Cost Savings" },
         { metric: "50+", label: "Systems Built" },
         { metric: "24/7", label: "Automation" },
-      ]
+      ],
     },
     {
       id: 2,
       icon: "📈",
       title: "Campaign Management",
       tagline: "Results-Driven Campaign Excellence",
-      description: "End-to-end campaign management across all digital channels. From strategy to execution, we optimize every touchpoint to maximize your ROI and drive measurable results.",
+      description:
+        "End-to-end campaign management across all digital channels. From strategy to execution, we optimize every touchpoint to maximize your ROI and drive measurable results.",
       features: [
         "Multi-channel campaign strategy",
         "Ad creation and copywriting",
@@ -63,7 +66,7 @@ const Services = () => {
         { metric: "₹2Cr+", label: "Ad Spend" },
         { metric: "+245%", label: "Avg. ROI" },
         { metric: "200+", label: "Campaigns" },
-      ]
+      ],
     },
   ];
 
@@ -81,12 +84,16 @@ const Services = () => {
       <section className="pt-24 pb-12 animated-gradient text-white relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-purple/30 rounded-full blur-3xl float-animation"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan/20 rounded-full blur-3xl float-animation" style={{ animationDelay: '-3s' }}></div>
+          <div
+            className="absolute bottom-20 right-10 w-96 h-96 bg-cyan/20 rounded-full blur-3xl float-animation"
+            style={{ animationDelay: "-3s" }}
+          ></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold font-display mb-6">
-              <span className="gradient-text">AI-Powered</span> Marketing Services
+              <span className="gradient-text">AI-Powered</span> Marketing
+              Services
             </h1>
             <p className="text-xl text-gray-300">
               Complete marketing solutions that drive growth and maximize ROI
@@ -110,14 +117,20 @@ const Services = () => {
                 }`}
               >
                 <div className="text-5xl mb-4">{service.icon}</div>
-                <h3 className={`text-2xl font-bold mb-2 ${
-                  activeService === index ? "text-white" : "text-gray-900"
-                }`}>
+                <h3
+                  className={`text-2xl font-bold mb-2 ${
+                    activeService === index ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   {service.title}
                 </h3>
-                <p className={`text-sm mb-4 ${
-                  activeService === index ? "text-purple-100" : "text-gray-600"
-                }`}>
+                <p
+                  className={`text-sm mb-4 ${
+                    activeService === index
+                      ? "text-purple-100"
+                      : "text-gray-600"
+                  }`}
+                >
                   {service.tagline}
                 </p>
                 <div className="text-lg font-bold">{service.pricing}</div>
@@ -129,7 +142,9 @@ const Services = () => {
           <div className="bg-gradient-to-br from-gray-50 to-purple-50 rounded-2xl p-12">
             <div className="grid lg:grid-cols-2 gap-12">
               <div>
-                <div className="text-6xl mb-6">{services[activeService].icon}</div>
+                <div className="text-6xl mb-6">
+                  {services[activeService].icon}
+                </div>
                 <h2 className="text-4xl font-bold text-gray-900 mb-4">
                   {services[activeService].title}
                 </h2>
@@ -140,8 +155,18 @@ const Services = () => {
                   {services[activeService].features.map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-3">
                       <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center flex-shrink-0 mt-1">
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <svg
+                          className="w-4 h-4 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
                         </svg>
                       </div>
                       <span className="text-lg text-gray-700">{feature}</span>
@@ -152,12 +177,18 @@ const Services = () => {
 
               <div className="space-y-8">
                 <div className="bg-white rounded-xl p-8 shadow-lg">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Results You Can Expect</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                    Results You Can Expect
+                  </h3>
                   <div className="grid grid-cols-3 gap-6">
                     {services[activeService].results.map((result, idx) => (
                       <div key={idx} className="text-center">
-                        <div className="text-3xl font-bold text-purple-600 mb-2">{result.metric}</div>
-                        <div className="text-sm text-gray-600">{result.label}</div>
+                        <div className="text-3xl font-bold text-purple-600 mb-2">
+                          {result.metric}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {result.label}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -165,9 +196,12 @@ const Services = () => {
 
                 <div className="bg-gradient-to-br from-purple-600 to-cyan-600 rounded-xl p-8 text-white">
                   <h3 className="text-2xl font-bold mb-4">Pricing</h3>
-                  <p className="text-3xl font-bold mb-4">{services[activeService].pricing}</p>
+                  <p className="text-3xl font-bold mb-4">
+                    {services[activeService].pricing}
+                  </p>
                   <p className="text-purple-100 mb-6">
-                    Flexible packages tailored to your needs. No long-term contracts required.
+                    Flexible packages tailored to your needs. No long-term
+                    contracts required.
                   </p>
                   <a
                     href="/contact"
@@ -190,24 +224,44 @@ const Services = () => {
           </h2>
           <div className="grid md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Discovery</h3>
-              <p className="text-gray-600">We learn about your business, goals, and challenges</p>
+              <div className="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                1
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Discovery
+              </h3>
+              <p className="text-gray-600">
+                We learn about your business, goals, and challenges
+              </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-cyan-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+              <div className="w-16 h-16 bg-cyan-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                2
+              </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Strategy</h3>
-              <p className="text-gray-600">Custom strategy tailored to your specific needs</p>
+              <p className="text-gray-600">
+                Custom strategy tailored to your specific needs
+              </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-coral-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Execution</h3>
-              <p className="text-gray-600">We implement and optimize your campaigns</p>
+              <div className="w-16 h-16 bg-coral-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                3
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Execution
+              </h3>
+              <p className="text-gray-600">
+                We implement and optimize your campaigns
+              </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-navy-900 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">4</div>
+              <div className="w-16 h-16 bg-navy-900 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                4
+              </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Results</h3>
-              <p className="text-gray-600">Track performance and scale what works</p>
+              <p className="text-gray-600">
+                Track performance and scale what works
+              </p>
             </div>
           </div>
         </div>

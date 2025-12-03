@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { closePopup } from "../store/popupSlice";
 import PopupEmbed from "./PopupEmbed";
 import api from "../utils/api";
 
 export default function PopupManager() {
   const [popups, setPopups] = useState([]);
   const [activePopups, setActivePopups] = useState([]);
-  const [closedPopups, setClosedPopups] = useState([]);
+  const closedPopups = useSelector((state) => state.popups.closedPopups);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     loadActivePopups();
-    loadClosedPopups();
   }, []);
 
   const loadActivePopups = async () => {
@@ -25,15 +27,6 @@ export default function PopupManager() {
       });
     } catch (error) {
       console.error("Error loading popups:", error);
-    }
-  };
-
-  const loadClosedPopups = () => {
-    try {
-      const closed = JSON.parse(localStorage.getItem("closedPopups") || "[]");
-      setClosedPopups(closed);
-    } catch (error) {
-      console.error("Error loading closed popups:", error);
     }
   };
 
@@ -164,10 +157,8 @@ export default function PopupManager() {
     // Remove from active popups
     setActivePopups((prev) => prev.filter((p) => p.id !== popupId));
 
-    // Add to closed popups
-    const newClosedPopups = [...closedPopups, popupId];
-    setClosedPopups(newClosedPopups);
-    localStorage.setItem("closedPopups", JSON.stringify(newClosedPopups));
+    // Add to Redux store (persisted automatically)
+    dispatch(closePopup(popupId));
   };
 
   const handleTrackView = async (popupId) => {

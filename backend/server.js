@@ -179,7 +179,7 @@ app.use("/api/pages", require("./routes/page.routes"));
 app.use("/api/testimonials", require("./routes/testimonial.routes"));
 app.use("/api/contact", formLimiter, require("./routes/contact.routes"));
 app.use("/api/upload", uploadLimiter, require("./routes/upload.routes"));
-app.use("/api/forms", formLimiter, require("./routes/form.routes"));
+app.use("/api/forms", require("./routes/form.routes")); // Rate limiting applied per-route in controller
 app.use("/api/modals", require("./routes/modal.routes"));
 app.use("/api/popups", require("./routes/popup.routes"));
 app.use("/api/embed", require("./routes/embed.routes"));
