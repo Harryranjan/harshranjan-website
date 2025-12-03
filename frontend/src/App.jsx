@@ -41,6 +41,7 @@ import Settings from "./pages/admin/Settings";
 import DownloadList from "./pages/admin/DownloadList";
 import DownloadForm from "./pages/admin/DownloadForm";
 import DownloadLeads from "./pages/admin/DownloadLeads";
+import MediaLibrary from "./pages/admin/MediaLibrary";
 import DownloadsLibrary from "./pages/DownloadsLibrary";
 import MenuList from "./pages/admin/MenuList";
 import MenuForm from "./pages/admin/MenuForm";
@@ -218,12 +219,7 @@ function App() {
             path="testimonials"
             element={<div className="text-2xl">Testimonials - Coming Soon</div>}
           />
-          <Route
-            path="media"
-            element={
-              <div className="text-2xl">Media Library - Coming Soon</div>
-            }
-          />
+          <Route path="media" element={<MediaLibrary />} />
           <Route
             path="seo"
             element={<div className="text-2xl">SEO Settings - Coming Soon</div>}

@@ -82,6 +82,63 @@ router.delete("/image/:filename", authMiddleware, (req, res) => {
   }
 });
 
+// List all uploaded files
+router.get("/list", authMiddleware, (req, res) => {
+  try {
+    const fs = require("fs");
+    const path = require("path");
+
+    const imagesDir = path.join(__dirname, "../uploads/images");
+    const filesDir = path.join(__dirname, "../uploads/files");
+
+    const files = [];
+
+    // Read images directory
+    if (fs.existsSync(imagesDir)) {
+      const imageFiles = fs.readdirSync(imagesDir);
+      imageFiles.forEach((file) => {
+        const stats = fs.statSync(path.join(imagesDir, file));
+        files.push({
+          name: file,
+          url: `/uploads/images/${file}`,
+          type: "image/" + file.split(".").pop(),
+          size: stats.size,
+          uploadedAt: stats.mtime,
+        });
+      });
+    }
+
+    // Read files directory
+    if (fs.existsSync(filesDir)) {
+      const docFiles = fs.readdirSync(filesDir);
+      docFiles.forEach((file) => {
+        const stats = fs.statSync(path.join(filesDir, file));
+        files.push({
+          name: file,
+          url: `/uploads/files/${file}`,
+          type: "document",
+          size: stats.size,
+          uploadedAt: stats.mtime,
+        });
+      });
+    }
+
+    // Sort by upload date (newest first)
+    files.sort((a, b) => b.uploadedAt - a.uploadedAt);
+
+    res.json({
+      success: true,
+      files,
+      total: files.length,
+    });
+  } catch (error) {
+    console.error("List files error:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to list files", error: error.message });
+  }
+});
+
 // Upload single file (PDF, DOC, etc.)
 router.post("/file", authMiddleware, fileUpload.single("file"), (req, res) => {
   try {
