@@ -12,6 +12,7 @@ import {
   LivePreview,
   TrackingScriptsSection,
 } from "../../components/ui";
+import CodeEditorFullscreen from "../../components/CodeEditorFullscreen";
 
 export default function PageForm() {
   const { id } = useParams();
@@ -484,28 +485,17 @@ export default function PageForm() {
                     }}
                   />
                 ) : (
-                  <div className="border border-gray-300 rounded-lg overflow-hidden">
-                    <div className="bg-gray-800 px-4 py-2 flex items-center justify-between">
-                      <span className="text-sm text-gray-300 font-mono">
-                        HTML / CSS / JavaScript / React / Tailwind
-                      </span>
-                      <span className="text-xs text-gray-400">
-                        Paste your custom code here
-                      </span>
-                    </div>
-                    <textarea
-                      value={
-                        typeof formData.content === "string"
-                          ? formData.content
-                          : ""
-                      }
-                      onChange={(e) => handleContentChange(e.target.value)}
-                      className="w-full font-mono text-sm p-4 bg-gray-900 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ minHeight: "500px", tabSize: 2 }}
-                      placeholder={`<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Your Custom Page</title>\n  <script src="https://cdn.tailwindcss.com"></script>\n</head>\n<body>\n  <!-- Your custom HTML here -->\n  <div class="container mx-auto p-8">\n    <h1 class="text-4xl font-bold">Hello World!</h1>\n  </div>\n</body>\n</html>`}
-                      spellCheck={false}
-                    />
-                  </div>
+                  <CodeEditorFullscreen
+                    value={
+                      typeof formData.content === "string"
+                        ? formData.content
+                        : ""
+                    }
+                    onChange={(value) => handleContentChange(value)}
+                    language="HTML/CSS/JS"
+                    minHeight="600px"
+                    placeholder={`<!DOCTYPE html>\\n<html lang="en">\\n<head>\\n  <meta charset="UTF-8">\\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\\n  <title>Your Custom Page</title>\\n  <script src="https://cdn.tailwindcss.com"></script>\\n</head>\\n<body>\\n  <!-- Your custom HTML here -->\\n  <div class="container mx-auto p-8">\\n    <h1 class="text-4xl font-bold">Hello World!</h1>\\n  </div>\\n</body>\\n</html>`}
+                  />
                 )}
               </div>
 

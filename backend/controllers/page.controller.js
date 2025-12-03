@@ -1,5 +1,6 @@
 const Page = require("../models/Page");
 const { Op } = require("sequelize");
+const { processShortcodes } = require("../utils/shortcodeProcessor");
 
 // Get all pages (with filtering and pagination)
 exports.getAllPages = async (req, res) => {
@@ -134,12 +135,22 @@ exports.getPageBySlug = async (req, res) => {
     // Increment views
     await page.increment("views");
 
+    // Process shortcodes in content for full HTML pages
+    const pageData = page.toJSON();
+    if (pageData.content && typeof pageData.content === 'string') {
+      // Check if it's full HTML (starts with <!DOCTYPE or <html)
+      const isFullHTML = /^\s*<!DOCTYPE|^\s*<html/i.test(pageData.content);
+      if (isFullHTML) {
+        pageData.content = processShortcodes(pageData.content);
+      }
+    }
+
     // Generate SEO metadata
     const seoHelpers = require("../utils/seoHelpers");
     const seoMetadata = seoHelpers.generateSEOMetaTags(page, "website");
 
     res.json({
-      page,
+      page: pageData,
       seo: seoMetadata,
     });
   } catch (error) {

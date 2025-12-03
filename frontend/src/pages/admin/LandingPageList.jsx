@@ -190,7 +190,10 @@ export default function LandingPageList() {
           </div>
           <Link
             to="/admin/landing-pages/create"
-            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition shadow-lg hover:shadow-xl font-medium flex items-center gap-2"
+            style={{
+              background: 'linear-gradient(to right, rgb(147, 51, 234), rgb(219, 39, 119))',
+            }}
+            className="text-white px-6 py-3 rounded-lg hover:shadow-xl transition-all shadow-lg font-medium flex items-center gap-2 hover:opacity-90"
           >
             <svg
               className="w-5 h-5"
@@ -212,7 +215,7 @@ export default function LandingPageList() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+        <div style={{ background: 'linear-gradient(to bottom right, rgb(59, 130, 246), rgb(37, 99, 235))' }} className="rounded-xl shadow-lg p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm font-medium">Total Pages</p>
@@ -236,7 +239,7 @@ export default function LandingPageList() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
+        <div style={{ background: 'linear-gradient(to bottom right, rgb(34, 197, 94), rgb(22, 163, 74))' }} className="rounded-xl shadow-lg p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-green-100 text-sm font-medium">Published</p>
@@ -260,7 +263,7 @@ export default function LandingPageList() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl shadow-lg p-6 text-white">
+        <div style={{ background: 'linear-gradient(to bottom right, rgb(234, 179, 8), rgb(249, 115, 22))' }} className="rounded-xl shadow-lg p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-yellow-100 text-sm font-medium">Drafts</p>
@@ -284,7 +287,7 @@ export default function LandingPageList() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl shadow-lg p-6 text-white">
+        <div style={{ background: 'linear-gradient(to bottom right, rgb(168, 85, 247), rgb(236, 72, 153))' }} className="rounded-xl shadow-lg p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-purple-100 text-sm font-medium">Total Views</p>
@@ -328,27 +331,58 @@ export default function LandingPageList() {
           Start with a Template
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {templates.map((template) => (
-            <Link
-              key={template.id}
-              to={`/admin/landing-pages/create?template=${template.id}`}
-              className={`group bg-white rounded-xl border-2 border-gray-200 hover:border-${template.color}-500 p-6 transition-all hover:shadow-lg`}
-            >
-              <div className="flex items-start gap-4">
-                <div
-                  className={`text-4xl bg-${template.color}-100 p-3 rounded-lg group-hover:scale-110 transition-transform`}
-                >
-                  {template.icon}
+          {templates.map((template) => {
+            // Map colors to Tailwind classes
+            const colorClasses = {
+              blue: {
+                border: 'hover:border-blue-500',
+                bg: 'bg-blue-100'
+              },
+              purple: {
+                border: 'hover:border-purple-500',
+                bg: 'bg-purple-100'
+              },
+              green: {
+                border: 'hover:border-green-500',
+                bg: 'bg-green-100'
+              },
+              orange: {
+                border: 'hover:border-orange-500',
+                bg: 'bg-orange-100'
+              },
+              red: {
+                border: 'hover:border-red-500',
+                bg: 'bg-red-100'
+              },
+              indigo: {
+                border: 'hover:border-indigo-500',
+                bg: 'bg-indigo-100'
+              }
+            };
+            
+            const colors = colorClasses[template.color] || colorClasses.blue;
+            
+            return (
+              <Link
+                key={template.id}
+                to={`/admin/landing-pages/create?template=${template.id}`}
+                className={`group bg-white rounded-xl border-2 border-gray-200 ${colors.border} p-6 transition-all hover:shadow-lg`}
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className={`text-4xl ${colors.bg} p-3 rounded-lg group-hover:scale-110 transition-transform`}
+                  >
+                    {template.icon}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-gray-900 text-lg mb-1">
+                      {template.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {template.description}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-900 text-lg mb-1">
-                    {template.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    {template.description}
-                  </p>
-                </div>
-              </div>
               <div className="mt-4 flex items-center text-sm font-medium text-purple-600 group-hover:text-purple-700">
                 Use Template
                 <svg
@@ -366,7 +400,8 @@ export default function LandingPageList() {
                 </svg>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -435,7 +470,10 @@ export default function LandingPageList() {
           </p>
           <Link
             to="/admin/landing-pages/create"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition font-medium"
+            style={{
+              background: 'linear-gradient(to right, rgb(147, 51, 234), rgb(219, 39, 119))',
+            }}
+            className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all font-medium"
           >
             <svg
               className="w-5 h-5"

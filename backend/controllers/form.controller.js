@@ -74,6 +74,7 @@ exports.createForm = async (req, res) => {
       submit_button_text,
       success_message,
       error_message,
+      custom_code,
     } = req.body;
 
     const form = await Form.create({
@@ -87,6 +88,7 @@ exports.createForm = async (req, res) => {
       submit_button_text: submit_button_text || "Submit",
       success_message: success_message || "Thank you for your submission!",
       error_message: error_message || "Something went wrong. Please try again.",
+      custom_code: custom_code || null,
     });
 
     res.status(201).json(form);
@@ -118,6 +120,7 @@ exports.updateForm = async (req, res) => {
       submit_button_text,
       success_message,
       error_message,
+      custom_code,
     } = req.body;
 
     await form.update({
@@ -131,6 +134,7 @@ exports.updateForm = async (req, res) => {
       submit_button_text,
       success_message,
       error_message,
+      custom_code,
     });
 
     res.json(form);

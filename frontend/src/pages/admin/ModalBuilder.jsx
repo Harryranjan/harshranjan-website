@@ -18,6 +18,8 @@ import {
 import api from "../../utils/api";
 import Toast from "../../components/Toast";
 import FormEmbed from "../../components/FormEmbed";
+import FormPreviewModal from "../../components/FormPreviewModal";
+import { FiEye } from "react-icons/fi";
 import { parseShortcodes } from "../../utils/shortcodeParser";
 
 export default function ModalBuilder() {
@@ -1294,7 +1296,16 @@ export default function ModalBuilder() {
           onCancel={() => navigate("/admin/forms")}
           submitText={isEditing ? "Update Modal" : "Create Modal"}
           loading={saving}
-        />
+        >
+          <button
+            type="button"
+            onClick={() => setShowPreview(true)}
+            className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+          >
+            <FiEye size={18} />
+            Preview
+          </button>
+        </FormActions>
       </form>
 
       {/* Success Modal */}
@@ -1733,6 +1744,14 @@ export default function ModalBuilder() {
           onClose={() => setToast(null)}
         />
       )}
+
+      {/* Preview Modal */}
+      <FormPreviewModal
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        formData={modalData}
+        type="modal"
+      />
     </div>
   );
 }

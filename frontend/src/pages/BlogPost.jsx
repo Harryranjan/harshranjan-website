@@ -7,6 +7,7 @@ import ReadingProgressBar from "../components/blog/ReadingProgressBar";
 import TableOfContents from "../components/blog/TableOfContents";
 import BlogSidebar from "../components/blog/BlogSidebar";
 import Spinner from "../components/ui/Spinner";
+import ContentRenderer from "../components/ContentRenderer";
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -308,9 +309,9 @@ export default function BlogPost() {
               )}
 
               {/* Content */}
-              <div
+              <ContentRenderer
+                content={post.content}
                 className="prose prose-sm sm:prose-base lg:prose-lg max-w-none blog-content"
-                dangerouslySetInnerHTML={{ __html: post.content }}
               />
 
               {/* Tags */}

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../utils/api";
 import Modal from "../../components/ui/Modal";
+import FormPreviewModal from "../../components/FormPreviewModal";
+import { FiEye } from "react-icons/fi";
 import {
   POPUP_TEMPLATES,
   POSITION_OPTIONS,
@@ -51,6 +53,7 @@ export default function PopupBuilder() {
 
   const [saving, setSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   const applyTemplate = (templateKey) => {
     const template = POPUP_TEMPLATES[templateKey];
@@ -127,13 +130,22 @@ export default function PopupBuilder() {
             {isEditing ? "Edit Popup" : "Create New Popup"}
           </h1>
         </div>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
-        >
-          {saving ? "Saving..." : "Save Popup"}
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowPreview(true)}
+            className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition inline-flex items-center gap-2"
+          >
+            <FiEye size={18} />
+            Preview
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+          >
+            {saving ? "Saving..." : "Save Popup"}
+          </button>
+        </div>
       </div>
 
       {/* Template Selection */}
@@ -581,6 +593,14 @@ export default function PopupBuilder() {
         }
         autoClose={true}
         autoCloseDuration={2000}
+      />
+
+      {/* Preview Modal */}
+      <FormPreviewModal
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        formData={popupData}
+        type="popup"
       />
     </div>
   );

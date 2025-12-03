@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import api from "../../utils/api";
 import { Spinner, Modal, LivePreview } from "../../components/ui";
+import CodeEditorFullscreen from "../../components/CodeEditorFullscreen";
 
 // Utility to decode HTML entities
 const decodeHTMLEntities = (text) => {
@@ -703,23 +704,19 @@ ${code}
         {/* Custom Code Editor */}
         {editorMode === "code" && (
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Custom Footer Code
-                </h2>
-                <p className="text-sm text-gray-500 mt-1">
-                  Write your custom HTML, CSS, and JavaScript
-                </p>
-              </div>
+            <div className="mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Custom Footer Code
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Write your custom HTML, CSS, and JavaScript
+              </p>
             </div>
-            <textarea
+            <CodeEditorFullscreen
               value={formData.settings.customCode || ""}
-              onChange={(e) =>
-                handleSettingChange("customCode", e.target.value)
-              }
-              rows={24}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-900 text-gray-100"
+              onChange={(value) => handleSettingChange("customCode", value)}
+              language="HTML/CSS/JS"
+              minHeight="600px"
               placeholder={`<footer class="bg-gray-900 text-white py-12">
   <div class="container mx-auto px-4">
     <div class="grid grid-cols-4 gap-8">

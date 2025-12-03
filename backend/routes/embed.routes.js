@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { Form, FormSubmission } = require("../models");
+const embedController = require("../controllers/embed.controller");
+const Modal = require("../models/Modal");
+const Popup = require("../models/Popup");
+const CTABanner = require("../models/CTABanner");
 
 // Public route - Get form for embedding (no auth required)
 router.get("/forms/:id", async (req, res) => {
@@ -294,6 +298,517 @@ router.get("/forms/:id/widget.js", async (req, res) => {
   } catch (error) {
     console.error("Error generating widget JS:", error);
     res.status(500).send('console.error("Error loading form widget");');
+  }
+});
+
+// ===== UNIVERSAL SHORTCODE HANDLER EMBEDS =====
+// These return standalone HTML that works anywhere (iframes, external sites, full HTML pages)
+
+// Form standalone HTML embed
+router.get("/forms/:id/html", embedController.getFormEmbed);
+
+// Modal standalone HTML embed
+router.get("/modals/:id/html", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const modal = await Modal.findByPk(id);
+
+    if (!modal || modal.status !== "active") {
+      return res.status(404).send(`
+        <div style="padding: 20px; background: #fee; border: 1px solid #fcc; border-radius: 8px; color: #c00;">
+          <strong>Modal Not Found</strong>
+        </div>
+      `);
+    }
+
+    const styling = typeof modal.styling === "string" ? JSON.parse(modal.styling) : modal.styling || {};
+
+    const embedHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${modal.title}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+    }
+    .modal-trigger {
+      background: ${styling.buttonColor || '#3b82f6'};
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .modal-trigger:hover {
+      background: ${styling.buttonHoverColor || '#2563eb'};
+    }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999999;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: ${styling.maxWidth || '600px'};
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+    .modal-close:hover {
+      background: #f3f4f6;
+      color: #333;
+    }
+    .modal-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: #1a1a1a;
+    }
+    .modal-body {
+      color: #374151;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <button class="modal-trigger" onclick="openModal()">${styling.triggerText || 'Open Modal'}</button>
+  
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h2 class="modal-title">${modal.title}</h2>
+      <div class="modal-body">${modal.content}</div>
+    </div>
+  </div>
+  
+  <script>
+    function openModal() {
+      document.getElementById('modalOverlay').classList.add('active');
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'modalOpened', modalId: ${id} }, '*');
+      }
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+    
+    function closeModalOnOverlay(e) {
+      if (e.target.id === 'modalOverlay') {
+        closeModal();
+      }
+    }
+    
+    // ESC key closes modal
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
+    `;
+
+    res.setHeader("Content-Type", "text/html");
+    res.send(embedHtml);
+  } catch (error) {
+    console.error("Error generating modal embed:", error);
+    res.status(500).send(`
+      <div style="padding: 20px; background: #fee; border: 1px solid #fcc; border-radius: 8px; color: #c00;">
+        <strong>Error Loading Modal</strong>
+      </div>
+    `);
+  }
+});
+
+// Popup standalone HTML embed
+router.get("/popups/:id/html", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const popup = await Popup.findByPk(id);
+
+    if (!popup || popup.status !== "active") {
+      return res.status(404).send(`
+        <div style="padding: 20px; background: #fee; border: 1px solid #fcc; border-radius: 8px; color: #c00;">
+          <strong>Popup Not Found</strong>
+        </div>
+      `);
+    }
+
+    const styling = typeof popup.styling === "string" ? JSON.parse(popup.styling) : popup.styling || {};
+    const triggerType = popup.trigger_type || "time";
+    const triggerValue = popup.trigger_value || 3000;
+
+    const embedHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${popup.title}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999999;
+      align-items: center;
+      justify-content: center;
+    }
+    .popup-overlay.active {
+      display: flex;
+    }
+    .popup-content {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: ${styling.maxWidth || '500px'};
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .popup-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+    .popup-close:hover {
+      background: #f3f4f6;
+      color: #333;
+    }
+    .popup-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: #1a1a1a;
+    }
+    .popup-body {
+      color: #374151;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="popup-overlay" id="popupOverlay" onclick="closePopupOnOverlay(event)">
+    <div class="popup-content">
+      <button class="popup-close" onclick="closePopup()">&times;</button>
+      <h2 class="popup-title">${popup.title}</h2>
+      <div class="popup-body">${popup.content}</div>
+    </div>
+  </div>
+  
+  <script>
+    const popupId = ${id};
+    const triggerType = '${triggerType}';
+    const triggerValue = ${triggerValue};
+    const seenKey = 'popup_seen_' + popupId;
+    
+    // Check if already seen
+    const hasSeenPopup = localStorage.getItem(seenKey);
+    
+    if (!hasSeenPopup) {
+      if (triggerType === 'time') {
+        setTimeout(openPopup, triggerValue);
+      } else if (triggerType === 'scroll') {
+        window.addEventListener('scroll', checkScroll);
+      } else if (triggerType === 'exit') {
+        document.addEventListener('mouseout', checkExit);
+      }
+    }
+    
+    function checkScroll() {
+      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      if (scrollPercent >= triggerValue) {
+        openPopup();
+        window.removeEventListener('scroll', checkScroll);
+      }
+    }
+    
+    function checkExit(e) {
+      if (e.clientY <= 0) {
+        openPopup();
+        document.removeEventListener('mouseout', checkExit);
+      }
+    }
+    
+    function openPopup() {
+      document.getElementById('popupOverlay').classList.add('active');
+      localStorage.setItem(seenKey, 'true');
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'popupOpened', popupId: popupId }, '*');
+      }
+    }
+    
+    function closePopup() {
+      document.getElementById('popupOverlay').classList.remove('active');
+    }
+    
+    function closePopupOnOverlay(e) {
+      if (e.target.id === 'popupOverlay') {
+        closePopup();
+      }
+    }
+    
+    // ESC key closes popup
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePopup();
+      }
+    });
+  </script>
+</body>
+</html>
+    `;
+
+    res.setHeader("Content-Type", "text/html");
+    res.send(embedHtml);
+  } catch (error) {
+    console.error("Error generating popup embed:", error);
+    res.status(500).send(`
+      <div style="padding: 20px; background: #fee; border: 1px solid #fcc; border-radius: 8px; color: #c00;">
+        <strong>Error Loading Popup</strong>
+      </div>
+    `);
+  }
+});
+
+// CTA Banner standalone HTML embed
+router.get("/cta-banners/:id/html", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const banner = await CTABanner.findByPk(id);
+
+    if (!banner || banner.status !== "active") {
+      return res.status(404).send(`
+        <div style="padding: 20px; background: #fee; border: 1px solid #fcc; border-radius: 8px; color: #c00;">
+          <strong>Banner Not Found</strong>
+        </div>
+      `);
+    }
+
+    const styling = typeof banner.styling === "string" ? JSON.parse(banner.styling) : banner.styling || {};
+    const position = banner.position || "bottom";
+
+    const embedHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${banner.title}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    .cta-banner {
+      position: fixed;
+      ${position}: 0;
+      left: 0;
+      right: 0;
+      background: ${styling.backgroundColor || '#1f2937'};
+      color: ${styling.textColor || 'white'};
+      padding: 16px 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 999998;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from {
+        transform: translateY(${position === 'top' ? '-' : ''}100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    .cta-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .cta-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .cta-description {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .cta-button {
+      background: ${styling.buttonColor || '#3b82f6'};
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.2s;
+      white-space: nowrap;
+    }
+    .cta-button:hover {
+      background: ${styling.buttonHoverColor || '#2563eb'};
+    }
+    .cta-close {
+      background: none;
+      border: none;
+      color: currentColor;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0.7;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+    .cta-close:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    @media (max-width: 640px) {
+      .cta-banner {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+      .cta-content {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .cta-actions {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cta-banner" id="ctaBanner">
+    <div class="cta-content">
+      <div>
+        <div class="cta-title">${banner.title}</div>
+        ${banner.description ? `<div class="cta-description">${banner.description}</div>` : ''}
+      </div>
+    </div>
+    <div class="cta-actions">
+      ${banner.button_text ? `<a href="${banner.button_link || '#'}" class="cta-button" ${banner.open_in_new_tab ? 'target="_blank" rel="noopener"' : ''}>${banner.button_text}</a>` : ''}
+      <button class="cta-close" onclick="closeBanner()">&times;</button>
+    </div>
+  </div>
+  
+  <script>
+    const bannerId = ${id};
+    const dismissKey = 'cta_dismissed_' + bannerId;
+    
+    // Check if already dismissed
+    const isDismissed = localStorage.getItem(dismissKey);
+    if (isDismissed) {
+      document.getElementById('ctaBanner').style.display = 'none';
+    }
+    
+    function closeBanner() {
+      const banner = document.getElementById('ctaBanner');
+      banner.style.animation = 'slideOut 0.3s ease-out';
+      
+      setTimeout(() => {
+        banner.style.display = 'none';
+        localStorage.setItem(dismissKey, 'true');
+        if (window.parent !== window) {
+          window.parent.postMessage({ type: 'ctaBannerClosed', bannerId: bannerId }, '*');
+        }
+      }, 300);
+    }
+  </script>
+</body>
+</html>
+    `;
+
+    res.setHeader("Content-Type", "text/html");
+    res.send(embedHtml);
+  } catch (error) {
+    console.error("Error generating CTA banner embed:", error);
+    res.status(500).send(`
+      <div style="padding: 20px; background: #fee; border: 1px solid #fcc; border-radius: 8px; color: #c00;">
+        <strong>Error Loading Banner</strong>
+      </div>
+    `);
   }
 });
 

@@ -11,8 +11,12 @@ import {
   FiX,
   FiCheck,
   FiPlus,
+  FiCode,
+  FiMaximize2,
 } from "react-icons/fi";
 import Toast from "../../components/Toast";
+import FormPreviewModal from "../../components/FormPreviewModal";
+import CodeEditorFullscreen from "../../components/CodeEditorFullscreen";
 
 const FIELD_TYPES = [
   // Basic Fields
@@ -186,6 +190,8 @@ export default function FormBuilderNew() {
   const location = window.location;
   const isEditing = !!id;
 
+  console.log("🔧 FormBuilderNew component loaded");
+
   // Get template data from navigation state
   const templateData = history.state?.templateData;
   const customCode = history.state?.customCode;
@@ -208,6 +214,19 @@ export default function FormBuilderNew() {
   const [saving, setSaving] = useState(false);
   const [draggedField, setDraggedField] = useState(null);
   const [toast, setToast] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
+  const [showCustomCodeEditor, setShowCustomCodeEditor] = useState(false);
+  const [isEditorFullscreen, setIsEditorFullscreen] = useState(false);
+
+  // Initialize customCodeContent from formData when it changes
+  const [customCodeContent, setCustomCodeContent] = useState(customCode || formData.custom_code || "");
+
+  // Sync customCodeContent with formData.custom_code when formData changes
+  useEffect(() => {
+    if (formData.custom_code) {
+      setCustomCodeContent(formData.custom_code);
+    }
+  }, [formData.custom_code]);
 
   useEffect(() => {
     if (isEditing) {
@@ -219,6 +238,11 @@ export default function FormBuilderNew() {
     try {
       const response = await api.get(`/forms/${id}`);
       setFormData(response.data);
+      // Check if it's a custom code form
+      if (response.data.custom_code) {
+        setCustomCodeContent(response.data.custom_code);
+        setShowCustomCodeEditor(true);
+      }
     } catch (error) {
       console.error("Error fetching form:", error);
     }
@@ -230,27 +254,34 @@ export default function FormBuilderNew() {
       return;
     }
 
+    console.log("Saving form data:", formData);
+    console.log("custom_code in formData:", formData.custom_code);
+    console.log("formData.type:", formData.type);
+
     try {
       setSaving(true);
       if (isEditing) {
-        await api.put(`/forms/${id}`, formData);
-        setToast({ message: "Form updated successfully!", type: "success" });
-        // Redirect after showing toast
-        setTimeout(() => {
-          navigate("/admin/forms?tab=forms");
-        }, 1500);
+        console.log("Updating form with ID:", id);
+        const response = await api.put(`/forms/${id}`, formData);
+        console.log("Form updated successfully:", response.data);
+        console.log("Returned custom_code:", response.data.custom_code);
+        // Use window.location for guaranteed redirect
+        window.location.href = "/admin/forms?tab=forms";
       } else {
-        await api.post("/forms", formData);
-        setToast({ message: "Form created successfully!", type: "success" });
-        // Redirect after showing toast
-        setTimeout(() => {
-          navigate("/admin/forms?tab=forms");
-        }, 1500);
+        console.log("Creating new form...");
+        const response = await api.post("/forms", formData);
+        console.log("Form created successfully:", response.data);
+        // Use window.location for guaranteed redirect
+        window.location.href = "/admin/forms?tab=forms";
       }
     } catch (error) {
-      console.error("Error saving form:", error);
-      setToast({ message: "Failed to save form", type: "error" });
-    } finally {
+      console.error("Error saving form - Full error:", error);
+      console.error("Error response:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+      setToast({ 
+        message: error.response?.data?.message || "Failed to save form", 
+        type: "error" 
+      });
       setSaving(false);
     }
   };
@@ -541,7 +572,7 @@ export default function FormBuilderNew() {
       <div className="bg-white border-b px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => navigate("/admin/forms")}
+            onClick={() => navigate("/admin/forms?tab=forms")}
             className="text-gray-600 hover:text-gray-900 font-medium"
           >
             ← Back
@@ -559,6 +590,26 @@ export default function FormBuilderNew() {
         </div>
         <div className="flex items-center gap-3">
           <button
+            onClick={() => setShowPreview(true)}
+            className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
+          >
+            <FiEye size={18} />
+            Preview
+          </button>
+          {formData.type === "custom" && (
+            <button
+              onClick={() => {
+                // Sync customCodeContent with latest formData before opening
+                setCustomCodeContent(formData.custom_code || "");
+                setShowCustomCodeEditor(true);
+              }}
+              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
+            >
+              <FiCode size={18} />
+              Edit Code
+            </button>
+          )}
+          <button
             onClick={() => setShowSettings(true)}
             className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
           >
@@ -566,7 +617,10 @@ export default function FormBuilderNew() {
             Settings
           </button>
           <button
-            onClick={handleSave}
+            onClick={() => {
+              console.log("🔘 Save button clicked!");
+              handleSave();
+            }}
             disabled={saving}
             className="flex items-center gap-2 px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
           >
@@ -1348,6 +1402,143 @@ export default function FormBuilderNew() {
           type={toast.type}
           onClose={() => setToast(null)}
         />
+      )}
+
+      {/* Preview Modal */}
+      <FormPreviewModal
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        formData={formData}
+        type="form"
+      />
+
+      {/* Custom Code Editor Modal */}
+      {showCustomCodeEditor && (
+        <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 bg-opacity-95 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className={`bg-white rounded-2xl shadow-2xl w-full flex flex-col overflow-hidden transition-all duration-300 ${
+            isEditorFullscreen ? 'max-w-full h-full m-0 rounded-none' : 'max-w-6xl max-h-[95vh]'
+          }`}>
+            {/* Header */}
+            <div className="flex items-center justify-between px-8 py-5 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-blue-600 rounded-xl shadow-lg">
+                  <FiCode className="text-white" size={24} />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Custom Code Editor</h2>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Write or paste your HTML form code
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsEditorFullscreen(!isEditorFullscreen)}
+                  className="p-2.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                  title={isEditorFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                >
+                  <FiMaximize2 size={20} />
+                </button>
+                <button
+                  onClick={() => {
+                    setShowCustomCodeEditor(false);
+                    setIsEditorFullscreen(false);
+                  }}
+                  className="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                  title="Close Editor"
+                >
+                  <FiX size={24} />
+                </button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-auto p-8 space-y-6 bg-gray-50">
+              {/* Form Info Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Form Name */}
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <span className="text-lg">📝</span>
+                    Form Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, name: e.target.value }))
+                    }
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50 focus:bg-white"
+                    placeholder="e.g., Contact Form"
+                  />
+                </div>
+
+                {/* Form Description */}
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <span className="text-lg">💬</span>
+                    Description <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, description: e.target.value }))
+                    }
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50 focus:bg-white"
+                    placeholder="Brief description"
+                  />
+                </div>
+              </div>
+
+              {/* Code Editor - Using Reusable Component */}
+              <CodeEditorFullscreen
+                value={customCodeContent}
+                onChange={setCustomCodeContent}
+                language="HTML/JSX"
+                minHeight={isEditorFullscreen ? 'calc(100vh-400px)' : '450px'}
+                placeholder="<!DOCTYPE html>&#10;<html lang='en'>&#10;<head>&#10;  <meta charset='UTF-8'>&#10;  <title>My Form</title>&#10;</head>&#10;<body>&#10;  <form>&#10;    <input type='text' name='name' placeholder='Your Name' required />&#10;    <input type='email' name='email' placeholder='Your Email' required />&#10;    <button type='submit'>Submit</button>&#10;  </form>&#10;</body>&#10;</html>"
+              />
+            </div>
+
+            {/* Footer */}
+            <div className="px-8 py-5 border-t bg-gray-50 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span>Ready to save</span>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowCustomCodeEditor(false)}
+                  className="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    console.log("Apply Changes clicked");
+                    console.log("customCodeContent:", customCodeContent);
+                    setFormData((prev) => {
+                      const updated = {
+                        ...prev,
+                        custom_code: customCodeContent,
+                        type: "custom",
+                      };
+                      console.log("Updated formData:", updated);
+                      return updated;
+                    });
+                    setShowCustomCodeEditor(false);
+                    setToast({ message: "✨ Custom code applied successfully!", type: "success" });
+                  }}
+                  className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all font-medium shadow-lg shadow-blue-500/30 flex items-center gap-2"
+                >
+                  <span>Apply Changes</span>
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

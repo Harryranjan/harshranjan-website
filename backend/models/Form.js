@@ -51,6 +51,10 @@ const Form = sequelize.define(
         this.setDataValue("styling", JSON.stringify(value));
       },
     },
+    custom_code: {
+      type: DataTypes.TEXT("long"),
+      allowNull: true,
+    },
     status: {
       type: DataTypes.ENUM("active", "inactive", "draft"),
       defaultValue: "draft",
