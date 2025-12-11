@@ -15,36 +15,33 @@ A reusable code editor with fullscreen capability that can be used anywhere for 
 ## 🚀 Quick Start
 
 ```jsx
-import CodeEditorFullscreen from '../../components/CodeEditorFullscreen';
+import CodeEditorFullscreen from "../../components/CodeEditorFullscreen";
 
 function MyComponent() {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
 
   return (
-    <CodeEditorFullscreen
-      value={code}
-      onChange={setCode}
-      language="HTML"
-    />
+    <CodeEditorFullscreen value={code} onChange={setCode} language="HTML" />
   );
 }
 ```
 
 ## 📖 Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | string | `''` | The code content |
-| `onChange` | function | - | Callback when code changes: `(newCode) => void` |
-| `placeholder` | string | HTML template | Placeholder text shown when empty |
-| `language` | string | `'HTML/JSX'` | Language label (HTML, CSS, JavaScript, etc.) |
-| `minHeight` | string | `'450px'` | Minimum height of editor |
-| `readOnly` | boolean | `false` | Make editor read-only |
-| `className` | string | `''` | Additional CSS classes |
+| Prop          | Type     | Default       | Description                                     |
+| ------------- | -------- | ------------- | ----------------------------------------------- |
+| `value`       | string   | `''`          | The code content                                |
+| `onChange`    | function | -             | Callback when code changes: `(newCode) => void` |
+| `placeholder` | string   | HTML template | Placeholder text shown when empty               |
+| `language`    | string   | `'HTML/JSX'`  | Language label (HTML, CSS, JavaScript, etc.)    |
+| `minHeight`   | string   | `'450px'`     | Minimum height of editor                        |
+| `readOnly`    | boolean  | `false`       | Make editor read-only                           |
+| `className`   | string   | `''`          | Additional CSS classes                          |
 
 ## 💡 Usage Examples
 
 ### 1. Custom Forms (Current Implementation)
+
 ```jsx
 <CodeEditorFullscreen
   value={customCodeContent}
@@ -55,6 +52,7 @@ function MyComponent() {
 ```
 
 ### 2. Header Builder
+
 ```jsx
 <CodeEditorFullscreen
   value={headerCode}
@@ -65,6 +63,7 @@ function MyComponent() {
 ```
 
 ### 3. Footer Builder
+
 ```jsx
 <CodeEditorFullscreen
   value={footerCode}
@@ -75,6 +74,7 @@ function MyComponent() {
 ```
 
 ### 4. Custom Page Code
+
 ```jsx
 <CodeEditorFullscreen
   value={pageCode}
@@ -85,6 +85,7 @@ function MyComponent() {
 ```
 
 ### 5. CSS Editor
+
 ```jsx
 <CodeEditorFullscreen
   value={cssCode}
@@ -95,6 +96,7 @@ function MyComponent() {
 ```
 
 ### 6. JavaScript Editor
+
 ```jsx
 <CodeEditorFullscreen
   value={jsCode}
@@ -105,12 +107,9 @@ function MyComponent() {
 ```
 
 ### 7. Read-Only Display
+
 ```jsx
-<CodeEditorFullscreen
-  value={generatedCode}
-  readOnly={true}
-  language="HTML"
-/>
+<CodeEditorFullscreen value={generatedCode} readOnly={true} language="HTML" />
 ```
 
 ## 🎨 Where to Use

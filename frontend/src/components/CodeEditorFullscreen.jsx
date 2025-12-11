@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { FiMaximize2, FiX } from 'react-icons/fi';
+import { useState } from "react";
+import { FiMaximize2, FiX } from "react-icons/fi";
 
 /**
  * Reusable Code Editor with Fullscreen capability
  * Perfect for editing HTML, CSS, JavaScript, or any code
- * 
+ *
  * Usage:
  * <CodeEditorFullscreen
  *   value={code}
@@ -15,24 +15,26 @@ import { FiMaximize2, FiX } from 'react-icons/fi';
  * />
  */
 export default function CodeEditorFullscreen({
-  value = '',
+  value = "",
   onChange,
-  placeholder = '<!DOCTYPE html>\n<html>\n<head>\n  <title>My Page</title>\n</head>\n<body>\n  <h1>Hello World</h1>\n</body>\n</html>',
-  language = 'HTML/JSX',
-  minHeight = '450px',
+  placeholder = "<!DOCTYPE html>\n<html>\n<head>\n  <title>My Page</title>\n</head>\n<body>\n  <h1>Hello World</h1>\n</body>\n</html>",
+  language = "HTML/JSX",
+  minHeight = "450px",
   showLineNumbers = false,
   readOnly = false,
-  className = ''
+  className = "",
 }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const characterCount = value.length;
-  const lineCount = value.split('\n').length;
+  const lineCount = value.split("\n").length;
 
   return (
     <>
       {/* Regular Code Editor */}
-      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden ${className}`}>
+      <div
+        className={`bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden ${className}`}
+      >
         {/* Header */}
         <div className="px-5 py-4 border-b bg-gradient-to-r from-gray-50 to-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -41,7 +43,9 @@ export default function CodeEditorFullscreen({
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
               <div className="w-3 h-3 rounded-full bg-green-500"></div>
             </div>
-            <span className="text-sm font-semibold text-gray-700 ml-2">{language} Code</span>
+            <span className="text-sm font-semibold text-gray-700 ml-2">
+              {language} Code
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -63,7 +67,7 @@ export default function CodeEditorFullscreen({
             )}
           </div>
         </div>
-        
+
         {/* Code Textarea */}
         <div className="relative">
           <textarea
@@ -75,15 +79,17 @@ export default function CodeEditorFullscreen({
               minHeight: minHeight,
               tabSize: 2,
               MozTabSize: 2,
-              lineHeight: '1.6',
-              fontFamily: "'Fira Code', 'Courier New', monospace"
+              lineHeight: "1.6",
+              fontFamily: "'Fira Code', 'Courier New', monospace",
             }}
             placeholder={placeholder}
           />
           {value.length === 0 && (
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
               <div className="text-6xl mb-4">🖥️</div>
-              <p className="text-gray-400 text-sm">Start typing your {language} code here</p>
+              <p className="text-gray-400 text-sm">
+                Start typing your {language} code here
+              </p>
             </div>
           )}
         </div>
@@ -93,9 +99,14 @@ export default function CodeEditorFullscreen({
           <div className="flex items-start gap-3">
             <span className="text-blue-600 mt-0.5">💡</span>
             <div className="flex-1">
-              <p className="text-xs text-blue-900 font-medium mb-1">Quick Tips:</p>
+              <p className="text-xs text-blue-900 font-medium mb-1">
+                Quick Tips:
+              </p>
               <ul className="text-xs text-blue-700 space-y-1 list-disc list-inside">
-                <li>Use the fullscreen button for a distraction-free coding experience</li>
+                <li>
+                  Use the fullscreen button for a distraction-free coding
+                  experience
+                </li>
                 <li>Press ESC to exit fullscreen mode</li>
                 <li>Code is automatically saved when you exit fullscreen</li>
               </ul>
@@ -115,7 +126,9 @@ export default function CodeEditorFullscreen({
                 <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                 <div className="w-3 h-3 rounded-full bg-green-500"></div>
               </div>
-              <span className="text-white font-semibold">{language} Code Editor - Fullscreen Mode</span>
+              <span className="text-white font-semibold">
+                {language} Code Editor - Fullscreen Mode
+              </span>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3 text-sm">
@@ -144,7 +157,7 @@ export default function CodeEditorFullscreen({
               onChange={(e) => onChange?.(e.target.value)}
               readOnly={readOnly}
               onKeyDown={(e) => {
-                if (e.key === 'Escape') {
+                if (e.key === "Escape") {
                   setIsFullscreen(false);
                 }
               }}
@@ -153,23 +166,31 @@ export default function CodeEditorFullscreen({
               style={{
                 tabSize: 2,
                 MozTabSize: 2,
-                lineHeight: '1.7',
-                fontFamily: "'Fira Code', 'Courier New', monospace"
+                lineHeight: "1.7",
+                fontFamily: "'Fira Code', 'Courier New', monospace",
               }}
               autoFocus
             />
             {value.length === 0 && (
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
                 <div className="text-8xl mb-6 opacity-20">💻</div>
-                <p className="text-gray-500 text-lg">Start typing your {language} code here</p>
-                <p className="text-gray-600 text-sm mt-2">Press ESC to exit fullscreen</p>
+                <p className="text-gray-500 text-lg">
+                  Start typing your {language} code here
+                </p>
+                <p className="text-gray-600 text-sm mt-2">
+                  Press ESC to exit fullscreen
+                </p>
               </div>
             )}
           </div>
 
           {/* Fullscreen Footer Hint */}
           <div className="px-6 py-3 bg-gray-800 border-t border-gray-700 flex items-center justify-between text-sm text-gray-400">
-            <span>💡 Tip: Press <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">ESC</kbd> to exit fullscreen</span>
+            <span>
+              💡 Tip: Press{" "}
+              <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">ESC</kbd>{" "}
+              to exit fullscreen
+            </span>
             <span>Changes are saved automatically</span>
           </div>
         </div>

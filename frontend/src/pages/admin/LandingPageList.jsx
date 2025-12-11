@@ -191,7 +191,8 @@ export default function LandingPageList() {
           <Link
             to="/admin/landing-pages/create"
             style={{
-              background: 'linear-gradient(to right, rgb(147, 51, 234), rgb(219, 39, 119))',
+              background:
+                "linear-gradient(to right, rgb(147, 51, 234), rgb(219, 39, 119))",
             }}
             className="text-white px-6 py-3 rounded-lg hover:shadow-xl transition-all shadow-lg font-medium flex items-center gap-2 hover:opacity-90"
           >
@@ -215,7 +216,13 @@ export default function LandingPageList() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div style={{ background: 'linear-gradient(to bottom right, rgb(59, 130, 246), rgb(37, 99, 235))' }} className="rounded-xl shadow-lg p-6 text-white">
+        <div
+          style={{
+            background:
+              "linear-gradient(to bottom right, rgb(59, 130, 246), rgb(37, 99, 235))",
+          }}
+          className="rounded-xl shadow-lg p-6 text-white"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm font-medium">Total Pages</p>
@@ -239,7 +246,13 @@ export default function LandingPageList() {
           </div>
         </div>
 
-        <div style={{ background: 'linear-gradient(to bottom right, rgb(34, 197, 94), rgb(22, 163, 74))' }} className="rounded-xl shadow-lg p-6 text-white">
+        <div
+          style={{
+            background:
+              "linear-gradient(to bottom right, rgb(34, 197, 94), rgb(22, 163, 74))",
+          }}
+          className="rounded-xl shadow-lg p-6 text-white"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-green-100 text-sm font-medium">Published</p>
@@ -263,7 +276,13 @@ export default function LandingPageList() {
           </div>
         </div>
 
-        <div style={{ background: 'linear-gradient(to bottom right, rgb(234, 179, 8), rgb(249, 115, 22))' }} className="rounded-xl shadow-lg p-6 text-white">
+        <div
+          style={{
+            background:
+              "linear-gradient(to bottom right, rgb(234, 179, 8), rgb(249, 115, 22))",
+          }}
+          className="rounded-xl shadow-lg p-6 text-white"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-yellow-100 text-sm font-medium">Drafts</p>
@@ -287,7 +306,13 @@ export default function LandingPageList() {
           </div>
         </div>
 
-        <div style={{ background: 'linear-gradient(to bottom right, rgb(168, 85, 247), rgb(236, 72, 153))' }} className="rounded-xl shadow-lg p-6 text-white">
+        <div
+          style={{
+            background:
+              "linear-gradient(to bottom right, rgb(168, 85, 247), rgb(236, 72, 153))",
+          }}
+          className="rounded-xl shadow-lg p-6 text-white"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-purple-100 text-sm font-medium">Total Views</p>
@@ -335,33 +360,33 @@ export default function LandingPageList() {
             // Map colors to Tailwind classes
             const colorClasses = {
               blue: {
-                border: 'hover:border-blue-500',
-                bg: 'bg-blue-100'
+                border: "hover:border-blue-500",
+                bg: "bg-blue-100",
               },
               purple: {
-                border: 'hover:border-purple-500',
-                bg: 'bg-purple-100'
+                border: "hover:border-purple-500",
+                bg: "bg-purple-100",
               },
               green: {
-                border: 'hover:border-green-500',
-                bg: 'bg-green-100'
+                border: "hover:border-green-500",
+                bg: "bg-green-100",
               },
               orange: {
-                border: 'hover:border-orange-500',
-                bg: 'bg-orange-100'
+                border: "hover:border-orange-500",
+                bg: "bg-orange-100",
               },
               red: {
-                border: 'hover:border-red-500',
-                bg: 'bg-red-100'
+                border: "hover:border-red-500",
+                bg: "bg-red-100",
               },
               indigo: {
-                border: 'hover:border-indigo-500',
-                bg: 'bg-indigo-100'
-              }
+                border: "hover:border-indigo-500",
+                bg: "bg-indigo-100",
+              },
             };
-            
+
             const colors = colorClasses[template.color] || colorClasses.blue;
-            
+
             return (
               <Link
                 key={template.id}
@@ -383,23 +408,23 @@ export default function LandingPageList() {
                     </p>
                   </div>
                 </div>
-              <div className="mt-4 flex items-center text-sm font-medium text-purple-600 group-hover:text-purple-700">
-                Use Template
-                <svg
-                  className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </div>
-            </Link>
+                <div className="mt-4 flex items-center text-sm font-medium text-purple-600 group-hover:text-purple-700">
+                  Use Template
+                  <svg
+                    className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
+              </Link>
             );
           })}
         </div>
@@ -471,7 +496,8 @@ export default function LandingPageList() {
           <Link
             to="/admin/landing-pages/create"
             style={{
-              background: 'linear-gradient(to right, rgb(147, 51, 234), rgb(219, 39, 119))',
+              background:
+                "linear-gradient(to right, rgb(147, 51, 234), rgb(219, 39, 119))",
             }}
             className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all font-medium"
           >

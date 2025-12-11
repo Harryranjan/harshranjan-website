@@ -19,7 +19,7 @@ function PopupTrigger({ popupId, className }) {
 
   const loadPopup = async () => {
     if (loading || popup) return;
-    
+
     try {
       setLoading(true);
       const { data } = await api.get(`/popups/${popupId}`);
@@ -37,15 +37,15 @@ function PopupTrigger({ popupId, className }) {
       <button
         onClick={loadPopup}
         disabled={loading}
-        className={className || "inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium"}
+        className={
+          className ||
+          "inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium"
+        }
       >
         {loading ? "Loading..." : "Show Popup"}
       </button>
       {showPopup && popup && (
-        <PopupEmbed
-          popup={popup}
-          onClose={() => setShowPopup(false)}
-        />
+        <PopupEmbed popup={popup} onClose={() => setShowPopup(false)} />
       )}
     </div>
   );
@@ -73,11 +73,11 @@ export default function ContentRenderer({ content, className = "" }) {
   const parts = parsedContent.split(/(__[A-Z_]+_\d+_\d+__)/g);
 
   const handleOpenModal = (modalId) => {
-    setOpenModals(prev => ({ ...prev, [modalId]: true }));
+    setOpenModals((prev) => ({ ...prev, [modalId]: true }));
   };
 
   const handleCloseModal = (modalId) => {
-    setOpenModals(prev => ({ ...prev, [modalId]: false }));
+    setOpenModals((prev) => ({ ...prev, [modalId]: false }));
   };
 
   return (
@@ -108,7 +108,10 @@ export default function ContentRenderer({ content, className = "" }) {
               <div key={`modal-${component.id}-${index}`}>
                 <button
                   onClick={() => handleOpenModal(component.id)}
-                  className={component.className || "inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"}
+                  className={
+                    component.className ||
+                    "inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                  }
                 >
                   Open Modal
                 </button>

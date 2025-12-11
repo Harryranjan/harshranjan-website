@@ -25,6 +25,7 @@ The shortcode system allows you to embed dynamic components (forms, modals, popu
 ### Automatic Integration
 
 **Pages Already Using ContentRenderer:**
+
 - ✅ `DynamicPage.jsx` - All custom pages
 - ✅ `BlogPost.jsx` - All blog posts
 - ✅ Demo pages and examples
@@ -38,7 +39,6 @@ The shortcode system allows you to embed dynamic components (forms, modals, popu
 ### Example 1: Contact Form in Page Content
 
 In your page editor (Rich/Block/Code mode), add:
-
 
 ```html
 <h1>Contact Us</h1>
@@ -144,7 +144,7 @@ function DynamicContent() {
   const [pageContent, setPageContent] = useState("");
 
   useEffect(() => {
-    api.get("/pages/about").then(res => {
+    api.get("/pages/about").then((res) => {
       setPageContent(res.data.content); // Contains shortcodes
     });
   }, []);
@@ -158,16 +158,20 @@ function DynamicContent() {
 ## 🎨 Customizing Button Styles
 
 ### Form Shortcode
+
 ```html
 [form id="1" class="inline-block my-4"]
 ```
 
 ### Modal Shortcode (Button Style)
+
 ```html
-[modal id="1" class="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"]
+[modal id="1" class="px-8 py-4 bg-blue-600 text-white rounded-lg
+hover:bg-blue-700"]
 ```
 
 ### Popup Shortcode (Button Style)
+
 ```html
 [popup id="1" class="px-6 py-3 bg-purple-600 text-white rounded-lg shadow-lg"]
 ```
@@ -196,6 +200,7 @@ function DynamicContent() {
 ### Step 2: Copy the Shortcode
 
 The system shows you the shortcode:
+
 - Forms: `[form id="5"]`
 - Modals: `[modal id="5"]`
 - Popups: `[popup id="5"]`
@@ -226,25 +231,23 @@ The component automatically renders where you pasted the shortcode!
 ## 📝 Shortcode Syntax Reference
 
 ### Basic Syntax
+
 ```
 [type id="number"]
 ```
 
 ### With Custom Class
+
 ```
 [type id="number" class="css-classes"]
 ```
 
 ### Examples
+
 ```html
-[form id="1"]
-[form id="2" class="my-custom-form"]
-[modal id="3"]
-[modal id="4" class="btn-primary btn-lg"]
-[popup id="5"]
-[popup id="6" class="btn-info"]
-[cta_banner id="7"]
-[cta_banner id="8" class="mb-8"]
+[form id="1"] [form id="2" class="my-custom-form"] [modal id="3"] [modal id="4"
+class="btn-primary btn-lg"] [popup id="5"] [popup id="6" class="btn-info"]
+[cta_banner id="7"] [cta_banner id="8" class="mb-8"]
 ```
 
 ---

@@ -1,23 +1,28 @@
 # Universal Shortcode Handler - Implementation Complete
 
 ## Overview
+
 Implemented a universal shortcode system that makes `[form]`, `[modal]`, `[popup]`, and `[cta_banner]` shortcodes work **everywhere** in the website - including full HTML pages that render in iframes.
 
 ## Problem Solved
+
 Previously, shortcodes only worked in React-rendered pages (Blank/Default templates). Pages with full HTML content (like Homepage and Contact) rendered in iframes where React components couldn't execute, causing shortcodes to appear as plain text.
 
 ## Solution Architecture
 
 ### 1. **Embed API Endpoints** ✅
+
 Created standalone HTML endpoints that work in any context (iframes, external sites, full HTML pages):
 
 #### Endpoints Created:
+
 - `GET /api/embed/forms/:id/html` - Standalone form with inline CSS/JS
 - `GET /api/embed/modals/:id/html` - Standalone modal with trigger button
 - `GET /api/embed/popups/:id/html` - Standalone popup with auto-trigger
 - `GET /api/embed/cta-banners/:id/html` - Standalone CTA banner
 
 #### Features:
+
 - **Self-contained**: All HTML, CSS, and JavaScript inline
 - **No dependencies**: Works without React, Tailwind, or external libraries
 - **Responsive**: Mobile-friendly design
@@ -26,54 +31,61 @@ Created standalone HTML endpoints that work in any context (iframes, external si
 - **Accessible**: Proper ARIA labels, keyboard navigation (ESC to close)
 
 ### 2. **Server-Side Shortcode Processor** ✅
+
 Created `backend/utils/shortcodeProcessor.js` that:
 
 ```javascript
 // Converts shortcodes to iframe embeds
-processShortcodes(content) 
+processShortcodes(content);
 // Input:  [form id="4"]
 // Output: <iframe src="http://localhost:5000/api/embed/forms/4/html"></iframe>
 ```
 
 #### Functions:
+
 - `processShortcodes(content)` - Replace all shortcodes with iframe embeds
 - `hasShortcodes(content)` - Check if content contains shortcodes
 - `extractShortcodes(content)` - Get all shortcodes in content
 - `generateIframeEmbed(type, id, className)` - Generate iframe HTML
 
 ### 3. **Page API Integration** ✅
+
 Updated `backend/controllers/page.controller.js`:
 
 ```javascript
 exports.getPageBySlug = async (req, res) => {
   // ... fetch page ...
-  
+
   // Process shortcodes in full HTML pages
   if (isFullHTML) {
     pageData.content = processShortcodes(pageData.content);
   }
-  
+
   res.json({ page: pageData });
 };
 ```
 
 **Logic**:
+
 - Detects full HTML pages (starts with `<!DOCTYPE` or `<html`)
 - Processes shortcodes before sending to frontend
 - Shortcodes converted to working iframe embeds
 - Blank/Default templates still use React ContentRenderer
 
 ### 4. **Form Controller Enhancement** ✅
+
 Updated `backend/controllers/embed.controller.js`:
 
 **Custom Code Form Support**:
+
 ```javascript
-if (form.type === 'custom' && form.custom_code) {
+if (form.type === "custom" && form.custom_code) {
   return `<!DOCTYPE html>...${form.custom_code}</html>`;
 }
 ```
 
 **Field-Based Form Support**:
+
 - Generates form HTML from fields array
 - Includes validation, styling, submission handling
 - Auto-resize iframe based on content
@@ -84,18 +96,21 @@ if (form.type === 'custom' && form.custom_code) {
 ### Backend Files Created/Modified:
 
 1. **`backend/controllers/embed.controller.js`** (NEW)
+
    - Form embed HTML generator
    - Custom code form support
    - Field-based form generator
    - Inline CSS/JS for standalone operation
 
 2. **`backend/routes/embed.routes.js`** (MODIFIED)
+
    - Added `/forms/:id/html`, `/modals/:id/html`, `/popups/:id/html`, `/cta-banners/:id/html`
    - Modal embed with trigger button and overlay
    - Popup embed with auto-trigger (time/scroll/exit)
    - CTA Banner embed with positioning and dismiss
 
 3. **`backend/utils/shortcodeProcessor.js`** (NEW)
+
    - Server-side shortcode parser
    - Iframe embed generator
    - Regex patterns for all 4 shortcode types
@@ -106,12 +121,14 @@ if (form.type === 'custom' && form.custom_code) {
    - Process shortcodes before response
 
 ### Frontend (No Changes Required)
+
 - Existing `ContentRenderer.jsx` still works for React pages
 - No frontend changes needed for full HTML pages
 
 ## How It Works
 
 ### For Full HTML Pages (Homepage, Contact):
+
 ```
 1. User visits /pages/homepage
 2. Frontend requests /api/pages/slug/homepage
@@ -124,6 +141,7 @@ if (form.type === 'custom' && form.custom_code) {
 ```
 
 ### For React Pages (Blank/Default Templates):
+
 ```
 1. User visits page with Blank template
 2. Frontend requests /api/pages/slug/[slug]
@@ -137,6 +155,7 @@ if (form.type === 'custom' && form.custom_code) {
 ## Testing Results
 
 ### Form ID 4 Status:
+
 - **Name**: Harsh
 - **Type**: custom
 - **Status**: active
@@ -144,7 +163,9 @@ if (form.type === 'custom' && form.custom_code) {
 - **Embed URL**: http://localhost:5000/api/embed/forms/4/html
 
 ### Pages with Shortcodes:
+
 1. **Homepage** (`/homepage`)
+
    - Template: Full HTML
    - Shortcode: `[form id="4"]` (appears twice)
    - Status: Published
@@ -159,6 +180,7 @@ if (form.type === 'custom' && form.custom_code) {
 ## API Endpoints Summary
 
 ### Public Embed Endpoints (No Auth Required):
+
 ```
 GET /api/embed/forms/:id/html              - Standalone form HTML
 GET /api/embed/modals/:id/html             - Standalone modal HTML
@@ -167,6 +189,7 @@ GET /api/embed/cta-banners/:id/html        - Standalone banner HTML
 ```
 
 ### Existing Embed Endpoints (Still Available):
+
 ```
 GET /api/embed/forms/:id                   - Form JSON data
 POST /api/embed/forms/:id/submit           - Submit form
@@ -179,22 +202,15 @@ GET /api/embed/forms/:id/widget.js         - JavaScript widget
 All shortcodes support optional `class` attribute:
 
 ```html
-[form id="4"]
-[form id="4" class="my-custom-class"]
-
-[modal id="1"]
-[modal id="1" class="large-modal"]
-
-[popup id="2"]
-[popup id="2" class="promo-popup"]
-
-[cta_banner id="3"]
-[cta_banner id="3" class="urgent-banner"]
+[form id="4"] [form id="4" class="my-custom-class"] [modal id="1"] [modal id="1"
+class="large-modal"] [popup id="2"] [popup id="2" class="promo-popup"]
+[cta_banner id="3"] [cta_banner id="3" class="urgent-banner"]
 ```
 
 ## Features by Shortcode Type
 
 ### Forms (`[form id="X"]`)
+
 - ✅ Custom code forms (full HTML/CSS/JS)
 - ✅ Field-based forms (dynamic generation)
 - ✅ Form validation
@@ -204,6 +220,7 @@ All shortcodes support optional `class` attribute:
 - ✅ Mobile responsive
 
 ### Modals (`[modal id="X"]`)
+
 - ✅ Trigger button
 - ✅ Overlay with backdrop
 - ✅ Close button (X)
@@ -214,6 +231,7 @@ All shortcodes support optional `class` attribute:
 - ✅ PostMessage to parent
 
 ### Popups (`[popup id="X"]`)
+
 - ✅ Auto-trigger (time/scroll/exit)
 - ✅ LocalStorage to prevent repeat
 - ✅ Overlay with backdrop
@@ -224,6 +242,7 @@ All shortcodes support optional `class` attribute:
 - ✅ PostMessage to parent
 
 ### CTA Banners (`[cta_banner id="X"]`)
+
 - ✅ Fixed positioning (top/bottom)
 - ✅ Action button with link
 - ✅ Dismiss button (X)
@@ -233,6 +252,7 @@ All shortcodes support optional `class` attribute:
 - ✅ Custom colors and styling
 
 ## Browser Compatibility
+
 - ✅ Chrome/Edge (modern)
 - ✅ Firefox (modern)
 - ✅ Safari (modern)
@@ -259,12 +279,14 @@ All shortcodes support optional `class` attribute:
 ## Future Enhancements (Optional)
 
 ### Admin Panel Integration:
+
 - Add "Get Embed Code" button in Forms/Modals/Popups admin
 - Show both shortcode and iframe options
 - Copy-to-clipboard functionality
 - Preview embed before using
 
 ### Advanced Features:
+
 - Embed code with customizable dimensions
 - Analytics tracking (views, submissions, clicks)
 - A/B testing for forms/popups
@@ -274,36 +296,39 @@ All shortcodes support optional `class` attribute:
 ## Usage Examples
 
 ### In Full HTML Pages:
+
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>My Page</title>
-</head>
-<body>
-  <h1>Contact Us</h1>
-  <p>Fill out the form below:</p>
-  
-  [form id="4"]
-  
-  <p>Thank you!</p>
-</body>
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <h1>Contact Us</h1>
+    <p>Fill out the form below:</p>
+
+    [form id="4"]
+
+    <p>Thank you!</p>
+  </body>
 </html>
 ```
 
 ### In Blank Template Pages:
+
 ```
 <div class="container">
   <h1>Contact Us</h1>
   <p>Fill out the form below:</p>
-  
+
   [form id="4"]
-  
+
   <p>Thank you!</p>
 </div>
 ```
 
 ### In Blog Posts:
+
 ```
 Check out our new product!
 
@@ -327,6 +352,7 @@ The Universal Shortcode Handler is now **fully implemented and working**. Shortc
 ✅ Any custom page or content area
 
 The system is:
+
 - **Backwards Compatible**: Existing React-based shortcodes still work
 - **Universal**: Works in iframes, external sites, full HTML
 - **Maintainable**: Clean separation of concerns

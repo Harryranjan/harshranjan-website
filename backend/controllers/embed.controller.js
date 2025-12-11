@@ -30,11 +30,14 @@ exports.getFormEmbed = async (req, res) => {
 
     // Generate standalone HTML
     const embedHtml = generateFormEmbedHTML(form);
-    
+
     // Set headers for iframe embedding
     res.setHeader("Content-Type", "text/html");
     res.setHeader("X-Frame-Options", "SAMEORIGIN");
-    res.setHeader("Content-Security-Policy", "frame-ancestors 'self' http://localhost:5173 http://localhost:5000");
+    res.setHeader(
+      "Content-Security-Policy",
+      "frame-ancestors 'self' http://localhost:5173 http://localhost:5000"
+    );
     res.send(embedHtml);
   } catch (error) {
     console.error("Error generating form embed:", error);
@@ -52,20 +55,26 @@ exports.getFormEmbed = async (req, res) => {
  */
 function generateFormEmbedHTML(form) {
   // Check if this is a custom code form
-  if (form.type === 'custom' && form.custom_code) {
+  if (form.type === "custom" && form.custom_code) {
     // Decode HTML entities if the code is HTML-escaped
     let customCode = form.custom_code;
-    
+
     // Check if it's HTML-escaped and decode it
-    if (customCode.includes('&lt;') || customCode.includes('&gt;') || customCode.includes('&quot;')) {
-      const he = require('he');
+    if (
+      customCode.includes("&lt;") ||
+      customCode.includes("&gt;") ||
+      customCode.includes("&quot;")
+    ) {
+      const he = require("he");
       customCode = he.decode(customCode);
     }
-    
+
     // If the custom code is already a full HTML document, inject auto-resize script
     if (/^\s*<!DOCTYPE/i.test(customCode)) {
       // Inject transparent background style before </head> tag
-      customCode = customCode.replace('</head>', `
+      customCode = customCode.replace(
+        "</head>",
+        `
   <style>
     /* Override body background to be transparent for seamless iframe embedding */
     body {
@@ -76,10 +85,13 @@ function generateFormEmbedHTML(form) {
       background: transparent !important;
     }
   </style>
-</head>`);
-      
+</head>`
+      );
+
       // Add auto-resize script before closing body tag
-      customCode = customCode.replace('</body>', `
+      customCode = customCode.replace(
+        "</body>",
+        `
   <script>
     // Auto-resize iframe to fit content
     function resizeIframe() {
@@ -98,10 +110,11 @@ function generateFormEmbedHTML(form) {
     // Initial resize
     resizeIframe();
   </script>
-</body>`);
+</body>`
+      );
       return customCode;
     }
-    
+
     // Otherwise, wrap it in a basic HTML structure
     return `
 <!DOCTYPE html>
@@ -148,59 +161,66 @@ function generateFormEmbedHTML(form) {
 </html>
     `;
   }
-  
+
   // Standard field-based form
-  const fields = typeof form.fields === "string" ? JSON.parse(form.fields) : form.fields;
-  const styling = typeof form.styling === "string" ? JSON.parse(form.styling) : form.styling || {};
-  
-  const fieldHtml = fields.map(field => {
-    const required = field.required ? "required" : "";
-    const fieldId = `field-${field.id}`;
-    
-    let inputHtml = "";
-    
-    switch (field.type) {
-      case "text":
-      case "email":
-      case "tel":
-      case "url":
-      case "number":
-        inputHtml = `<input 
+  const fields =
+    typeof form.fields === "string" ? JSON.parse(form.fields) : form.fields;
+  const styling =
+    typeof form.styling === "string"
+      ? JSON.parse(form.styling)
+      : form.styling || {};
+
+  const fieldHtml = fields
+    .map((field) => {
+      const required = field.required ? "required" : "";
+      const fieldId = `field-${field.id}`;
+
+      let inputHtml = "";
+
+      switch (field.type) {
+        case "text":
+        case "email":
+        case "tel":
+        case "url":
+        case "number":
+          inputHtml = `<input 
           type="${field.type}" 
           id="${fieldId}" 
           name="${field.name}" 
-          placeholder="${field.placeholder || ''}" 
+          placeholder="${field.placeholder || ""}" 
           ${required}
           class="form-input"
         />`;
-        break;
-        
-      case "textarea":
-        inputHtml = `<textarea 
+          break;
+
+        case "textarea":
+          inputHtml = `<textarea 
           id="${fieldId}" 
           name="${field.name}" 
-          placeholder="${field.placeholder || ''}" 
+          placeholder="${field.placeholder || ""}" 
           rows="${field.rows || 4}"
           ${required}
           class="form-input"
         ></textarea>`;
-        break;
-        
-      case "select":
-        const options = field.options || [];
-        inputHtml = `<select 
+          break;
+
+        case "select":
+          const options = field.options || [];
+          inputHtml = `<select 
           id="${fieldId}" 
           name="${field.name}" 
           ${required}
           class="form-input"
         >
           <option value="">Select...</option>
-          ${options.map(opt => `<option value="${opt}">${opt}</option>`).join("")}
+          ${options
+            .map((opt) => `<option value="${opt}">${opt}</option>`)
+            .join("")}
         </select>`;
-        break;
-        
-      case "checkbox":
-        inputHtml = `<label class="checkbox-label">
+          break;
+
+        case "checkbox":
+          inputHtml = `<label class="checkbox-label">
           <input 
             type="checkbox" 
             id="${fieldId}" 
@@ -211,11 +231,13 @@ function generateFormEmbedHTML(form) {
           />
           <span>${field.label}</span>
         </label>`;
-        return `<div class="form-field checkbox-field">${inputHtml}</div>`;
-        
-      case "radio":
-        const radioOptions = field.options || [];
-        inputHtml = radioOptions.map(opt => `
+          return `<div class="form-field checkbox-field">${inputHtml}</div>`;
+
+        case "radio":
+          const radioOptions = field.options || [];
+          inputHtml = radioOptions
+            .map(
+              (opt) => `
           <label class="radio-label">
             <input 
               type="radio" 
@@ -226,24 +248,27 @@ function generateFormEmbedHTML(form) {
             />
             <span>${opt}</span>
           </label>
-        `).join("");
-        break;
-    }
-    
-    if (field.type === "checkbox") {
-      return inputHtml;
-    }
-    
-    return `
+        `
+            )
+            .join("");
+          break;
+      }
+
+      if (field.type === "checkbox") {
+        return inputHtml;
+      }
+
+      return `
       <div class="form-field">
         <label for="${fieldId}" class="form-label">
           ${field.label}
-          ${field.required ? '<span class="required">*</span>' : ''}
+          ${field.required ? '<span class="required">*</span>' : ""}
         </label>
         ${inputHtml}
       </div>
     `;
-  }).join("");
+    })
+    .join("");
 
   return `
 <!DOCTYPE html>
@@ -345,7 +370,7 @@ function generateFormEmbedHTML(form) {
     }
     
     .form-button {
-      background: ${styling.buttonColor || '#3b82f6'};
+      background: ${styling.buttonColor || "#3b82f6"};
       color: white;
       padding: 12px 24px;
       border: none;
@@ -358,7 +383,7 @@ function generateFormEmbedHTML(form) {
     }
     
     .form-button:hover {
-      background: ${styling.buttonHoverColor || '#2563eb'};
+      background: ${styling.buttonHoverColor || "#2563eb"};
     }
     
     .form-button:disabled {
@@ -403,7 +428,11 @@ function generateFormEmbedHTML(form) {
 <body>
   <div class="form-container">
     <h2 class="form-title">${form.name}</h2>
-    ${form.description ? `<p class="form-description">${form.description}</p>` : ''}
+    ${
+      form.description
+        ? `<p class="form-description">${form.description}</p>`
+        : ""
+    }
     
     <div id="message"></div>
     
@@ -411,7 +440,7 @@ function generateFormEmbedHTML(form) {
       ${fieldHtml}
       
       <button type="submit" class="form-button" id="submitBtn">
-        ${form.submit_button_text || 'Submit'}
+        ${form.submit_button_text || "Submit"}
       </button>
     </form>
   </div>
@@ -445,7 +474,9 @@ function generateFormEmbedHTML(form) {
       });
       
       try {
-        const response = await fetch('${process.env.FRONTEND_URL || 'http://localhost:5000'}/api/forms/${form.id}/submit', {
+        const response = await fetch('${
+          process.env.FRONTEND_URL || "http://localhost:5000"
+        }/api/forms/${form.id}/submit', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -456,22 +487,31 @@ function generateFormEmbedHTML(form) {
         const result = await response.json();
         
         if (response.ok) {
-          messageDiv.innerHTML = '<div class="alert alert-success">${form.success_message || 'Thank you! Your submission has been received.'}</div>';
+          messageDiv.innerHTML = '<div class="alert alert-success">${
+            form.success_message ||
+            "Thank you! Your submission has been received."
+          }</div>';
           form.reset();
           
           // Notify parent if in iframe
           if (window.parent !== window) {
-            window.parent.postMessage({ type: 'formSubmitted', formId: ${form.id} }, '*');
+            window.parent.postMessage({ type: 'formSubmitted', formId: ${
+              form.id
+            } }, '*');
           }
         } else {
-          messageDiv.innerHTML = '<div class="alert alert-error">' + (result.message || '${form.error_message || 'An error occurred. Please try again.'}') + '</div>';
+          messageDiv.innerHTML = '<div class="alert alert-error">' + (result.message || '${
+            form.error_message || "An error occurred. Please try again."
+          }') + '</div>';
         }
       } catch (error) {
         console.error('Form submission error:', error);
-        messageDiv.innerHTML = '<div class="alert alert-error">${form.error_message || 'An error occurred. Please try again.'}</div>';
+        messageDiv.innerHTML = '<div class="alert alert-error">${
+          form.error_message || "An error occurred. Please try again."
+        }</div>';
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '${form.submit_button_text || 'Submit'}';
+        btn.innerHTML = '${form.submit_button_text || "Submit"}';
       }
     }
   </script>

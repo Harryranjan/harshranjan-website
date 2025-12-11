@@ -321,7 +321,10 @@ router.get("/modals/:id/html", async (req, res) => {
       `);
     }
 
-    const styling = typeof modal.styling === "string" ? JSON.parse(modal.styling) : modal.styling || {};
+    const styling =
+      typeof modal.styling === "string"
+        ? JSON.parse(modal.styling)
+        : modal.styling || {};
 
     const embedHtml = `
 <!DOCTYPE html>
@@ -337,7 +340,7 @@ router.get("/modals/:id/html", async (req, res) => {
       padding: 20px;
     }
     .modal-trigger {
-      background: ${styling.buttonColor || '#3b82f6'};
+      background: ${styling.buttonColor || "#3b82f6"};
       color: white;
       padding: 12px 24px;
       border: none;
@@ -348,7 +351,7 @@ router.get("/modals/:id/html", async (req, res) => {
       transition: background-color 0.2s;
     }
     .modal-trigger:hover {
-      background: ${styling.buttonHoverColor || '#2563eb'};
+      background: ${styling.buttonHoverColor || "#2563eb"};
     }
     .modal-overlay {
       display: none;
@@ -369,7 +372,7 @@ router.get("/modals/:id/html", async (req, res) => {
       background: white;
       border-radius: 12px;
       padding: 32px;
-      max-width: ${styling.maxWidth || '600px'};
+      max-width: ${styling.maxWidth || "600px"};
       width: 90%;
       max-height: 90vh;
       overflow-y: auto;
@@ -408,7 +411,9 @@ router.get("/modals/:id/html", async (req, res) => {
   </style>
 </head>
 <body>
-  <button class="modal-trigger" onclick="openModal()">${styling.triggerText || 'Open Modal'}</button>
+  <button class="modal-trigger" onclick="openModal()">${
+    styling.triggerText || "Open Modal"
+  }</button>
   
   <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
     <div class="modal-content">
@@ -473,7 +478,10 @@ router.get("/popups/:id/html", async (req, res) => {
       `);
     }
 
-    const styling = typeof popup.styling === "string" ? JSON.parse(popup.styling) : popup.styling || {};
+    const styling =
+      typeof popup.styling === "string"
+        ? JSON.parse(popup.styling)
+        : popup.styling || {};
     const triggerType = popup.trigger_type || "time";
     const triggerValue = popup.trigger_value || 3000;
 
@@ -505,7 +513,7 @@ router.get("/popups/:id/html", async (req, res) => {
       background: white;
       border-radius: 12px;
       padding: 32px;
-      max-width: ${styling.maxWidth || '500px'};
+      max-width: ${styling.maxWidth || "500px"};
       width: 90%;
       max-height: 90vh;
       overflow-y: auto;
@@ -652,7 +660,10 @@ router.get("/cta-banners/:id/html", async (req, res) => {
       `);
     }
 
-    const styling = typeof banner.styling === "string" ? JSON.parse(banner.styling) : banner.styling || {};
+    const styling =
+      typeof banner.styling === "string"
+        ? JSON.parse(banner.styling)
+        : banner.styling || {};
     const position = banner.position || "bottom";
 
     const embedHtml = `
@@ -669,8 +680,8 @@ router.get("/cta-banners/:id/html", async (req, res) => {
       ${position}: 0;
       left: 0;
       right: 0;
-      background: ${styling.backgroundColor || '#1f2937'};
-      color: ${styling.textColor || 'white'};
+      background: ${styling.backgroundColor || "#1f2937"};
+      color: ${styling.textColor || "white"};
       padding: 16px 20px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       z-index: 999998;
@@ -682,7 +693,7 @@ router.get("/cta-banners/:id/html", async (req, res) => {
     }
     @keyframes slideIn {
       from {
-        transform: translateY(${position === 'top' ? '-' : ''}100%);
+        transform: translateY(${position === "top" ? "-" : ""}100%);
         opacity: 0;
       }
       to {
@@ -710,7 +721,7 @@ router.get("/cta-banners/:id/html", async (req, res) => {
       gap: 12px;
     }
     .cta-button {
-      background: ${styling.buttonColor || '#3b82f6'};
+      background: ${styling.buttonColor || "#3b82f6"};
       color: white;
       padding: 10px 20px;
       border: none;
@@ -723,7 +734,7 @@ router.get("/cta-banners/:id/html", async (req, res) => {
       white-space: nowrap;
     }
     .cta-button:hover {
-      background: ${styling.buttonHoverColor || '#2563eb'};
+      background: ${styling.buttonHoverColor || "#2563eb"};
     }
     .cta-close {
       background: none;
@@ -764,11 +775,21 @@ router.get("/cta-banners/:id/html", async (req, res) => {
     <div class="cta-content">
       <div>
         <div class="cta-title">${banner.title}</div>
-        ${banner.description ? `<div class="cta-description">${banner.description}</div>` : ''}
+        ${
+          banner.description
+            ? `<div class="cta-description">${banner.description}</div>`
+            : ""
+        }
       </div>
     </div>
     <div class="cta-actions">
-      ${banner.button_text ? `<a href="${banner.button_link || '#'}" class="cta-button" ${banner.open_in_new_tab ? 'target="_blank" rel="noopener"' : ''}>${banner.button_text}</a>` : ''}
+      ${
+        banner.button_text
+          ? `<a href="${banner.button_link || "#"}" class="cta-button" ${
+              banner.open_in_new_tab ? 'target="_blank" rel="noopener"' : ""
+            }>${banner.button_text}</a>`
+          : ""
+      }
       <button class="cta-close" onclick="closeBanner()">&times;</button>
     </div>
   </div>

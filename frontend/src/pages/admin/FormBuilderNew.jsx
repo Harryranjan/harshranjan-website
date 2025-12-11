@@ -219,7 +219,9 @@ export default function FormBuilderNew() {
   const [isEditorFullscreen, setIsEditorFullscreen] = useState(false);
 
   // Initialize customCodeContent from formData when it changes
-  const [customCodeContent, setCustomCodeContent] = useState(customCode || formData.custom_code || "");
+  const [customCodeContent, setCustomCodeContent] = useState(
+    customCode || formData.custom_code || ""
+  );
 
   // Sync customCodeContent with formData.custom_code when formData changes
   useEffect(() => {
@@ -278,9 +280,9 @@ export default function FormBuilderNew() {
       console.error("Error saving form - Full error:", error);
       console.error("Error response:", error.response?.data);
       console.error("Error status:", error.response?.status);
-      setToast({ 
-        message: error.response?.data?.message || "Failed to save form", 
-        type: "error" 
+      setToast({
+        message: error.response?.data?.message || "Failed to save form",
+        type: "error",
       });
       setSaving(false);
     }
@@ -1415,9 +1417,13 @@ export default function FormBuilderNew() {
       {/* Custom Code Editor Modal */}
       {showCustomCodeEditor && (
         <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 bg-opacity-95 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className={`bg-white rounded-2xl shadow-2xl w-full flex flex-col overflow-hidden transition-all duration-300 ${
-            isEditorFullscreen ? 'max-w-full h-full m-0 rounded-none' : 'max-w-6xl max-h-[95vh]'
-          }`}>
+          <div
+            className={`bg-white rounded-2xl shadow-2xl w-full flex flex-col overflow-hidden transition-all duration-300 ${
+              isEditorFullscreen
+                ? "max-w-full h-full m-0 rounded-none"
+                : "max-w-6xl max-h-[95vh]"
+            }`}
+          >
             {/* Header */}
             <div className="flex items-center justify-between px-8 py-5 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
               <div className="flex items-center gap-4">
@@ -1425,7 +1431,9 @@ export default function FormBuilderNew() {
                   <FiCode className="text-white" size={24} />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Custom Code Editor</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    Custom Code Editor
+                  </h2>
                   <p className="text-sm text-gray-600 mt-1">
                     Write or paste your HTML form code
                   </p>
@@ -1435,7 +1443,9 @@ export default function FormBuilderNew() {
                 <button
                   onClick={() => setIsEditorFullscreen(!isEditorFullscreen)}
                   className="p-2.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
-                  title={isEditorFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                  title={
+                    isEditorFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"
+                  }
                 >
                   <FiMaximize2 size={20} />
                 </button>
@@ -1477,13 +1487,19 @@ export default function FormBuilderNew() {
                 <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
                   <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
                     <span className="text-lg">💬</span>
-                    Description <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+                    Description{" "}
+                    <span className="text-xs text-gray-400 font-normal">
+                      (Optional)
+                    </span>
                   </label>
                   <input
                     type="text"
                     value={formData.description}
                     onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, description: e.target.value }))
+                      setFormData((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
                     }
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50 focus:bg-white"
                     placeholder="Brief description"
@@ -1496,7 +1512,7 @@ export default function FormBuilderNew() {
                 value={customCodeContent}
                 onChange={setCustomCodeContent}
                 language="HTML/JSX"
-                minHeight={isEditorFullscreen ? 'calc(100vh-400px)' : '450px'}
+                minHeight={isEditorFullscreen ? "calc(100vh-400px)" : "450px"}
                 placeholder="<!DOCTYPE html>&#10;<html lang='en'>&#10;<head>&#10;  <meta charset='UTF-8'>&#10;  <title>My Form</title>&#10;</head>&#10;<body>&#10;  <form>&#10;    <input type='text' name='name' placeholder='Your Name' required />&#10;    <input type='email' name='email' placeholder='Your Email' required />&#10;    <button type='submit'>Submit</button>&#10;  </form>&#10;</body>&#10;</html>"
               />
             </div>
@@ -1528,7 +1544,10 @@ export default function FormBuilderNew() {
                       return updated;
                     });
                     setShowCustomCodeEditor(false);
-                    setToast({ message: "✨ Custom code applied successfully!", type: "success" });
+                    setToast({
+                      message: "✨ Custom code applied successfully!",
+                      type: "success",
+                    });
                   }}
                   className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all font-medium shadow-lg shadow-blue-500/30 flex items-center gap-2"
                 >

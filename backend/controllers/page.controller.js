@@ -137,7 +137,7 @@ exports.getPageBySlug = async (req, res) => {
 
     // Process shortcodes in content for full HTML pages
     const pageData = page.toJSON();
-    if (pageData.content && typeof pageData.content === 'string') {
+    if (pageData.content && typeof pageData.content === "string") {
       // Check if it's full HTML (starts with <!DOCTYPE or <html)
       const isFullHTML = /^\s*<!DOCTYPE|^\s*<html/i.test(pageData.content);
       if (isFullHTML) {

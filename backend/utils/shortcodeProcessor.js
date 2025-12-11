@@ -3,14 +3,15 @@
  * Replaces shortcodes in HTML content with iframe embeds that work universally
  */
 
-const API_URL = process.env.API_URL || process.env.BACKEND_URL || 'http://localhost:5000';
+const API_URL =
+  process.env.API_URL || process.env.BACKEND_URL || "http://localhost:5000";
 
 /**
  * Process shortcodes in HTML content
  * Converts [form id="X"], [modal id="X"], etc. to iframe embeds
  */
 function processShortcodes(content) {
-  if (!content || typeof content !== 'string') {
+  if (!content || typeof content !== "string") {
     return content;
   }
 
@@ -20,7 +21,7 @@ function processShortcodes(content) {
   processedContent = processedContent.replace(
     /\[form\s+id="(\d+)"(?:\s+class="([^"]*)")?\]/g,
     (match, id, className) => {
-      return generateIframeEmbed('forms', id, className);
+      return generateIframeEmbed("forms", id, className);
     }
   );
 
@@ -28,7 +29,7 @@ function processShortcodes(content) {
   processedContent = processedContent.replace(
     /\[modal\s+id="(\d+)"(?:\s+class="([^"]*)")?\]/g,
     (match, id, className) => {
-      return generateIframeEmbed('modals', id, className);
+      return generateIframeEmbed("modals", id, className);
     }
   );
 
@@ -36,7 +37,7 @@ function processShortcodes(content) {
   processedContent = processedContent.replace(
     /\[popup\s+id="(\d+)"(?:\s+class="([^"]*)")?\]/g,
     (match, id, className) => {
-      return generateIframeEmbed('popups', id, className);
+      return generateIframeEmbed("popups", id, className);
     }
   );
 
@@ -44,7 +45,7 @@ function processShortcodes(content) {
   processedContent = processedContent.replace(
     /\[cta_banner\s+id="(\d+)"(?:\s+class="([^"]*)")?\]/g,
     (match, id, className) => {
-      return generateIframeEmbed('cta-banners', id, className);
+      return generateIframeEmbed("cta-banners", id, className);
     }
   );
 
@@ -54,20 +55,25 @@ function processShortcodes(content) {
 /**
  * Generate iframe embed HTML for a shortcode
  */
-function generateIframeEmbed(type, id, className = '') {
+function generateIframeEmbed(type, id, className = "") {
   const iframeId = `embed-${type}-${id}`;
   const embedUrl = `${API_URL}/api/embed/${type}/${id}/html`;
-  
+
   // Different iframe styles based on type
   const iframeStyles = {
-    forms: 'width: 100%; border: none; display: block; background: transparent;',
-    modals: 'width: 100%; min-height: 100px; border: none; background: transparent;',
-    popups: 'width: 1px; height: 1px; position: absolute; opacity: 0; pointer-events: none;',
-    'cta-banners': 'width: 1px; height: 1px; position: absolute; opacity: 0; pointer-events: none;'
+    forms:
+      "width: 100%; border: none; display: block; background: transparent;",
+    modals:
+      "width: 100%; min-height: 100px; border: none; background: transparent;",
+    popups:
+      "width: 1px; height: 1px; position: absolute; opacity: 0; pointer-events: none;",
+    "cta-banners":
+      "width: 1px; height: 1px; position: absolute; opacity: 0; pointer-events: none;",
   };
 
-  const style = iframeStyles[type] || 'width: 100%; border: none; background: transparent;';
-  
+  const style =
+    iframeStyles[type] || "width: 100%; border: none; background: transparent;";
+
   return `
     <div class="shortcode-embed ${className}" data-shortcode-type="${type}" data-shortcode-id="${id}" style="width: 100%; overflow: visible;">
       <iframe 
@@ -80,7 +86,9 @@ function generateIframeEmbed(type, id, className = '') {
         title="${type.charAt(0).toUpperCase() + type.slice(1)} ${id}"
       ></iframe>
     </div>
-    ${type === 'forms' ? `
+    ${
+      type === "forms"
+        ? `
     <script>
       (function() {
         const iframe = document.getElementById('${iframeId}');
@@ -107,7 +115,9 @@ function generateIframeEmbed(type, id, className = '') {
         });
       })();
     </script>
-    ` : ''}
+    `
+        : ""
+    }
   `;
 }
 
@@ -115,11 +125,12 @@ function generateIframeEmbed(type, id, className = '') {
  * Check if content contains any shortcodes
  */
 function hasShortcodes(content) {
-  if (!content || typeof content !== 'string') {
+  if (!content || typeof content !== "string") {
     return false;
   }
 
-  const shortcodePattern = /\[(form|modal|popup|cta_banner)\s+id="\d+"(?:\s+class="[^"]*")?\]/;
+  const shortcodePattern =
+    /\[(form|modal|popup|cta_banner)\s+id="\d+"(?:\s+class="[^"]*")?\]/;
   return shortcodePattern.test(content);
 }
 
@@ -127,11 +138,12 @@ function hasShortcodes(content) {
  * Extract all shortcodes from content
  */
 function extractShortcodes(content) {
-  if (!content || typeof content !== 'string') {
+  if (!content || typeof content !== "string") {
     return [];
   }
 
-  const shortcodePattern = /\[(form|modal|popup|cta_banner)\s+id="(\d+)"(?:\s+class="([^"]*)")?\]/g;
+  const shortcodePattern =
+    /\[(form|modal|popup|cta_banner)\s+id="(\d+)"(?:\s+class="([^"]*)")?\]/g;
   const shortcodes = [];
   let match;
 
@@ -139,8 +151,8 @@ function extractShortcodes(content) {
     shortcodes.push({
       type: match[1],
       id: match[2],
-      class: match[3] || '',
-      fullMatch: match[0]
+      class: match[3] || "",
+      fullMatch: match[0],
     });
   }
 
@@ -151,5 +163,5 @@ module.exports = {
   processShortcodes,
   hasShortcodes,
   extractShortcodes,
-  generateIframeEmbed
+  generateIframeEmbed,
 };

@@ -76,10 +76,7 @@ export default function MediaLibrary() {
         });
       }
 
-      showToast(
-        `Successfully uploaded ${fileList.length} file(s)`,
-        "success"
-      );
+      showToast(`Successfully uploaded ${fileList.length} file(s)`, "success");
       loadFiles();
     } catch (error) {
       console.error("Upload error:", error);
@@ -204,8 +201,7 @@ export default function MediaLibrary() {
           Images (
           {
             files.filter(
-              (f) =>
-                f.url?.includes("/images/") || f.type?.startsWith("image/")
+              (f) => f.url?.includes("/images/") || f.type?.startsWith("image/")
             ).length
           }
           )
@@ -221,8 +217,7 @@ export default function MediaLibrary() {
           Documents (
           {
             files.filter(
-              (f) =>
-                f.url?.includes("/files/") || !f.type?.startsWith("image/")
+              (f) => f.url?.includes("/files/") || !f.type?.startsWith("image/")
             ).length
           }
           )

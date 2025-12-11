@@ -39,7 +39,11 @@ router.delete("/:id", authMiddleware, formController.deleteForm);
 router.post("/:id/duplicate", authMiddleware, formController.duplicateForm);
 
 // Form submission routes (PUBLIC - apply rate limiting)
-router.post("/:formId/submit", formLimiter, formSubmissionController.submitForm); // Public endpoint with rate limit
+router.post(
+  "/:formId/submit",
+  formLimiter,
+  formSubmissionController.submitForm
+); // Public endpoint with rate limit
 router.get(
   "/:formId/submissions",
   authMiddleware,

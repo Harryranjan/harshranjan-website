@@ -58,7 +58,7 @@ export default function FormList() {
     limit: 20,
     total: 0,
   });
-  
+
   // Read tab from URL parameter, default to "forms"
   const tabFromUrl = searchParams.get("tab") || "forms";
   const [activeTab, setActiveTab] = useState(tabFromUrl);
@@ -494,17 +494,17 @@ export default function FormList() {
             <span>New Form</span>
           </button>
           <button
-            onClick={() => navigate('/admin/forms/modals/new')}
+            onClick={() => navigate("/admin/forms/modals/new")}
             className="text-white px-4 py-2 rounded-lg transition inline-flex items-center gap-2 font-medium shadow-sm"
-            style={{ backgroundColor: '#8B5CF6' }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#7C3AED'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#8B5CF6'}
+            style={{ backgroundColor: "#8B5CF6" }}
+            onMouseEnter={(e) => (e.target.style.backgroundColor = "#7C3AED")}
+            onMouseLeave={(e) => (e.target.style.backgroundColor = "#8B5CF6")}
           >
             <span>🪟</span>
             <span>New Modal</span>
           </button>
           <button
-            onClick={() => navigate('/admin/forms/popups/new')}
+            onClick={() => navigate("/admin/forms/popups/new")}
             className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition inline-flex items-center gap-2 font-medium shadow-sm"
           >
             <span>💬</span>
