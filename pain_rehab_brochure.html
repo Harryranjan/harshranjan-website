@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pain Therapy & Rehab Centre - Brochure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .brochure {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+        }
+
+        /* COVER PAGE */
+        .cover-page {
+            height: 100vh;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+
+        .medical-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .icon-float {
+            position: absolute;
+            font-size: 60px;
+            opacity: 0.1;
+            animation: floatIcon 15s infinite;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        .icon-1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .icon-2 { top: 20%; right: 15%; animation-delay: 2s; }
+        .icon-3 { bottom: 20%; left: 20%; animation-delay: 4s; }
+        .icon-4 { bottom: 15%; right: 10%; animation-delay: 6s; }
+        .icon-5 { top: 50%; left: 5%; animation-delay: 1s; }
+        .icon-6 { top: 60%; right: 8%; animation-delay: 3s; }
+
+        .cover-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-area {
+            margin-bottom: 40px;
+        }
+
+        .medical-cross {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            font-size: 50px;
+            box-shadow: 0 10px 40px rgba(0,210,255,0.3);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .cover-title {
+            font-size: 4em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 2px 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .cover-subtitle {
+            font-size: 1.8em;
+            font-weight: 300;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cover-tagline {
+            font-size: 1.3em;
+            max-width: 600px;
+            margin: 0 auto 50px;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        .cover-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .cover-stat {
+            text-align: center;
+        }
+
+        .cover-stat-number {
+            font-size: 3em;
+            font-weight: 700;
+            color: #00d2ff;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .cover-stat-label {
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .scroll-indicator::after {
+            content: '↓';
+            font-size: 2em;
+            opacity: 0.6;
+        }
+
+        /* MAIN CONTENT PAGES */
+        .page {
+            min-height: 100vh;
+            padding: 80px 60px;
+            position: relative;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-title {
+            font-size: 3em;
+            color: #0f2027;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 2px;
+        }
+
+        .page-subtitle {
+            font-size: 1.3em;
+            color: #666;
+            max-width: 700px;
+            margin: 20px auto 0;
+            line-height: 1.6;
+        }
+
+        /* DOCTORS SECTION */
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .doctor-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doctor-card::before {
+            content: '👨‍⚕️';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 150px;
+            opacity: 0.1;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        }
+
+        .doctor-card h3 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .doctor-card .credentials {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .doctor-card p {
+            line-height: 1.8;
+            font-size: 1.05em;
+            opacity: 0.95;
+        }
+
+        /* SERVICES SECTION */
+        .services-page {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .service-card h4 {
+            font-size: 1.6em;
+            color: #0f2027;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .service-card p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+
+        .service-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .service-card li {
+            padding: 10px 0;
+            color: #444;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            line-height: 1.5;
+        }
+
+        .service-card li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        /* CONTACT PAGE */
+        .contact-page {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: white;
+        }
+
+        .contact-page .page-title {
+            color: white;
+        }
+
+        .contact-page .page-title::after {
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+        }
+
+        .contact-page .page-subtitle {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .contact-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .contact-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .contact-card p,
+        .contact-card a {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.8;
+            font-size: 1.1em;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .contact-card a:hover {
+            color: #00d2ff;
+        }
+
+        .map-section {
+            margin-top: 60px;
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .map-section h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .cover-title {
+                font-size: 2.5em;
+            }
+
+            .cover-subtitle {
+                font-size: 1.3em;
+            }
+
+            .cover-stats {
+                gap: 30px;
+            }
+
+            .page {
+                padding: 60px 30px;
+            }
+
+            .page-title {
+                font-size: 2.2em;
+            }
+
+            .doctors-grid,
+            .services-grid,
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .icon-float {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="brochure">
+        <!-- COVER PAGE -->
+        <div class="cover-page">
+            <div class="medical-icons">
+                <div class="icon-float icon-1">🦴</div>
+                <div class="icon-float icon-2">🦵</div>
+                <div class="icon-float icon-3">💪</div>
+                <div class="icon-float icon-4">🫀</div>
+                <div class="icon-float icon-5">🧠</div>
+                <div class="icon-float icon-6">🤲</div>
+            </div>
+            
+            <div class="cover-content">
+                <div class="logo-area">
+                    <div class="medical-cross">⚕️</div>
+                </div>
+                
+                <h1 class="cover-title">Pain Therapy & Rehab Centre</h1>
+                <p class="cover-subtitle">Advanced Rehabilitation & Pain Management</p>
+                <p class="cover-tagline">Restoring mobility, relieving pain, and rebuilding lives through evidence-based therapy and compassionate care</p>
+                
+                <div class="cover-stats">
+                    <div class="cover-stat">
+                        <span class="cover-stat-number">4.8★</span>
+                        <span class="cover-stat-label">Patient Rating</span>
+                    </div>
+                    <div class="cover-stat">
+                        <span class="cover-stat-number">7+</span>
+                        <span class="cover-stat-label">Years Experience</span>
+                    </div>
+                    <div class="cover-stat">
+                        <span class="cover-stat-number">1000+</span>
+                        <span class="cover-stat-label">Lives Transformed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator"></div>
+        </div>
+
+        <!-- ABOUT PAGE -->
+        <div class="page">
+            <div class="page-header">
+                <h2 class="page-title">Welcome to Excellence in Care</h2>
+                <p class="page-subtitle">At Pain Therapy & Rehab Centre, we understand that chronic pain and physical limitations can significantly impact your quality of life. Our mission is to provide comprehensive, personalized rehabilitation services that address the root cause of your pain and restore your ability to live life to the fullest.</p>
+            </div>
+
+            <div class="doctors-grid">
+                <div class="doctor-card">
+                    <h3>Dr. Subodh Kumar</h3>
+                    <p class="credentials">MD (Acupuncture) • Sujok Therapist • Neurotherapist</p>
+                    <p>With extensive training in alternative medicine and neurotherapy, Dr. Kumar specializes in treating chronic pain conditions using acupuncture, acupressure, and Sujok therapy. His holistic approach combines ancient healing techniques with modern medical understanding to provide effective, drug-free pain relief for conditions ranging from migraines to neuropathy.</p>
+                </div>
+                
+                <div class="doctor-card">
+                    <h3>Dr. J.K. Tiwari</h3>
+                    <p class="credentials">BPT • MTFI • MIAP • NDT Certified</p>
+                    <p>A highly skilled physiotherapist with specializations in Manual Therapy, Neurodevelopmental Therapy, and advanced rehabilitation techniques. Dr. Tiwari brings years of expertise in treating complex musculoskeletal disorders, sports injuries, and neurological conditions. His patient-centered approach focuses on functional recovery and long-term wellness.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVICES PAGE 1 -->
+        <div class="page services-page">
+            <div class="page-header">
+                <h2 class="page-title">Our Comprehensive Services</h2>
+                <p class="page-subtitle">Evidence-based treatments tailored to your unique needs</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <span class="service-icon">🦴</span>
+                    <h4>Spine & Back Care</h4>
+                    <p>Specialized treatment for all spinal conditions using advanced manual therapy and therapeutic exercises.</p>
+                    <ul>
+                        <li>Chronic Lower Back Pain Management</li>
+                        <li>Cervical Spondylosis Treatment</li>
+                        <li>Lumbar Disc Herniation Therapy</li>
+                        <li>Spinal Manipulation & Mobilization</li>
+                        <li>Postural Correction Programs</li>
+                        <li>Core Strengthening Exercises</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <span class="service-icon">🦵</span>
+                    <h4>Joint & Mobility Solutions</h4>
+                    <p>Comprehensive care for joint pain and mobility restrictions affecting your daily activities.</p>
+                    <ul>
+                        <li>Knee Pain & Osteoarthritis Management</li>
+                        <li>Hip Joint Rehabilitation</li>
+                        <li>Frozen Shoulder Treatment</li>
+                        <li>Joint Mobilization Techniques</li>
+                        <li>Range of Motion Restoration</li>
+                        <li>Sports Injury Rehabilitation</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <span class="service-icon">🧠</span>
+                    <h4>Neurological Rehabilitation</h4>
+                    <p>Expert care for neurological conditions with focus on functional recovery and independence.</p>
+                    <ul>
+                        <li>Stroke Rehabilitation & Recovery</li>
+                        <li>Paralysis Treatment Programs</li>
+                        <li>Neurodevelopmental Therapy (NDT)</li>
+                        <li>Peripheral Neuropathy Management</li>
+                        <li>Balance & Coordination Training</li>
+                        <li>Gait Training & Walking Programs</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <span class="service-icon">⚡</span>
+                    <h4>Pain Management</h4>
+                    <p>Multi-modal approach to chronic pain relief without reliance on medications.</p>
+                    <ul>
+                        <li>Sciatica & Nerve Pain Relief</li>
+                        <li>Heel Pain & Plantar Fasciitis</li>
+                        <li>Headache & Migraine Treatment</li>
+                        <li>Fibromyalgia Management</li>
+                        <li>Trigger Point Therapy</li>
+                        <li>Myofascial Pain Treatment</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <span class="service-icon">🤲</span>
+                    <h4>Alternative Therapies</h4>
+                    <p>Time-tested holistic healing methods integrated with modern rehabilitation.</p>
+                    <ul>
+                        <li>Acupuncture & Acupressure</li>
+                        <li>Sujok Therapy for Pain Relief</li>
+                        <li>Cupping Therapy</li>
+                        <li>Dry Needling Techniques</li>
+                        <li>Therapeutic Massage</li>
+                        <li>Energy Healing Modalities</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <span class="service-icon">🏥</span>
+                    <h4>Post-Surgical Recovery</h4>
+                    <p>Structured rehabilitation programs to optimize healing after orthopedic surgery.</p>
+                    <ul>
+                        <li>Joint Replacement Rehabilitation</li>
+                        <li>Arthroscopy Recovery Programs</li>
+                        <li>Ligament Reconstruction Therapy</li>
+                        <li>Fracture Rehabilitation</li>
+                        <li>Scar Tissue Management</li>
+                        <li>Strength & Function Restoration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE -->
+        <div class="page contact-page">
+            <div class="page-header">
+                <h2 class="page-title">Visit Us Today</h2>
+                <p class="page-subtitle">Take the first step towards a pain-free life. Our experienced team is ready to help you achieve your health goals.</p>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-card">
+                    <span class="contact-icon">📍</span>
+                    <h3>Location</h3>
+                    <p>33, Amardeep Township Complex<br>
+                    Near Ajwa Chowkdi<br>
+                    Opposite Yogeshwar Township-1<br>
+                    Ajwa Road, Vadodara 390019<br>
+                    Gujarat, India</p>
+                </div>
+
+                <div class="contact-card">
+                    <span class="contact-icon">📞</span>
+                    <h3>Phone</h3>
+                    <a href="tel:8160754633">+91 8160754633</a>
+                    <a href="tel:9601704565">+91 9601704565</a>
+                    <p style="margin-top: 20px; opacity: 0.8;">Call us for appointments or inquiries</p>
+                </div>
+
+                <div class="contact-card">
+                    <span class="contact-icon">✉️</span>
+                    <h3>Email</h3>
+                    <a href="mailto:[email protected]">[email protected]</a>
+                    <p style="margin-top: 20px; opacity: 0.8;">We respond within 24 hours</p>
+                </div>
+
+                <div class="contact-card">
+                    <span class="contact-icon">🕐</span>
+                    <h3>Hours</h3>
+                    <p>Monday - Saturday<br>
+                    9:00 AM - 1:00 PM<br>
+                    5:00 PM - 8:00 PM</p>
+                    <p style="margin-top: 10px; opacity: 0.8;">Sunday: By Appointment</p>
+                </div>
+            </div>
+
+            <div class="map-section">
+                <h3>🗺️ Easily Accessible Location</h3>
+                <p style="margin-top: 20px; font-size: 1.1em;">Located on Ajwa Road, one of Vadodara's main arterial roads, we're easily accessible from all parts of the city with ample parking available.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
