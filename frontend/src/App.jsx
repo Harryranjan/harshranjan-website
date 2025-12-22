@@ -7,6 +7,7 @@ import PublicLayout from "./layouts/PublicLayout";
 import AgencyLayout from "./layouts/AgencyLayout";
 import LanguagePopup from "./components/LanguagePopup";
 import FloatingLanguageButton from "./components/FloatingLanguageButton";
+import FloatingWhatsAppButton from "./components/FloatingWhatsAppButton";
 import {
   getPreferredLanguage,
   isUserFromVadodara,
@@ -109,6 +110,9 @@ function App() {
 
       {/* Floating Language Button */}
       <FloatingLanguageButton />
+
+      {/* Floating WhatsApp Button */}
+      <FloatingWhatsAppButton />
 
       <Routes>
         {/* Public Routes */}

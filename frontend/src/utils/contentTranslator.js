@@ -2269,7 +2269,10 @@ export function translateContent(htmlContent, targetLanguage) {
               `\\b${englishText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
               "gi"
             );
-            const newText = text.replace(regex, langTranslations[targetLanguage]);
+            const newText = text.replace(
+              regex,
+              langTranslations[targetLanguage]
+            );
             if (newText !== text) {
               translationCount++;
               text = newText;
@@ -2292,7 +2295,9 @@ export function translateContent(htmlContent, targetLanguage) {
     // Translate all text nodes
     translateNode(body);
 
-    console.log(`✨ Translation complete! ${translationCount} replacements made`);
+    console.log(
+      `✨ Translation complete! ${translationCount} replacements made`
+    );
 
     // Return the translated HTML - get all body content
     return body.innerHTML;

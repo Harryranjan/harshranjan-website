@@ -37,7 +37,9 @@ export default function FloatingLanguageButton() {
         >
           <div className="flex flex-col items-center">
             <span className="text-xl">{currentLanguage.flag}</span>
-            <span className="text-xs font-semibold">{currentLanguage.nativeName}</span>
+            <span className="text-xs font-semibold">
+              {currentLanguage.nativeName}
+            </span>
           </div>
         </button>
 
@@ -69,7 +71,9 @@ export default function FloatingLanguageButton() {
                     <span className="text-2xl">{lang.flag}</span>
                     <div className="text-left flex-1">
                       <div className="font-medium text-sm">{lang.name}</div>
-                      <div className="text-xs text-gray-500">{lang.nativeName}</div>
+                      <div className="text-xs text-gray-500">
+                        {lang.nativeName}
+                      </div>
                     </div>
                     {currentLanguage.code === lang.code && (
                       <svg

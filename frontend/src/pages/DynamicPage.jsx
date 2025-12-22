@@ -41,11 +41,11 @@ export default function DynamicPage() {
   // Translate content when language changes
   useEffect(() => {
     if (page && page.content) {
-      console.log('🌍 Translating content to:', i18n.language);
-      console.log('📄 Original content length:', page.content.length);
+      console.log("🌍 Translating content to:", i18n.language);
+      console.log("📄 Original content length:", page.content.length);
       const translated = translateContent(page.content, i18n.language);
-      console.log('✅ Translated content length:', translated?.length);
-      console.log('🔄 Content changed:', translated !== page.content);
+      console.log("✅ Translated content length:", translated?.length);
+      console.log("🔄 Content changed:", translated !== page.content);
       setTranslatedContent(translated);
     }
   }, [i18n.language, page]);
@@ -218,7 +218,7 @@ export default function DynamicPage() {
                 content={
                   Array.isArray(page.content)
                     ? blocksToHTML(page.content)
-                    : (translatedContent || page.content)
+                    : translatedContent || page.content
                 }
                 className="page-content-wrapper"
                 key={i18n.language}
