@@ -7,6 +7,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store/store";
 import App from "./App.jsx";
 import "./index.css";
+import "./i18n/config"; // Initialize i18n
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

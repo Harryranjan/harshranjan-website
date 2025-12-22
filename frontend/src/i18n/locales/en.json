@@ -1,0 +1,112 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "conditions": "Conditions We Treat",
+    "testimonials": "Testimonials",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "gallery": "Gallery"
+  },
+  "home": {
+    "hero": {
+      "title": "Pain Therapy & Rehab Centre",
+      "subtitle": "Advanced Rehabilitation & Pain Management",
+      "tagline": "Restoring mobility, relieving pain, and rebuilding lives through evidence-based therapy and compassionate care",
+      "bookAppointment": "Book Appointment",
+      "learnMore": "Learn More"
+    },
+    "stats": {
+      "rating": "Patient Rating",
+      "experience": "Years Experience",
+      "patients": "Lives Transformed"
+    },
+    "services": {
+      "title": "Our Core Services",
+      "subtitle": "Comprehensive pain management and rehabilitation services tailored to your recovery needs",
+      "spine": {
+        "title": "Spine & Back Pain Therapy",
+        "description": "Expert treatment for chronic and acute back pain, sciatica, herniated discs, and spinal conditions."
+      },
+      "joint": {
+        "title": "Joint Pain & Arthritis Treatment",
+        "description": "Comprehensive care for knee pain, frozen shoulder, hip pain, and all joint-related issues."
+      },
+      "neuro": {
+        "title": "Neuro Rehabilitation & Paralysis",
+        "description": "Specialized programs for stroke recovery, paralysis treatment, and neurological conditions."
+      },
+      "postOp": {
+        "title": "Post-Operative Rehabilitation",
+        "description": "Structured recovery programs after knee/hip replacement, ACL surgery, and other procedures."
+      },
+      "manual": {
+        "title": "Manual Therapy & Spinal Manipulation",
+        "description": "Hands-on treatment techniques including spinal manipulation, joint mobilization, and soft tissue work."
+      },
+      "cupping": {
+        "title": "Cupping & Acupressure Therapy",
+        "description": "Traditional healing methods including cupping, acupressure, and Sujok therapy for pain relief."
+      }
+    },
+    "doctors": {
+      "title": "Meet Our Doctors",
+      "drSubodh": {
+        "name": "Dr. Subodh Kumar",
+        "credentials": "MD (ACU), Sujok Therapist, Neurotherapist",
+        "description": "With extensive training in alternative medicine and neurotherapy, Dr. Kumar specializes in treating chronic pain conditions using acupuncture, acupressure, and Sujok therapy."
+      },
+      "drTiwari": {
+        "name": "Dr. J.K. Tiwari",
+        "credentials": "BPT, MTFI, MIAP, NDT",
+        "description": "Dr. Tiwari brings years of expertise in physiotherapy and manual therapy, with specialized certifications in Neurodevelopmental Treatment (NDT) and Manual Therapy."
+      }
+    },
+    "conditions": {
+      "title": "Conditions We Treat",
+      "subtitle": "Expert care for a wide range of pain and mobility conditions"
+    },
+    "cta": {
+      "title": "Take the First Step Towards a Pain-Free Life",
+      "subtitle": "Book your appointment today and start your journey to recovery",
+      "button": "Book Appointment Now"
+    }
+  },
+  "contact": {
+    "title": "Visit Us Today",
+    "subtitle": "Take the first step towards a pain-free life. Our experienced team is ready to help you achieve your health goals.",
+    "clinic": "Pain Therapy & Rehab Centre",
+    "address1": "33, Amardeep Township Complex",
+    "address2": "Near Ajwa Chowkdi, Opposite Yogeshwar Township-1",
+    "address3": "Ajwa Road, Vadodara 390019, Gujarat",
+    "phone": "Phone",
+    "email": "Email",
+    "hours": "Hours",
+    "hoursValue": "Mon-Sat: 9:00 AM - 8:00 PM, Sun: By Appointment"
+  },
+  "common": {
+    "readMore": "Read More",
+    "learnMore": "Learn More",
+    "viewAll": "View All",
+    "bookNow": "Book Now",
+    "contactUs": "Contact Us",
+    "getDirections": "Get Directions"
+  },
+  "language": {
+    "popup": {
+      "title": "Choose Your Preferred Language",
+      "subtitle": "We detected you're visiting from India. Choose your preferred language to continue.",
+      "english": "Continue in English",
+      "hindi": "Switch to Hindi (हिंदी)",
+      "gujarati": "Switch to Gujarati (ગુજરાતી)",
+      "marathi": "Switch to Marathi (मराठी)",
+      "rememberChoice": "Remember my choice"
+    },
+    "switcher": {
+      "label": "Language",
+      "english": "English",
+      "gujarati": "ગુજરાતી (Gujarati)"
+    }
+  }
+}

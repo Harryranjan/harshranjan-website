@@ -1,9 +1,16 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./layouts/AdminLayout";
 import PublicLayout from "./layouts/PublicLayout";
 import AgencyLayout from "./layouts/AgencyLayout";
+import LanguagePopup from "./components/LanguagePopup";
+import FloatingLanguageButton from "./components/FloatingLanguageButton";
+import {
+  getPreferredLanguage,
+  isUserFromVadodara,
+} from "./utils/locationDetector";
 
 // Public Pages
 import Home from "./pages/Home";
@@ -57,10 +64,52 @@ import LandingPage from "./pages/LandingPage";
 import DemoShowcase from "./pages/DemoShowcase";
 import Profile from "./pages/admin/Profile";
 import DynamicPage from "./pages/DynamicPage";
+import HealthcarePage from "./pages/HealthcarePage";
 
 function App() {
+  const [showLanguagePopup, setShowLanguagePopup] = useState(false);
+  const [locationData, setLocationData] = useState(null);
+
+  useEffect(() => {
+    // Check if popup was already shown
+    const popupShown =
+      localStorage.getItem("languagePopupShown") ||
+      sessionStorage.getItem("languagePopupShown");
+    const userLanguage = localStorage.getItem("userLanguage");
+
+    // Only show popup if not shown before and no language preference set
+    if (!popupShown && !userLanguage) {
+      detectLocationAndShowPopup();
+    }
+  }, []);
+
+  const detectLocationAndShowPopup = async () => {
+    try {
+      const preferredLang = await getPreferredLanguage();
+
+      // If detected as Vadodara (returns 'suggest-gu'), show popup
+      if (preferredLang === "suggest-gu") {
+        const location = await isUserFromVadodara();
+        setLocationData(location);
+        setShowLanguagePopup(true);
+      }
+    } catch (error) {
+      console.error("Location detection error:", error);
+    }
+  };
+
   return (
     <AuthProvider>
+      {/* Language Selection Popup */}
+      <LanguagePopup
+        show={showLanguagePopup}
+        onClose={() => setShowLanguagePopup(false)}
+        locationData={locationData}
+      />
+
+      {/* Floating Language Button */}
+      <FloatingLanguageButton />
+
       <Routes>
         {/* Public Routes */}
         <Route
@@ -102,6 +151,14 @@ function App() {
           element={
             <PublicLayout>
               <Portfolio />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/healthcare"
+          element={
+            <PublicLayout>
+              <HealthcarePage />
             </PublicLayout>
           }
         />

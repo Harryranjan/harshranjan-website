@@ -55,6 +55,13 @@ export default function ContentRenderer({ content, className = "" }) {
   const [openModals, setOpenModals] = useState({});
   const [openPopups, setOpenPopups] = useState({});
 
+  console.log("🎨 ContentRenderer received:", {
+    hasContent: !!content,
+    contentLength: content?.length,
+    contentPreview: content?.substring(0, 200),
+    className,
+  });
+
   if (!content) return null;
 
   const { parsedContent, components } = parseShortcodes(content);

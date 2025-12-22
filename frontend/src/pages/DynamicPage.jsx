@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import api from "../utils/api";
 import { blocksToHTML, isFullHTMLDocument } from "../utils/blocksToHTML";
 import LoadingSpinner from "../components/common/LoadingSpinner";
@@ -7,13 +8,16 @@ import ErrorPage from "../components/common/ErrorPage";
 import PageSEO from "../components/common/PageSEO";
 import ContentRenderer from "../components/ContentRenderer";
 import { parseShortcodes } from "../utils/shortcodeParser";
+import { translateContent } from "../utils/contentTranslator";
 import Header from "../components/Header";
 
 export default function DynamicPage() {
   const { slug } = useParams();
+  const { i18n } = useTranslation();
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [translatedContent, setTranslatedContent] = useState(null);
 
   // Load Tailwind CDN dynamically
   useEffect(() => {
@@ -33,6 +37,18 @@ export default function DynamicPage() {
   useEffect(() => {
     fetchPage();
   }, [slug]);
+
+  // Translate content when language changes
+  useEffect(() => {
+    if (page && page.content) {
+      console.log('🌍 Translating content to:', i18n.language);
+      console.log('📄 Original content length:', page.content.length);
+      const translated = translateContent(page.content, i18n.language);
+      console.log('✅ Translated content length:', translated?.length);
+      console.log('🔄 Content changed:', translated !== page.content);
+      setTranslatedContent(translated);
+    }
+  }, [i18n.language, page]);
 
   const fetchPage = async () => {
     try {
@@ -155,7 +171,33 @@ export default function DynamicPage() {
               </div>
             )}
             <iframe
-              srcDoc={page.content}
+              srcDoc={`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <script src="https://cdn.tailwindcss.com"></script>
+                  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                  <style>
+                    /* Base styles to ensure readability */
+                    body {
+                      margin: 0;
+                      padding: 0;
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                    }
+                    /* Ensure minimum contrast for readability */
+                    body:not([class*="bg-"]) {
+                      background-color: #ffffff;
+                      color: #111827;
+                    }
+                  </style>
+                </head>
+                <body>
+                  ${translatedContent || page.content}
+                </body>
+                </html>
+              `}
               style={{
                 width: "100%",
                 minHeight: "100vh",
@@ -164,6 +206,7 @@ export default function DynamicPage() {
               }}
               sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"
               title={page.title}
+              key={i18n.language}
             />
           </div>
         ) : (
@@ -175,9 +218,10 @@ export default function DynamicPage() {
                 content={
                   Array.isArray(page.content)
                     ? blocksToHTML(page.content)
-                    : page.content
+                    : (translatedContent || page.content)
                 }
                 className="page-content-wrapper"
+                key={i18n.language}
               />
             ) : (
               // Default template with container and header

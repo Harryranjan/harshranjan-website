@@ -65,17 +65,9 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link to="/pages/home" className="flex items-center gap-3 group">
-            <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-teal-500 rounded-xl flex items-center justify-center group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-              <i className="fas fa-heartbeat text-white text-2xl"></i>
-            </div>
-            <div>
-              <div className="font-extrabold text-gray-900 text-xl leading-tight">
-                Pain Therapy Centre
-              </div>
-              <div className="text-xs text-blue-600 font-semibold">
-                Expert Care in Vadodara
-              </div>
+          <Link to="/pages/home" className="group">
+            <div className="font-bold text-gray-900 text-lg group-hover:text-blue-600 transition-colors duration-300">
+              Dr. Subodh Kumar
             </div>
           </Link>
 
