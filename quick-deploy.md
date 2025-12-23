@@ -1,6 +1,33 @@
 # 🚀 Quick Deployment Guide
 
-## Step 1️⃣: On Your Local Machine (PowerShell)
+## 🔥 Quick Update (Git-Based) - **RECOMMENDED**
+
+If Git is already set up on the server, use this super-fast method:
+
+### 1️⃣ Make Changes Locally
+```powershell
+# Make your code changes
+git add .
+git commit -m "Your changes"
+git push origin master
+```
+
+### 2️⃣ Update Server
+```bash
+# SSH to server
+ssh root@72.61.241.90
+
+# Run update script
+~/update-backend.sh
+```
+
+**Done! Backend updated in 10 seconds!** ✅
+
+---
+
+## 📦 Full Deployment (SCP Upload Method)
+
+### Step 1️⃣: On Your Local Machine (PowerShell)
 
 ```powershell
 cd "g:\AAA PROJECTS\Harsh Ranjan Website"
@@ -120,11 +147,28 @@ pm2 logs drsubodh-backend
 
 ## 🔄 Future Updates
 
-### Update Backend:
+### Option 1: Quick Update with Git (Fastest) ⚡
+```bash
+# SSH to server
+ssh root@72.61.241.90
+
+# Run the update script
+~/update-backend.sh
+```
+
+This script automatically:
+- Fetches latest code from GitHub
+- Updates backend to latest commit
+- Installs new dependencies
+- Restarts PM2
+- Shows status
+
+### Option 2: Manual Update
 ```bash
 cd /var/www/drsubodh/backend
-git pull origin master
-npm install --production
+git fetch origin master
+git reset --hard origin/master
+npm install
 pm2 restart drsubodh-backend
 ```
 
