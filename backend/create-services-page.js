@@ -1,11 +1,11 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function createServicesPage() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
   const servicesContent = `<!-- Hero Section -->
@@ -452,33 +452,33 @@ async function createServicesPage() {
 
   // Check if services page exists
   const [existing] = await connection.execute(
-    'SELECT id FROM pages WHERE slug = ?',
-    ['services']
+    "SELECT id FROM pages WHERE slug = ?",
+    ["services"]
   );
 
   if (existing.length > 0) {
     // Update existing page
     await connection.execute(
-      'UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?',
-      [servicesContent, 'services']
+      "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+      [servicesContent, "services"]
     );
-    console.log('✅ Updated existing Services page');
+    console.log("✅ Updated existing Services page");
   } else {
     // Create new page
     await connection.execute(
       `INSERT INTO pages (title, slug, content, template, status, created_at, updated_at) 
        VALUES (?, ?, ?, ?, ?, NOW(), NOW())`,
-      ['Our Services', 'services', servicesContent, 'custom', 'published']
+      ["Our Services", "services", servicesContent, "custom", "published"]
     );
-    console.log('✅ Created new Services page');
+    console.log("✅ Created new Services page");
   }
 
-  console.log('\nServices page includes:');
-  console.log('   - 9 comprehensive service cards');
-  console.log('   - Treatment approach workflow');
-  console.log('   - Why choose us section');
-  console.log('   - Quick stats display');
-  console.log('   - Strong CTAs');
+  console.log("\nServices page includes:");
+  console.log("   - 9 comprehensive service cards");
+  console.log("   - Treatment approach workflow");
+  console.log("   - Why choose us section");
+  console.log("   - Quick stats display");
+  console.log("   - Strong CTAs");
 
   await connection.end();
 }

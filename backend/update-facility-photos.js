@@ -1,11 +1,11 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function updateFacilityPhotos() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
   // First, let's check what pages we have related to gallery/facility
@@ -13,7 +13,7 @@ async function updateFacilityPhotos() {
     'SELECT id, slug, title FROM pages WHERE slug IN ("about", "gallery", "our-facility") OR title LIKE "%facility%" OR title LIKE "%gallery%"'
   );
 
-  console.log('Found pages:', pages);
+  console.log("Found pages:", pages);
 
   // Update the about page with correct clinic photos
   const galleryContent = `<!-- Hero Section -->
@@ -137,17 +137,19 @@ async function updateFacilityPhotos() {
     await connection.execute(
       `INSERT INTO pages (title, slug, content, template, status, created_at, updated_at) 
        VALUES (?, ?, ?, ?, ?, NOW(), NOW())`,
-      ['Our Facility', 'our-facility', galleryContent, 'custom', 'published']
+      ["Our Facility", "our-facility", galleryContent, "custom", "published"]
     );
     console.log('✅ Created new "Our Facility" page with correct photos!');
   } else {
     // Update existing page
-    const targetPage = pages.find(p => p.slug === 'about') || pages[0];
+    const targetPage = pages.find((p) => p.slug === "about") || pages[0];
     await connection.execute(
-      'UPDATE pages SET content = ?, updated_at = NOW() WHERE id = ?',
+      "UPDATE pages SET content = ?, updated_at = NOW() WHERE id = ?",
       [galleryContent, targetPage.id]
     );
-    console.log(`✅ Updated "${targetPage.title}" (${targetPage.slug}) page with correct facility photos!`);
+    console.log(
+      `✅ Updated "${targetPage.title}" (${targetPage.slug}) page with correct facility photos!`
+    );
   }
 
   await connection.end();

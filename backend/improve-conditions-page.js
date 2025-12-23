@@ -1,11 +1,11 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function improveConditionsPage() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
   const improvedContent = `<!-- Hero Section -->
@@ -406,11 +406,11 @@ async function improveConditionsPage() {
 </section>`;
 
   await connection.execute(
-    'UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?',
-    [improvedContent, 'conditions-we-treat']
+    "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+    [improvedContent, "conditions-we-treat"]
   );
 
-  console.log('✅ Improved Conditions We Treat page with better UI/UX!');
+  console.log("✅ Improved Conditions We Treat page with better UI/UX!");
   await connection.end();
 }
 

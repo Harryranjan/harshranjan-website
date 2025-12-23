@@ -1,20 +1,20 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function addMissingCard() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
   const [rows] = await connection.execute(
-    'SELECT content FROM pages WHERE slug = ?',
-    ['about-team']
+    "SELECT content FROM pages WHERE slug = ?",
+    ["about-team"]
   );
 
   let content = rows[0].content;
-  
+
   // Find where to insert the third card (after the Holistic Approach card, before the closing </div>)
   const insertPoint = `                    <div class="bg-white p-8 rounded-xl shadow-lg">
                         <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -25,7 +25,7 @@ async function addMissingCard() {
                     </div>
 
                 `;
-  
+
   const thirdCard = `                    <div class="bg-white p-8 rounded-xl shadow-lg">
                         <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6">
                             <i class="fas fa-brain text-teal-600 text-3xl"></i>
@@ -43,17 +43,17 @@ async function addMissingCard() {
                     </div>
 
                 `;
-  
+
   content = content.replace(insertPoint, thirdCard);
-  
+
   // Update database
   await connection.execute(
-    'UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?',
-    [content, 'about-team']
+    "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+    [content, "about-team"]
   );
-  
-  console.log('✅ Added the missing third card to Philosophy section');
-  
+
+  console.log("✅ Added the missing third card to Philosophy section");
+
   await connection.end();
 }
 

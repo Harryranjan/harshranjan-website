@@ -1,14 +1,17 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function fixHeroSection() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
-  const [rows] = await connection.execute('SELECT content FROM pages WHERE slug = ?', ['home']);
+  const [rows] = await connection.execute(
+    "SELECT content FROM pages WHERE slug = ?",
+    ["home"]
+  );
   let content = rows[0].content;
 
   // Fix the missing closing div tag in the Background Pattern section
@@ -27,9 +30,12 @@ async function fixHeroSection() {
         <!-- Animated Medical Icons -->`
   );
 
-  await connection.execute('UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?', [content, 'home']);
+  await connection.execute(
+    "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+    [content, "home"]
+  );
 
-  console.log('✅ Fixed hero section - closed the Background Pattern div tag!');
+  console.log("✅ Fixed hero section - closed the Background Pattern div tag!");
   await connection.end();
 }
 

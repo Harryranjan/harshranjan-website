@@ -1,43 +1,50 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function fixTeamPage() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
   const [rows] = await connection.execute(
-    'SELECT content FROM pages WHERE slug = ?',
-    ['about-team']
+    "SELECT content FROM pages WHERE slug = ?",
+    ["about-team"]
   );
 
   let content = rows[0].content;
-  
+
   // Remove the entire Dr. J.K. Tiwari section
-  const jkSectionStart = content.indexOf('<!-- Dr. J.K. Tiwari -->');
-  const jkSectionEnd = content.indexOf('</div>\n        </div>\n\n    <!-- Why Choose Us', jkSectionStart);
-  
+  const jkSectionStart = content.indexOf("<!-- Dr. J.K. Tiwari -->");
+  const jkSectionEnd = content.indexOf(
+    "</div>\n        </div>\n\n    <!-- Why Choose Us",
+    jkSectionStart
+  );
+
   if (jkSectionStart === -1 || jkSectionEnd === -1) {
-    console.log('❌ Could not find Dr. J.K. Tiwari section markers');
+    console.log("❌ Could not find Dr. J.K. Tiwari section markers");
     await connection.end();
     return;
   }
-  
+
   // Remove J.K. Tiwari section
-  content = content.substring(0, jkSectionStart) + content.substring(jkSectionEnd);
-  
+  content =
+    content.substring(0, jkSectionStart) + content.substring(jkSectionEnd);
+
   // Now add Dr. Subodh Kumar's content in the empty section
-  const subodhSectionStart = content.indexOf('<!-- Dr. Subodh Kumar -->');
-  const subodhEmptyDiv = content.indexOf('<div class="max-w-5xl mx-auto mb-16">\n                \n            </div>', subodhSectionStart);
-  
+  const subodhSectionStart = content.indexOf("<!-- Dr. Subodh Kumar -->");
+  const subodhEmptyDiv = content.indexOf(
+    '<div class="max-w-5xl mx-auto mb-16">\n                \n            </div>',
+    subodhSectionStart
+  );
+
   if (subodhEmptyDiv === -1) {
-    console.log('❌ Could not find Dr. Subodh Kumar empty section');
+    console.log("❌ Could not find Dr. Subodh Kumar empty section");
     await connection.end();
     return;
   }
-  
+
   const drSubodhContent = `<div class="max-w-5xl mx-auto mb-16">
                 <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                     <div class="md:flex">
@@ -85,24 +92,30 @@ async function fixTeamPage() {
                     </div>
                 </div>
             </div>`;
-  
+
   // Replace the empty div with Dr. Subodh's content
-  const emptyDivEnd = content.indexOf('</div>', subodhEmptyDiv) + 6;
-  content = content.substring(0, subodhEmptyDiv) + drSubodhContent + content.substring(emptyDivEnd);
-  
+  const emptyDivEnd = content.indexOf("</div>", subodhEmptyDiv) + 6;
+  content =
+    content.substring(0, subodhEmptyDiv) +
+    drSubodhContent +
+    content.substring(emptyDivEnd);
+
   // Update database
   await connection.execute(
-    'UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?',
-    [content, 'about-team']
+    "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+    [content, "about-team"]
   );
-  
-  console.log('✅ Fixed team page:');
-  console.log('   - Added Dr. Subodh Kumar content');
-  console.log('   - Removed Dr. J.K. Tiwari');
-  console.log('\nVerification:');
-  console.log('Dr. Subodh Kumar present:', content.includes('Dr. Subodh Kumar'));
-  console.log('Dr. J.K. Tiwari present:', content.includes('Dr. J.K. Tiwari'));
-  
+
+  console.log("✅ Fixed team page:");
+  console.log("   - Added Dr. Subodh Kumar content");
+  console.log("   - Removed Dr. J.K. Tiwari");
+  console.log("\nVerification:");
+  console.log(
+    "Dr. Subodh Kumar present:",
+    content.includes("Dr. Subodh Kumar")
+  );
+  console.log("Dr. J.K. Tiwari present:", content.includes("Dr. J.K. Tiwari"));
+
   await connection.end();
 }
 

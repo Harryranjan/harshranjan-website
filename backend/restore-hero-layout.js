@@ -1,21 +1,26 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function restoreHeroLayout() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
-  const [rows] = await connection.execute('SELECT content FROM pages WHERE slug = ?', ['home']);
+  const [rows] = await connection.execute(
+    "SELECT content FROM pages WHERE slug = ?",
+    ["home"]
+  );
   let content = rows[0].content;
 
   // Find where the left content ends (after the CTA buttons)
-  const leftContentEnd = content.indexOf('</div>\n                </div>\n\n            </div>\n        </div>');
-  
+  const leftContentEnd = content.indexOf(
+    "</div>\n                </div>\n\n            </div>\n        </div>"
+  );
+
   if (leftContentEnd === -1) {
-    console.log('❌ Could not find the end of left content section');
+    console.log("❌ Could not find the end of left content section");
     await connection.end();
     return;
   }
@@ -107,11 +112,19 @@ async function restoreHeroLayout() {
 
   // Insert the right side content before the closing divs
   const insertPosition = leftContentEnd;
-  content = content.slice(0, insertPosition) + rightSideContent + content.slice(insertPosition);
+  content =
+    content.slice(0, insertPosition) +
+    rightSideContent +
+    content.slice(insertPosition);
 
-  await connection.execute('UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?', [content, 'home']);
+  await connection.execute(
+    "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+    [content, "home"]
+  );
 
-  console.log('✅ Restored hero layout with appointment card on right side and stats!');
+  console.log(
+    "✅ Restored hero layout with appointment card on right side and stats!"
+  );
   await connection.end();
 }
 

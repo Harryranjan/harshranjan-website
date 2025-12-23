@@ -1,42 +1,43 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function fixTeamPageCorrect() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
   const [rows] = await connection.execute(
-    'SELECT content FROM pages WHERE slug = ?',
-    ['about-team']
+    "SELECT content FROM pages WHERE slug = ?",
+    ["about-team"]
   );
 
   let content = rows[0].content;
-  
+
   // Find and remove the entire Dr. J.K. Tiwari card (from comment to closing div before Why Choose Us)
-  const jkCommentStart = content.indexOf('<!-- Dr. J.K. Tiwari -->');
-  const whyChooseStart = content.indexOf('<!-- Why Choose Us -->');
-  
+  const jkCommentStart = content.indexOf("<!-- Dr. J.K. Tiwari -->");
+  const whyChooseStart = content.indexOf("<!-- Why Choose Us -->");
+
   if (jkCommentStart === -1 || whyChooseStart === -1) {
-    console.log('Markers:', { jkCommentStart, whyChooseStart });
-    console.log('❌ Could not find section markers');
+    console.log("Markers:", { jkCommentStart, whyChooseStart });
+    console.log("❌ Could not find section markers");
     await connection.end();
     return;
   }
-  
+
   // Find the proper closing before Why Choose Us section
   // The structure is: <!-- Dr. J.K. Tiwari --> <div>...</div> </div> </section> <!-- Why Choose Us -->
-  const beforeWhyChoose = content.lastIndexOf('</section>', whyChooseStart);
-  
+  const beforeWhyChoose = content.lastIndexOf("</section>", whyChooseStart);
+
   // Remove from J.K. Tiwari comment to end of section
   const beforeJK = content.substring(0, jkCommentStart);
   const afterJK = content.substring(beforeWhyChoose);
-  content = beforeJK + '\n        ' + afterJK;
-  
+  content = beforeJK + "\n        " + afterJK;
+
   // Now fix Dr. Subodh Kumar's empty section
-  const subodhEmpty = '<div class="max-w-5xl mx-auto mb-16">\n                \n            </div>';
+  const subodhEmpty =
+    '<div class="max-w-5xl mx-auto mb-16">\n                \n            </div>';
   const drSubodhContent = `<div class="max-w-5xl mx-auto mb-16">
                 <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                     <div class="md:flex">
@@ -84,29 +85,35 @@ async function fixTeamPageCorrect() {
                     </div>
                 </div>
             </div>`;
-  
+
   content = content.replace(subodhEmpty, drSubodhContent);
-  
+
   // Also update the "2 Expert Doctors" stat to "1 Expert Doctor"
   content = content.replace(
     '<div class="text-5xl font-bold text-purple-600 mb-4">2</div>\n                    <h4 class="font-bold text-lg mb-2">Expert Doctors</h4>',
     '<div class="text-5xl font-bold text-purple-600 mb-4">1</div>\n                    <h4 class="font-bold text-lg mb-2">Expert Doctor</h4>'
   );
-  
+
   // Update database
   await connection.execute(
-    'UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?',
-    [content, 'about-team']
+    "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+    [content, "about-team"]
   );
-  
-  console.log('✅ Successfully fixed team page!');
-  console.log('   ✓ Added Dr. Subodh Kumar content');
-  console.log('   ✓ Removed Dr. J.K. Tiwari');
-  console.log('   ✓ Updated stats (2 doctors → 1 doctor)');
-  console.log('\nVerification:');
-  console.log('   Dr. Subodh Kumar:', content.includes('Dr. Subodh Kumar') ? '✓ Present' : '✗ Missing');
-  console.log('   Dr. J.K. Tiwari:', content.includes('Dr. J.K. Tiwari') ? '✗ Still present' : '✓ Removed');
-  
+
+  console.log("✅ Successfully fixed team page!");
+  console.log("   ✓ Added Dr. Subodh Kumar content");
+  console.log("   ✓ Removed Dr. J.K. Tiwari");
+  console.log("   ✓ Updated stats (2 doctors → 1 doctor)");
+  console.log("\nVerification:");
+  console.log(
+    "   Dr. Subodh Kumar:",
+    content.includes("Dr. Subodh Kumar") ? "✓ Present" : "✗ Missing"
+  );
+  console.log(
+    "   Dr. J.K. Tiwari:",
+    content.includes("Dr. J.K. Tiwari") ? "✗ Still present" : "✓ Removed"
+  );
+
   await connection.end();
 }
 

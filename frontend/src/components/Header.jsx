@@ -147,7 +147,7 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 shadow-xl">
+        <div className="lg:hidden bg-white border-t border-gray-100 shadow-xl max-h-[calc(100vh-80px)] overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 py-6 space-y-2">
             {menuItems.map((item, index) => (
               <div key={index}>

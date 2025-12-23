@@ -1,14 +1,17 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function addStatsToHero() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
-  const [rows] = await connection.execute('SELECT content FROM pages WHERE slug = ?', ['home']);
+  const [rows] = await connection.execute(
+    "SELECT content FROM pages WHERE slug = ?",
+    ["home"]
+  );
   let content = rows[0].content;
 
   // Add the stats cards after the appointment card but before closing the right column
@@ -40,9 +43,14 @@ ${statsCards}
                 </div>`
   );
 
-  await connection.execute('UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?', [content, 'home']);
+  await connection.execute(
+    "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+    [content, "home"]
+  );
 
-  console.log('✅ Added 500+ Patients and 4.8★ Rating stats cards to hero section!');
+  console.log(
+    "✅ Added 500+ Patients and 4.8★ Rating stats cards to hero section!"
+  );
   await connection.end();
 }
 

@@ -1,14 +1,17 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function fixHeroLayoutStats() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
-  const [rows] = await connection.execute('SELECT content FROM pages WHERE slug = ?', ['home']);
+  const [rows] = await connection.execute(
+    "SELECT content FROM pages WHERE slug = ?",
+    ["home"]
+  );
   let content = rows[0].content;
 
   // Remove the empty stats row and fix the structure
@@ -23,9 +26,12 @@ async function fixHeroLayoutStats() {
                 <!-- Right Side - Quick Consultation Card - Takes 2 columns -->`
   );
 
-  await connection.execute('UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?', [content, 'home']);
+  await connection.execute(
+    "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+    [content, "home"]
+  );
 
-  console.log('✅ Fixed hero layout - removed empty stats row!');
+  console.log("✅ Fixed hero layout - removed empty stats row!");
   await connection.end();
 }
 

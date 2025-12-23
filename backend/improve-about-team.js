@@ -1,11 +1,11 @@
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 async function improveAboutTeamPage() {
   const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'harsh_ranjan_website'
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "harsh_ranjan_website",
   });
 
   const improvedContent = `<!-- Page Header -->
@@ -310,16 +310,16 @@ async function improveAboutTeamPage() {
 </section>`;
 
   await connection.execute(
-    'UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?',
-    [improvedContent, 'about-team']
+    "UPDATE pages SET content = ?, updated_at = NOW() WHERE slug = ?",
+    [improvedContent, "about-team"]
   );
 
-  console.log('✅ Improved About Team page with:');
-  console.log('   - Removed duplicate sections');
-  console.log('   - Fixed layout and structure');
-  console.log('   - Enhanced visual hierarchy');
-  console.log('   - Added better CTAs');
-  console.log('   - Improved certifications display');
+  console.log("✅ Improved About Team page with:");
+  console.log("   - Removed duplicate sections");
+  console.log("   - Fixed layout and structure");
+  console.log("   - Enhanced visual hierarchy");
+  console.log("   - Added better CTAs");
+  console.log("   - Improved certifications display");
   console.log('   - Added comprehensive "Why Choose Us" section');
 
   await connection.end();
