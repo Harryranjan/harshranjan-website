@@ -83,13 +83,26 @@ app.use(
   })
 );
 
-// CORS configuration - Allow multiple origins for development
+// CORS configuration - Allow multiple origins for development and production
 const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:5173",
+  "http://localhost:5173",
   "http://localhost:5174",
   "http://localhost:5175",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:5174",
+  // Production URLs - Domain
+  "http://drsubodh.harshranjan.in",
+  "https://drsubodh.harshranjan.in",
+  "http://harshranjan.in",
+  "https://harshranjan.in",
+  "http://www.harshranjan.in",
+  "https://www.harshranjan.in",
+  // Production URLs - IP (fallback)
+  "http://drsubodh.72.61.241.90",
+  "http://72.61.241.90",
+  "https://drsubodh.72.61.241.90",
+  "https://72.61.241.90",
 ];
 
 app.use(
