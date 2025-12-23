@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,7 +22,7 @@ export default function Header() {
     const fetchMenuItems = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/menus/location/header"
+          `${API_URL}/menus/location/header`
         );
         const data = await response.json();
 

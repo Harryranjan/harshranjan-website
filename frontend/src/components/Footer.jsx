@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
@@ -13,7 +15,7 @@ const Footer = () => {
       try {
         console.log("🦶 Fetching footer menu...");
         const response = await fetch(
-          "http://localhost:5000/api/menus/location/footer"
+          `${API_URL}/menus/location/footer`
         );
         const data = await response.json();
         console.log("🦶 Footer API Response:", data);
