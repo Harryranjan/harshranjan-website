@@ -21,9 +21,7 @@ export default function Header() {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch(
-          `${API_URL}/menus/location/header`
-        );
+        const response = await fetch(`${API_URL}/menus/location/header`);
         const data = await response.json();
 
         if (data.items && data.items.length > 0) {

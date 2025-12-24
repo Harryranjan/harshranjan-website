@@ -67,7 +67,8 @@ export default function LanguagePopup({ show, onClose, locationData }) {
                   <p className="text-xs text-blue-100 mt-0.5">
                     {locationData?.city && (
                       <span>
-                        📍 {locationData.city}, {locationData.region || "Gujarat"}
+                        📍 {locationData.city},{" "}
+                        {locationData.region || "Gujarat"}
                       </span>
                     )}
                   </p>

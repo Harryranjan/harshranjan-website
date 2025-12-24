@@ -1,6 +1,7 @@
 # 🌐 DNS Configuration Guide
 
 ## Domain: harshranjan.in
+
 **Subdomain:** drsubodh.harshranjan.in  
 **Server IP:** 72.61.241.90
 
@@ -12,23 +13,24 @@ Login to your domain registrar (GoDaddy, Namecheap, CloudFlare, etc.) and add th
 
 ### **A Records**
 
-| Type | Name/Host | Value/Points To | TTL |
-|------|-----------|----------------|-----|
-| A | drsubodh | 72.61.241.90 | 3600 |
-| A | @ | 72.61.241.90 | 3600 |
-| A | www | 72.61.241.90 | 3600 |
+| Type | Name/Host | Value/Points To | TTL  |
+| ---- | --------- | --------------- | ---- |
+| A    | drsubodh  | 72.61.241.90    | 3600 |
+| A    | @         | 72.61.241.90    | 3600 |
+| A    | www       | 72.61.241.90    | 3600 |
 
 ### **Optional: CNAME (Alternative to A record for www)**
 
-| Type | Name/Host | Value/Points To | TTL |
-|------|-----------|----------------|-----|
-| CNAME | www | harshranjan.in | 3600 |
+| Type  | Name/Host | Value/Points To | TTL  |
+| ----- | --------- | --------------- | ---- |
+| CNAME | www       | harshranjan.in  | 3600 |
 
 ---
 
 ## 🔧 Provider-Specific Instructions
 
 ### **GoDaddy**
+
 1. Login to GoDaddy
 2. Go to **My Products** > **DNS**
 3. Click **Add** under Records
@@ -40,6 +42,7 @@ Login to your domain registrar (GoDaddy, Namecheap, CloudFlare, etc.) and add th
 6. Click **Save**
 
 ### **Namecheap**
+
 1. Login to Namecheap
 2. Go to **Domain List** > Click **Manage**
 3. Go to **Advanced DNS** tab
@@ -52,6 +55,7 @@ Login to your domain registrar (GoDaddy, Namecheap, CloudFlare, etc.) and add th
 7. Click **Save**
 
 ### **Cloudflare** (Recommended for CDN & SSL)
+
 1. Login to Cloudflare
 2. Select your domain **harshranjan.in**
 3. Go to **DNS** tab
@@ -71,6 +75,7 @@ Login to your domain registrar (GoDaddy, Namecheap, CloudFlare, etc.) and add th
 ## ✅ Verify DNS Propagation
 
 ### **Method 1: Command Line**
+
 ```bash
 # Windows (PowerShell)
 nslookup drsubodh.harshranjan.in
@@ -81,12 +86,14 @@ nslookup drsubodh.harshranjan.in
 ```
 
 ### **Method 2: Online Tools**
+
 - https://dnschecker.org
 - https://www.whatsmydns.net
 - Enter: `drsubodh.harshranjan.in`
 - Check if it resolves to `72.61.241.90`
 
 ### **Method 3: Browser**
+
 ```bash
 # Try accessing via domain
 http://drsubodh.harshranjan.in
@@ -128,12 +135,12 @@ certbot --nginx -d drsubodh.harshranjan.in
 
 If you want to add more subdomains later:
 
-| Subdomain | Purpose | A Record |
-|-----------|---------|----------|
+| Subdomain               | Purpose         | A Record     |
+| ----------------------- | --------------- | ------------ |
 | drsubodh.harshranjan.in | Dr. Subodh site | 72.61.241.90 |
-| blog.harshranjan.in | Blog | 72.61.241.90 |
-| api.harshranjan.in | API only | 72.61.241.90 |
-| admin.harshranjan.in | Admin panel | 72.61.241.90 |
+| blog.harshranjan.in     | Blog            | 72.61.241.90 |
+| api.harshranjan.in      | API only        | 72.61.241.90 |
+| admin.harshranjan.in    | Admin panel     | 72.61.241.90 |
 
 Each will need its own Nginx configuration file.
 
@@ -142,25 +149,30 @@ Each will need its own Nginx configuration file.
 ## 🆘 Troubleshooting
 
 ### DNS Not Resolving?
+
 1. **Wait longer** - DNS can take up to 48 hours
 2. **Check TTL** - Lower TTL (300-600) for faster updates
 3. **Clear DNS cache:**
+
    ```bash
    # Windows
    ipconfig /flushdns
-   
+
    # Mac/Linux
    sudo dnsmasq --clear-cache
    ```
+
 4. **Verify with multiple tools** - Use dnschecker.org
 
 ### SSL Certificate Fails?
+
 1. **Ensure DNS is resolving** - Test with `nslookup` first
 2. **Check port 80 is open** - Certbot needs HTTP access
 3. **Verify Nginx is running** - `systemctl status nginx`
 4. **Check domain ownership** - Make sure you control the domain
 
 ### Site Not Loading?
+
 1. **Check DNS:** `nslookup drsubodh.harshranjan.in`
 2. **Check Nginx:** `systemctl status nginx`
 3. **Check Server:** `curl http://72.61.241.90`
@@ -175,7 +187,7 @@ Each will need its own Nginx configuration file.
 ✅ **Server IP:** 72.61.241.90  
 ✅ **Frontend:** https://drsubodh.harshranjan.in  
 ✅ **Backend API:** https://drsubodh.harshranjan.in/api  
-✅ **SSL:** Let's Encrypt (Free)  
+✅ **SSL:** Let's Encrypt (Free)
 
 ---
 

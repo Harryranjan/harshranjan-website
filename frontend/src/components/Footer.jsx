@@ -14,9 +14,7 @@ const Footer = () => {
     const fetchFooterMenu = async () => {
       try {
         console.log("🦶 Fetching footer menu...");
-        const response = await fetch(
-          `${API_URL}/menus/location/footer`
-        );
+        const response = await fetch(`${API_URL}/menus/location/footer`);
         const data = await response.json();
         console.log("🦶 Footer API Response:", data);
         if (data.menu) {

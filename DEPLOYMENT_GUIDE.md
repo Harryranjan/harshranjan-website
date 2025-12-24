@@ -1,6 +1,7 @@
 # 🚀 Production Deployment Guide
 
 ## Server Details
+
 - **Domain:** harshranjan.in
 - **Subdomain:** drsubodh.harshranjan.in
 - **IP Address:** 72.61.241.90
@@ -11,6 +12,7 @@
 ## 📋 Pre-Deployment Checklist
 
 ### 1. Server Preparation
+
 ```bash
 # SSH into your server
 ssh root@72.61.241.90
@@ -33,6 +35,7 @@ apt install -y nginx
 ```
 
 ### 2. Database Setup
+
 ```bash
 # Login to MySQL
 mysql -u root -p
@@ -52,6 +55,7 @@ EXIT;
 ## 🔧 Backend Deployment
 
 ### 1. Upload Backend Code
+
 ```bash
 # On your local machine
 cd "g:\AAA PROJECTS\Harsh Ranjan Website"
@@ -66,6 +70,7 @@ git push origin master
 ```
 
 ### 2. On Server - Setup Backend
+
 ```bash
 # Clone repository (if using Git)
 cd /var/www
@@ -85,6 +90,7 @@ nano .env
 ```
 
 ### 3. Update .env File
+
 ```env
 PORT=5000
 NODE_ENV=production
@@ -100,6 +106,7 @@ FRONTEND_URL=https://drsubodh.harshranjan.in
 ```
 
 ### 4. Run Database Migrations
+
 ```bash
 # If you have migrations
 npm run migrate
@@ -109,6 +116,7 @@ mysql -u drsubodh_user -p drsubodh_website < database-schema.sql
 ```
 
 ### 5. Start Backend with PM2
+
 ```bash
 pm2 start server.js --name drsubodh-backend
 pm2 save
@@ -120,6 +128,7 @@ pm2 startup
 ## 🎨 Frontend Deployment
 
 ### 1. Build Frontend Locally
+
 ```bash
 # On your local machine
 cd "g:\AAA PROJECTS\Harsh Ranjan Website\frontend"
@@ -135,6 +144,7 @@ npm run build
 ```
 
 ### 2. Upload to Server
+
 ```bash
 # Upload the 'dist' folder to server
 # Using SCP (from local machine)
@@ -144,12 +154,14 @@ scp -r dist root@72.61.241.90:/var/www/drsubodh-frontend
 ```
 
 ### 3. Configure Nginx
+
 ```bash
 # On server
 nano /etc/nginx/sites-available/drsubodh
 ```
 
 Add this configuration:
+
 ```nginx
 server {
     listen 80;
@@ -183,6 +195,7 @@ server {
 ```
 
 Enable site and restart Nginx:
+
 ```bash
 ln -s /etc/nginx/sites-available/drsubodh /etc/nginx/sites-enabled/
 nginx -t
@@ -208,6 +221,7 @@ certbot renew --dry-run
 ```
 
 The frontend .env.production is already configured for HTTPS:
+
 ```env
 VITE_API_URL=https://drsubodh.harshranjan.in/api
 ```
@@ -215,16 +229,19 @@ VITE_API_URL=https://drsubodh.harshranjan.in/api
 ---
 
 ## 🧪 Testingharshranjan.in/api/health
+
 # Or with IP: curl http://72.61.241.90:5000/api/health
-```
+
+````
 
 ### 2. Test Frontend
 ```bash
 curl http://drsubodh.harshranjan.in
 # Or with IP: curl http://72.61.241.90
-```
+````
 
 ### 3. Test in Browser
+
 - Open: `https://drsubodh.harshranjan.in` (with SSL)
 - Or: `http://drsubodh.harshranjan.in` (without SSL)
 - Check browser console for errors
@@ -232,7 +249,8 @@ curl http://drsubodh.harshranjan.in
 - Check API calls
 
 ### 4. DNS Verification
-```bash
+
+````bash
 # Verify DNS is pointing correctly
 nslookup drsubodh.harshranjan.in
 # Should show: 72.61.241.90
@@ -256,13 +274,14 @@ tail -f /var/log/nginx/error.log
 
 # Monitor PM2 processes
 pm2 monit
-```
+````
 
 ---
 
 ## 🔄 Updates & Maintenance
 
 ### Update Backend
+
 ```bash
 cd /var/www/drsubodh-backend/backend
 git pull origin master
@@ -271,6 +290,7 @@ pm2 restart drsubodh-backend
 ```
 
 ### Update Frontend
+
 ```bash
 # Build locally
 npm run build
@@ -284,20 +304,24 @@ scp -r dist root@72.61.241.90:/var/www/drsubodh-frontend
 ## 🆘 Troubleshooting
 
 ### CORS Errors
+
 - Check `FRONTEND_URL` in backend .env
 - Verify allowedOrigins in server.js includes your domain
 
 ### API Not Found (404)
+
 - Check `VITE_API_URL` in frontend .env
 - Verify backend is running: `pm2 status`
 - Check Nginx proxy configuration
 
 ### Database Connection Failed
+
 - Verify MySQL is running: `systemctl status mysql`
 - Check database credentials in .env
 - Test connection: `mysql -u drsubodh_user -p`
 
 ### Permission Errors
+
 ```bash
 # Fix file permissions
 chown -R www-data:www-data /var/www/drsubodh-frontend
@@ -348,6 +372,7 @@ systemctl status mysql
 ---
 
 **Need Help?** Check the logs first:
+
 - Backend: `pm2 logs drsubodh-backend`
 - Nginx: `tail -f /var/log/nginx/error.log`
 - MySQL: `tail -f /var/log/mysql/error.log`

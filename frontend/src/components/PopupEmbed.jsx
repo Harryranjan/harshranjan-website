@@ -146,12 +146,12 @@ export default function PopupEmbed({
         {popup.icon && <div className="text-3xl mb-3">{popup.icon}</div>}
 
         {/* Title */}
-        {popup.title && typeof popup.title === 'string' && (
+        {popup.title && typeof popup.title === "string" && (
           <h3 className="text-lg font-bold mb-2 pr-6">{popup.title}</h3>
         )}
 
         {/* Content */}
-        {popup.content && typeof popup.content === 'string' && (
+        {popup.content && typeof popup.content === "string" && (
           <div
             className="text-sm mb-4 opacity-90 prose prose-sm max-w-none"
             dangerouslySetInnerHTML={{

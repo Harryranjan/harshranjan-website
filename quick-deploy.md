@@ -5,6 +5,7 @@
 If Git is already set up on the server, use this super-fast method:
 
 ### 1️⃣ Make Changes Locally
+
 ```powershell
 # Make your code changes
 git add .
@@ -13,6 +14,7 @@ git push origin master
 ```
 
 ### 2️⃣ Update Server
+
 ```bash
 # SSH to server
 ssh root@72.61.241.90
@@ -35,6 +37,7 @@ cd "g:\AAA PROJECTS\Harsh Ranjan Website"
 ```
 
 This will:
+
 - ✅ Build the frontend
 - ✅ Upload frontend to server
 - ✅ Upload backend to server
@@ -46,6 +49,7 @@ This will:
 ## Step 2️⃣: On Your Server (SSH Terminal)
 
 ### Option A: Automated Setup
+
 ```bash
 # Copy the setup script to server
 cd /tmp
@@ -73,6 +77,7 @@ sudo mysql -u root -p
 ```
 
 In MySQL:
+
 ```sql
 CREATE DATABASE drsubodh_website CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'drsubodh_user'@'localhost' IDENTIFIED BY 'YourPassword123!';
@@ -100,6 +105,7 @@ nano .env
 ```
 
 Update in .env:
+
 - DB_PASSWORD
 - JWT_SECRET (generate: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`)
 - EMAIL_USER
@@ -148,6 +154,7 @@ pm2 logs drsubodh-backend
 ## 🔄 Future Updates
 
 ### Option 1: Quick Update with Git (Fastest) ⚡
+
 ```bash
 # SSH to server
 ssh root@72.61.241.90
@@ -157,6 +164,7 @@ ssh root@72.61.241.90
 ```
 
 This script automatically:
+
 - Fetches latest code from GitHub
 - Updates backend to latest commit
 - Installs new dependencies
@@ -164,6 +172,7 @@ This script automatically:
 - Shows status
 
 ### Option 2: Manual Update
+
 ```bash
 cd /var/www/drsubodh/backend
 git fetch origin master
@@ -173,6 +182,7 @@ pm2 restart drsubodh-backend
 ```
 
 ### Update Frontend:
+
 ```powershell
 # On local machine
 cd "g:\AAA PROJECTS\Harsh Ranjan Website\frontend"
@@ -185,6 +195,7 @@ scp -r dist root@72.61.241.90:/var/www/drsubodh-frontend
 ## 🆘 Troubleshooting
 
 ### Backend not starting?
+
 ```bash
 pm2 logs drsubodh-backend
 # Check .env file
@@ -192,12 +203,14 @@ pm2 logs drsubodh-backend
 ```
 
 ### Frontend not loading?
+
 ```bash
 sudo systemctl status nginx
 sudo tail -f /var/log/nginx/error.log
 ```
 
 ### Database connection failed?
+
 ```bash
 mysql -u drsubodh_user -p
 # Test connection
