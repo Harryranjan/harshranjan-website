@@ -118,6 +118,10 @@ function App() {
         {/* Public Routes */}
         <Route
           path="/"
+          element={<Navigate to="/pages/home" replace />}
+        />
+        <Route
+          path="/agency-home"
           element={
             <AgencyLayout>
               <AgencyHomePage />
