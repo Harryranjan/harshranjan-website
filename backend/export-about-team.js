@@ -1,6 +1,6 @@
-require('dotenv').config();
-const mysql = require('mysql2/promise');
-const fs = require('fs');
+require("dotenv").config();
+const mysql = require("mysql2/promise");
+const fs = require("fs");
 
 async function exportAboutTeam() {
   try {
@@ -8,18 +8,20 @@ async function exportAboutTeam() {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME
+      database: process.env.DB_NAME,
     });
 
-    const [rows] = await conn.query('SELECT * FROM pages WHERE slug = ?', ['about-team']);
-    
+    const [rows] = await conn.query("SELECT * FROM pages WHERE slug = ?", [
+      "about-team",
+    ]);
+
     if (rows.length === 0) {
-      console.log('Page not found');
+      console.log("Page not found");
       return;
     }
 
     const page = rows[0];
-    
+
     // Save as SQL for production
     const sql = `
 UPDATE pages SET
@@ -38,24 +40,24 @@ UPDATE pages SET
 WHERE slug = 'about-team';
 `;
 
-    fs.writeFileSync('about-team-production-update.sql', sql);
-    console.log('✅ Exported to about-team-production-update.sql');
-    console.log('📝 Page:', page.title);
-    console.log('📏 Content size:', page.content.length, 'bytes');
-    console.log('📅 Last updated:', page.updated_at);
-    
+    fs.writeFileSync("about-team-production-update.sql", sql);
+    console.log("✅ Exported to about-team-production-update.sql");
+    console.log("📝 Page:", page.title);
+    console.log("📏 Content size:", page.content.length, "bytes");
+    console.log("📅 Last updated:", page.updated_at);
+
     // Check for doctor images
     const doctorImgs = page.content.match(/\/images\/doctor\/[^"'\s]*/gi);
-    console.log('\n🖼️  Doctor images found:');
+    console.log("\n🖼️  Doctor images found:");
     if (doctorImgs) {
-      doctorImgs.forEach(img => console.log('  -', img));
+      doctorImgs.forEach((img) => console.log("  -", img));
     } else {
-      console.log('  None');
+      console.log("  None");
     }
 
     await conn.end();
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error("Error:", error.message);
   }
 }
 
