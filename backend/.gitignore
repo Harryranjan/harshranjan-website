@@ -3,6 +3,7 @@ node_modules/
 
 # Environment variables
 .env
+.env.local
 
 # Logs
 logs/
@@ -26,3 +27,48 @@ uploads/*
 # Build
 dist/
 build/
+
+# Helper scripts (one-time use scripts, not part of core backend)
+add-*.js
+check-*.js
+create-*.js
+fix-*.js
+update-*.js
+improve-*.js
+cleanup-*.js
+remove-*.js
+restore-*.js
+verify-*.js
+test-*.js
+export-*.js
+enhance-*.js
+expand-*.js
+extract-*.js
+diagnose-*.js
+debug-*.js
+match-*.js
+make-*.js
+move-*.js
+optimize-*.js
+rebuild-*.js
+redesign-*.js
+reduce-*.js
+refine-*.js
+revert-*.js
+setup-*.js
+standardize-*.js
+adjust-*.js
+audit-*.js
+center-*.js
+compact-*.js
+convert-*.js
+run-*.js
+migrate.js
+
+# HTML snapshots and temp files
+hero-current.html
+home-page-content.html
+homepage-backup.html
+homepage-current.html
+team-page-current.html
+page-content-full.txt
