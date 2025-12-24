@@ -66,6 +66,7 @@ import DemoShowcase from "./pages/DemoShowcase";
 import Profile from "./pages/admin/Profile";
 import DynamicPage from "./pages/DynamicPage";
 import HealthcarePage from "./pages/HealthcarePage";
+import HomePageWrapper from "./components/HomePageWrapper";
 
 function App() {
   const [showLanguagePopup, setShowLanguagePopup] = useState(false);
@@ -118,7 +119,11 @@ function App() {
         {/* Public Routes */}
         <Route
           path="/"
-          element={<Navigate to="/pages/home" replace />}
+          element={
+            <PublicLayout>
+              <HomePageWrapper />
+            </PublicLayout>
+          }
         />
         <Route
           path="/agency-home"

@@ -11,8 +11,9 @@ import { parseShortcodes } from "../utils/shortcodeParser";
 import { translateContent } from "../utils/contentTranslator";
 import Header from "../components/Header";
 
-export default function DynamicPage() {
-  const { slug } = useParams();
+export default function DynamicPage({ fixedSlug = null }) {
+  const { slug: urlSlug } = useParams();
+  const slug = fixedSlug || urlSlug;
   const { i18n } = useTranslation();
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -35,7 +36,9 @@ export default function DynamicPage() {
   }, []);
 
   useEffect(() => {
-    fetchPage();
+    if (slug) {
+      fetchPage();
+    }
   }, [slug]);
 
   // Translate content when language changes
