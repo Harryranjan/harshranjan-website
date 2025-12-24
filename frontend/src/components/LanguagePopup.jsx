@@ -50,25 +50,24 @@ export default function LanguagePopup({ show, onClose, locationData }) {
         }`}
       >
         <div
-          className={`bg-white rounded-2xl shadow-2xl max-w-lg w-full transform transition-all duration-300 ${
+          className={`bg-white rounded-lg shadow-2xl max-w-sm w-full transform transition-all duration-300 ${
             isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
           }`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-t-lg">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="text-3xl">🌍</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xl">🌍</span>
                 <div>
-                  <h2 className="text-2xl font-bold">
+                  <h2 className="text-sm font-bold">
                     {t("language.popup.title")}
                   </h2>
-                  <p className="text-sm text-blue-100 mt-1">
+                  <p className="text-xs text-blue-100 mt-0.5">
                     {locationData?.city && (
                       <span>
-                        📍 Detected: {locationData.city},{" "}
-                        {locationData.region || "Gujarat"}
+                        📍 {locationData.city}, {locationData.region || "Gujarat"}
                       </span>
                     )}
                   </p>
@@ -76,10 +75,10 @@ export default function LanguagePopup({ show, onClose, locationData }) {
               </div>
               <button
                 onClick={onClose}
-                className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+                className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-1 transition-colors"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -96,30 +95,30 @@ export default function LanguagePopup({ show, onClose, locationData }) {
           </div>
 
           {/* Content */}
-          <div className="p-6">
-            <p className="text-gray-600 text-center mb-6">
+          <div className="p-3">
+            <p className="text-gray-600 text-center text-xs mb-3">
               {t("language.popup.subtitle")}
             </p>
 
             {/* Language Options */}
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               {/* Hindi Option */}
               <button
                 onClick={() => handleLanguageSelect("hi")}
-                className="w-full group relative overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl p-4 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                className="w-full group relative overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-md p-2 transition-all duration-200 transform hover:scale-105 shadow-md"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl">🇮🇳</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">IN</span>
                     <div className="text-left">
-                      <div className="font-bold text-lg">हिंदी (Hindi)</div>
-                      <div className="text-sm text-orange-100">
+                      <div className="font-bold text-sm">हिंदी (Hindi)</div>
+                      <div className="text-xs text-orange-100">
                         National Language
                       </div>
                     </div>
                   </div>
                   <svg
-                    className="w-6 h-6"
+                    className="w-4 h-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -137,22 +136,22 @@ export default function LanguagePopup({ show, onClose, locationData }) {
               {/* Gujarati Option */}
               <button
                 onClick={() => handleLanguageSelect("gu")}
-                className="w-full group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl p-4 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                className="w-full group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-md p-2 transition-all duration-200 transform hover:scale-105 shadow-md"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl">🇮🇳</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">IN</span>
                     <div className="text-left">
-                      <div className="font-bold text-lg">
+                      <div className="font-bold text-sm">
                         ગુજરાતી (Gujarati)
                       </div>
-                      <div className="text-sm text-blue-100">
+                      <div className="text-xs text-blue-100">
                         Recommended for Gujarat
                       </div>
                     </div>
                   </div>
                   <svg
-                    className="w-6 h-6"
+                    className="w-4 h-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -170,20 +169,20 @@ export default function LanguagePopup({ show, onClose, locationData }) {
               {/* Marathi Option */}
               <button
                 onClick={() => handleLanguageSelect("mr")}
-                className="w-full group bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl p-4 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                className="w-full group bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-md p-2 transition-all duration-200 transform hover:scale-105 shadow-md"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl">🇮🇳</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">IN</span>
                     <div className="text-left">
-                      <div className="font-bold text-lg">मराठी (Marathi)</div>
-                      <div className="text-sm text-purple-100">
+                      <div className="font-bold text-sm">मराठी (Marathi)</div>
+                      <div className="text-xs text-purple-100">
                         Recommended for Maharashtra
                       </div>
                     </div>
                   </div>
                   <svg
-                    className="w-6 h-6"
+                    className="w-4 h-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -201,20 +200,20 @@ export default function LanguagePopup({ show, onClose, locationData }) {
               {/* English Option */}
               <button
                 onClick={() => handleLanguageSelect("en")}
-                className="w-full group bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-blue-400 text-gray-700 rounded-xl p-4 transition-all duration-200 transform hover:scale-105"
+                className="w-full group bg-white hover:bg-gray-50 border border-gray-200 hover:border-blue-400 text-gray-700 rounded-md p-2 transition-all duration-200 transform hover:scale-105"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl">🇬🇧</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">GB</span>
                     <div className="text-left">
-                      <div className="font-bold text-lg">
+                      <div className="font-bold text-sm">
                         {t("language.popup.english")}
                       </div>
-                      <div className="text-sm text-gray-500">International</div>
+                      <div className="text-xs text-gray-500">International</div>
                     </div>
                   </div>
                   <svg
-                    className="w-6 h-6 text-gray-400 group-hover:text-blue-600"
+                    className="w-4 h-4 text-gray-400 group-hover:text-blue-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -231,22 +230,22 @@ export default function LanguagePopup({ show, onClose, locationData }) {
             </div>
 
             {/* Remember Choice */}
-            <div className="mt-6 pt-4 border-t border-gray-200">
-              <label className="flex items-center gap-3 cursor-pointer group">
+            <div className="mt-2.5 pt-2.5 border-t border-gray-200">
+              <label className="flex items-center gap-1.5 cursor-pointer group">
                 <input
                   type="checkbox"
                   checked={rememberChoice}
                   onChange={(e) => setRememberChoice(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                  className="w-3.5 h-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                 />
-                <span className="text-sm text-gray-600 group-hover:text-gray-900">
+                <span className="text-xs text-gray-600 group-hover:text-gray-900">
                   {t("language.popup.rememberChoice")}
                 </span>
               </label>
             </div>
 
             {/* Info */}
-            <div className="mt-4 bg-blue-50 border border-blue-100 rounded-lg p-3">
+            <div className="mt-2 bg-blue-50 border border-blue-100 rounded-md p-2">
               <p className="text-xs text-blue-800 text-center">
                 💡 You can change the language anytime using the language
                 switcher in the navigation menu
